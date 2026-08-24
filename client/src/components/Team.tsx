@@ -390,7 +390,7 @@ export default function Team() {
   return (
     <section
       id="team"
-      className="py-20 md:py-28 bg-background relative overflow-hidden"
+      className="py-20 md:py-28 bg-transparent relative overflow-hidden"
       ref={containerRef}
     >
       {/* Background pattern */}
@@ -690,3 +690,4 @@ export default function Team() {
     </section>
   );
 }
+

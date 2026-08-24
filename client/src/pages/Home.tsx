@@ -12,6 +12,8 @@ import { motion, useScroll, useSpring } from "framer-motion";
 import { ArrowUp, ArrowRight } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
+import DataStreamsBackground from "@/components/DataStreamsBackground";
+import "../brain-scene.css";
 
 export default function Home() {
   // State to control back-to-top button visibility
@@ -68,7 +70,10 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-background text-foreground overflow-hidden" style={{ position: 'relative' }}>
+    <div className="min-h-screen flex flex-col bg-transparent text-foreground overflow-hidden" style={{ position: 'relative' }}>
+      {/* 5. Abstract Data Streams */}
+      <DataStreamsBackground />
+      
       {/* Scroll progress indicator at top of page */}
       <motion.div 
         className="fixed top-0 left-0 right-0 h-1 bg-gradient-red z-50"

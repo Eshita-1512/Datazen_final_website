@@ -82,7 +82,7 @@ export default function Timeline() {
   return (
     <section 
       id="timeline" 
-      className="py-20 md:py-32 bg-background relative" 
+      className="py-20 md:py-32 bg-transparent relative" 
       ref={containerRef}
     >
       {/* Decorative elements */}
@@ -251,3 +251,4 @@ export default function Timeline() {
     </section>
   );
 }
+

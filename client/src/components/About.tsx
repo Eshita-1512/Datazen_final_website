@@ -159,7 +159,7 @@ export default function About() {
   return (
     <section 
       id="about" 
-      className="py-20 md:py-32 bg-background relative overflow-hidden" 
+      className="py-20 md:py-32 bg-transparent relative overflow-hidden" 
       ref={containerRef}
     >
       {/* Background data flow pattern */}

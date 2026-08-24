@@ -247,7 +247,7 @@ export default function Activities() {
 
             <motion.button
               onClick={() => window.open("https://datathon2026.com/")}
-              className="bg-white text-[var(--power-red)] font-medium px-6 py-2 rounded-lg shadow-lg transition-all duration-200 ease-in-out flex items-center gap-2 hover:bg-gray-50"
+              className="bg-white text-[var(--power-red)] font-medium px-6 py-2 rounded-lg shadow-lg transition-all duration-200 ease-in-out flex items-center gap-2 hover:bg-transparent"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.9 }}
@@ -264,7 +264,7 @@ export default function Activities() {
   return (
     <section
       id="activities"
-      className="py-20 md:py-32 bg-background relative overflow-hidden"
+      className="py-20 md:py-32 bg-transparent relative overflow-hidden"
       ref={containerRef}
     >
       {/* Background pattern */}
@@ -415,3 +415,4 @@ export default function Activities() {
     </section>
   );
 }
+
