@@ -1,7 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import About from "@/components/About";
-import Activities from "@/components/Activities";
+import FocusArea from "@/components/FocusArea";
 import Timeline from "@/components/Timeline";
 import Stats from "@/components/Stats";
 import Team from "@/components/Team";
@@ -92,8 +91,7 @@ export default function Home() {
       
       <main className="flex-1 relative z-10">
         <Hero />
-        <About />
-        <Activities />
+        <FocusArea />
         <Timeline />
         <Stats />
         <Team />
