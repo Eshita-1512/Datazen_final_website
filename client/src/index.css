@@ -168,6 +168,23 @@
   background: linear-gradient(135deg, var(--power-red), var(--vitality-red));
 }
 
+/* Event image loading shimmer — shared by Timeline and EventDetail */
+@keyframes tl-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+.tl-skeleton {
+  background-size: 200% 100%;
+  animation: tl-shimmer 1.6s ease-in-out infinite;
+  background-image: linear-gradient(
+    105deg,
+    rgba(183,32,46,0.18) 0%,
+    rgba(237,28,36,0.38) 40%,
+    rgba(183,32,46,0.18) 60%,
+    rgba(120,10,10,0.22) 100%
+  );
+}
+
 /* Path animation for SVGs */
 .path-animation {
   stroke-dasharray: 1000;
