@@ -59,8 +59,7 @@ export default function Navbar() {
               // Home page navigation with hash links
               <>
                 <a href="#home" className="font-medium hover:text-primary transition-colors">Home</a>
-                <a href="#about" className="font-medium hover:text-primary transition-colors">About Us</a>
-                <a href="#activities" className="font-medium hover:text-primary transition-colors">Activities</a>
+                <a href="#focus-area" className="font-medium hover:text-primary transition-colors">Our Focus Area</a>
                 <a href="#timeline" className="font-medium hover:text-primary transition-colors">Timeline</a>
                 <a href="#team" className="font-medium hover:text-primary transition-colors">Team</a>
                 <Link href="/resources" className="font-medium hover:text-primary transition-colors">Resources</Link>
@@ -70,8 +69,7 @@ export default function Navbar() {
               // Other pages navigation
               <>
                 <Link href="/" className="font-medium hover:text-primary transition-colors">Home</Link>
-                <Link href="/#about" className="font-medium hover:text-primary transition-colors">About Us</Link>
-                <Link href="/#activities" className="font-medium hover:text-primary transition-colors">Activities</Link>
+                <Link href="/#focus-area" className="font-medium hover:text-primary transition-colors">Our Focus Area</Link>
                 <Link href="/#timeline" className="font-medium hover:text-primary transition-colors">Timeline</Link>
                 <Link href="/#team" className="font-medium hover:text-primary transition-colors">Team</Link>
                 <Link href="/resources" className={`font-medium transition-colors ${location === '/resources' ? 'text-primary' : 'hover:text-primary'}`}>Resources</Link>
@@ -108,19 +106,12 @@ export default function Navbar() {
                   >
                     Home
                   </a>
-                  <a 
-                    href="#about" 
+                  <a
+                    href="#focus-area"
                     className="block py-2 px-4 text-sm hover:bg-accent rounded"
                     onClick={handleLinkClick}
                   >
-                    About Us
-                  </a>
-                  <a 
-                    href="#activities" 
-                    className="block py-2 px-4 text-sm hover:bg-accent rounded"
-                    onClick={handleLinkClick}
-                  >
-                    Activities
+                    Our Focus Area
                   </a>
                   <a 
                     href="#timeline" 
@@ -157,19 +148,12 @@ export default function Navbar() {
                   >
                     Home
                   </Link>
-                  <Link 
-                    href="/#about" 
+                  <Link
+                    href="/#focus-area"
                     className="block py-2 px-4 text-sm hover:bg-accent rounded"
                     onClick={handleLinkClick}
                   >
-                    About Us
-                  </Link>
-                  <Link 
-                    href="/#activities" 
-                    className="block py-2 px-4 text-sm hover:bg-accent rounded"
-                    onClick={handleLinkClick}
-                  >
-                    Activities
+                    Our Focus Area
                   </Link>
                   <Link 
                     href="/#timeline" 
