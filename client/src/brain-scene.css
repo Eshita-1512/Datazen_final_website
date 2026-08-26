@@ -26,7 +26,7 @@ html::-webkit-scrollbar{width:0;height:0;display:none}
 
 .scene {
   position:relative;
-  height:640vh;
+  height:960vh;
 }
 
 /* pin the brain to the viewport with position:fixed */

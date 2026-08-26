@@ -9,12 +9,14 @@ export function useBrainScene() {
   const stageRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const flyTitleRef = useRef<HTMLDivElement>(null);
-  const txtARef = useRef<HTMLDivElement>(null);
-  const txtIRef = useRef<HTMLDivElement>(null);
+  const txt1Ref = useRef<HTMLDivElement>(null);
+  const txt2Ref = useRef<HTMLDivElement>(null);
+  const txt3Ref = useRef<HTMLDivElement>(null);
+  const txt4Ref = useRef<HTMLDivElement>(null);
   const hintRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!sceneRef.current || !stageRef.current || !canvasRef.current || !flyTitleRef.current || !txtARef.current || !txtIRef.current || !hintRef.current) {
+    if (!sceneRef.current || !stageRef.current || !canvasRef.current || !flyTitleRef.current || !txt1Ref.current || !txt2Ref.current || !txt3Ref.current || !txt4Ref.current || !hintRef.current) {
       return;
     }
 
@@ -23,8 +25,10 @@ export function useBrainScene() {
     const canvas = canvasRef.current;
     const flyTitle = flyTitleRef.current;
     const hintEl = hintRef.current;
-    const txtA = txtARef.current;
-    const txtI = txtIRef.current;
+    const txt1 = txt1Ref.current;
+    const txt2 = txt2Ref.current;
+    const txt3 = txt3Ref.current;
+    const txt4 = txt4Ref.current;
 
     // We assume the timeline comes after this scene. 
     // We can use document query selector to find the next section to calculate fade out.
@@ -177,7 +181,12 @@ export function useBrainScene() {
       }
       return best;
     }
-    const hotIdx = [pickNode(-0.72, 0.30, 0.78), pickNode(0.76, 0.40, -0.45)];
+    const hotIdx = [
+      pickNode(-0.72, 0.30, 0.78),
+      pickNode(0.76, 0.40, -0.45),
+      pickNode(-0.76, 0.30, -0.55),
+      pickNode(0.50, -0.30, 0.60)
+    ];
 
     const scene = new THREE.Scene();
     const cam = new THREE.PerspectiveCamera(50, 1, 1, 3000); 
@@ -287,9 +296,18 @@ export function useBrainScene() {
     }
     function framed(st: any) { const m = fitCz(); if (st.cz < m) st.cz = m; return st; }
 
+    const unwrappedRy = [0, 0, 0, 0];
+    for (let i = 0; i < 4; i++) {
+      let ry = info[i].ry + Math.PI * 2;
+      if (i > 0) {
+        while (ry < unwrappedRy[i - 1]) ry += Math.PI * 2;
+      }
+      unwrappedRy[i] = ry;
+    }
+
     const ZOOM_CZ = 98;
     function nodeState(i: number, sideSign: number) {
-      const rx = info[i].rx, ry = info[i].ry + Math.PI * 2, cz = ZOOM_CZ;
+      const rx = info[i].rx, ry = unwrappedRy[i], cz = ZOOM_CZ;
       _v.copy(info[i].local).applyEuler(_e.set(rx, ry, 0, 'XYZ'));
       const W = Math.tan(FOV) * cz * cam.aspect;
       const off = sideSign * W * 0.26;
@@ -303,24 +321,30 @@ export function useBrainScene() {
     });
 
     function targets(p: number) {
-      let st, hi = 0; const C1 = nodeState(0, 1), C2 = nodeState(1, -1);
-      if (p < 0.17) { st = { ...START }; }
-      else if (p < 0.35) {
-        // Go straight to the first highlighted node smoothly and faster
-        const a = smooth(seg(p, 0.17, 0.35));
+      let st, hi = 0; 
+      const C1 = nodeState(0, 1), C2 = nodeState(1, -1), C3 = nodeState(2, 1), C4 = nodeState(3, -1);
+      
+      if (p < 0.15) { st = { ...START }; }
+      else if (p < 0.22) {
+        const a = smooth(seg(p, 0.15, 0.22));
         st = lerpS(framed({ ...START }), C1, a);
         const fl = Math.sin(a * Math.PI);
         st.rx += fl * 0.10; st.ry += fl * 0.15; st.rz += Math.sin(a * Math.PI * 2) * 0.08;
-        hi = smooth(seg(p, 0.22, 0.32));
+        hi = smooth(seg(p, 0.18, 0.22));
       }
-      else if (p < 0.60) { st = C1; hi = 1; }
-      else if (p < 0.65) { st = lerpS(C1, C2, smooth(seg(p, 0.60, 0.65))); hi = 1; }
-      else if (p < 0.90) { st = C2; hi = 1; }
+      else if (p < 0.35) { st = C1; hi = 1; }
+      else if (p < 0.42) { st = lerpS(C1, C2, smooth(seg(p, 0.35, 0.42))); hi = 1; }
+      else if (p < 0.55) { st = C2; hi = 1; }
+      else if (p < 0.62) { st = lerpS(C2, C3, smooth(seg(p, 0.55, 0.62))); hi = 1; }
+      else if (p < 0.75) { st = C3; hi = 1; }
+      else if (p < 0.82) { st = lerpS(C3, C4, smooth(seg(p, 0.75, 0.82))); hi = 1; }
+      else if (p < 0.92) { st = C4; hi = 1; }
       else {
-        // Scroll back to the main brain view, un-zooming and continuing to spin forward to the original left-facing angle
-        const a = smooth(seg(p, 0.90, 1));
-        st = lerpS(C2, framed({ ...START, ry: START.ry + Math.PI * 4 }), a);
-        hi = 1 - a; // fade out the highlighted node
+        const a = smooth(seg(p, 0.92, 1));
+        let endRy = START.ry;
+        while (endRy < C4.ry) endRy += Math.PI * 2;
+        st = lerpS(C4, framed({ ...START, ry: endRy }), a);
+        hi = 1 - a;
       }
       return { st, hi };
     }
@@ -399,10 +423,10 @@ export function useBrainScene() {
       layoutTitle(smooth(seg(p, 0, INTRO)));
       
       hintEl.style.opacity = p > 0.01 ? '0' : '0.7';
-      showText(txtA, trap(p, 0.45, 0.485, 0.575, 0.60));
-      
-      const vi = trap(p, 0.68, 0.715, 0.815, 0.84);
-      showText(txtI, vi);
+      showText(txt1, trap(p, 0.22, 0.24, 0.33, 0.35));
+      showText(txt2, trap(p, 0.42, 0.44, 0.53, 0.55));
+      showText(txt3, trap(p, 0.62, 0.64, 0.73, 0.75));
+      showText(txt4, trap(p, 0.82, 0.84, 0.90, 0.92));
       
       // Look for the next section (e.g. About) to calculate fade out
       const nextSectionEl = sceneEl.nextElementSibling as HTMLElement;
@@ -448,5 +472,5 @@ export function useBrainScene() {
     };
   }, []);
 
-  return { sceneRef, stageRef, canvasRef, flyTitleRef, txtARef, txtIRef, hintRef };
+  return { sceneRef, stageRef, canvasRef, flyTitleRef, txt1Ref, txt2Ref, txt3Ref, txt4Ref, hintRef };
 }

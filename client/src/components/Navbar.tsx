@@ -47,7 +47,7 @@ export default function Navbar() {
       <div className="container mx-auto px-6 py-3">
         <div className="flex justify-between items-center">
           {/* Logo */}
-          <div className="flex items-center">
+          <div className={`flex items-center ${isHomePage ? 'invisible' : ''}`}>
             <Link href="/" className="text-primary font-poppins font-bold text-2xl">
               <span className="text-foreground">Data</span>Zen
             </Link>
