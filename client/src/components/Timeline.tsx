@@ -1,122 +1,22 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import { motion, useInView, useScroll, useSpring } from "framer-motion";
 import { ArrowRight, Trophy, Sparkles } from "lucide-react";
-
-// ── Event Data ──────────────────────────────────────────────────────────
-interface TimelineEvent {
-  id: number;
-  date: string;
-  title: string;
-  description: string;
-  tags: string[];
-  isFlagship?: boolean;
-  align: "left" | "right";
-  image: string;
-  fallbackGradient: string;
-}
-
-const timelineEvents: TimelineEvent[] = [
-  {
-    id: 1,
-    date: "3rd September 2025",
-    title: "ZenConnect '25",
-    description:
-      "A sneak peek into the exciting realm of AI & Data with us. Meet the council, explore fun activities, get a roadmap on your data journey, and network at a university level.",
-    tags: ["Networking", "Roadmap Session", "Fun Activities"],
-    align: "left",
-    image: "/images/zenconnect.jpg",
-    fallbackGradient: "linear-gradient(135deg,#1a0505,#6b1010,#c0392b)",
-  },
-  {
-    id: 2,
-    date: "13th to 19th October 2025",
-    title: "Data Trek",
-    description:
-      "A week-long virtual trek exploring the latest trends in data science and AI, featuring guest speakers from industry leaders and hands-on workshops.",
-    tags: ["7 Days", "Guest Speakers", "Workshops"],
-    align: "right",
-    image: "/images/datatrek.jpg",
-    fallbackGradient: "linear-gradient(135deg,#050a1a,#102060,#1a5fbf)",
-  },
-  {
-    id: 3,
-    date: "31st January 2026",
-    title: "Case Study Competition",
-    description:
-      "A competition where students analyze and visualize data using Tableau, showcasing their skills in data storytelling, analytical thinking, and impactful insights.",
-    tags: ["Tableau", "Data Storytelling", "₹50,000 Prize"],
-    align: "left",
-    image: "/images/casestudy.jpg",
-    fallbackGradient: "linear-gradient(135deg,#050e05,#1a4010,#3a8c1a)",
-  },
-  {
-    id: 4,
-    date: "7th & 8th February 2026",
-    title: "Datathon 2026",
-    description:
-      "Our flagship 48-hour Data Science & AI/ML hackathon with a prize pool of over ₹2 Lakhs+ and a footfall of over 1,000+ students from top universities.",
-    tags: ["48 Hours", "Prize Pool ₹2L+", "1000+ Students", "AI / ML"],
-    isFlagship: true,
-    align: "right",
-    image: "/images/datathon.jpg",
-    fallbackGradient: "linear-gradient(135deg,#1a0500,#7a1500,#c0392b)",
-  },
-];
-
-// ── Lazy Image with Red Skeleton ────────────────────────────────────────
-function EventImage({
-  src,
-  alt,
-  gradient,
-}: {
-  src: string;
-  alt: string;
-  gradient: string;
-}) {
-  const [loaded, setLoaded] = useState(false);
-  const [error, setError] = useState(false);
-
-  return (
-    <div className="relative w-full h-44 md:h-52 rounded-lg overflow-hidden">
-      {!loaded && !error && (
-        <div
-          className="absolute inset-0 tl-skeleton"
-          style={{ background: gradient }}
-        />
-      )}
-      {error && (
-        <div
-          className="absolute inset-0 rounded-lg"
-          style={{ background: gradient }}
-        />
-      )}
-      {!error && (
-        <img
-          src={src}
-          alt={alt}
-          loading="eager"
-          className={`w-full h-full object-cover transition-opacity duration-500 ${
-            loaded ? "opacity-100" : "opacity-0"
-          }`}
-          onLoad={() => setLoaded(true)}
-          onError={() => setError(true)}
-        />
-      )}
-    </div>
-  );
-}
+import { useLocation } from "wouter";
+import { timelineEvents, type TimelineEventData } from "@/data/events";
+import EventImage from "@/components/EventImage";
 
 // ── Timeline Card ───────────────────────────────────────────────────────
 function TimelineCard({
   event,
   index,
 }: {
-  event: TimelineEvent;
+  event: TimelineEventData;
   index: number;
 }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(cardRef, { once: false, margin: "-10%" });
   const [isHovered, setIsHovered] = useState(false);
+  const [, setLocation] = useLocation();
   const isLeft = event.align === "left";
 
   return (
@@ -129,6 +29,7 @@ function TimelineCard({
                 isInView ? "tl-card-inview" : ""
               } ${isHovered ? "tl-card-hover" : ""}`
         }`}
+        onClick={() => setLocation(`/events/${event.slug}`)}
         initial={{ opacity: 0, x: isLeft ? -60 : 60, y: 14 }}
         animate={
           isInView
@@ -568,23 +469,6 @@ export default function Timeline() {
         @keyframes tl-svg-pulse {
           0%   { transform: scale(1);   opacity: 0.4; }
           100% { transform: scale(2.2); opacity: 0;   }
-        }
-
-        /* Image placeholder shimmer */
-        @keyframes tl-shimmer {
-          0%   { background-position: -200% 0; }
-          100% { background-position:  200% 0; }
-        }
-        .tl-skeleton {
-          background-size: 200% 100%;
-          animation: tl-shimmer 1.6s ease-in-out infinite;
-          background-image: linear-gradient(
-            105deg,
-            rgba(183,32,46,0.18) 0%,
-            rgba(237,28,36,0.38) 40%,
-            rgba(183,32,46,0.18) 60%,
-            rgba(120,10,10,0.22) 100%
-          );
         }
 
         /* Lusion image reveal — clip-path bottom→top on scroll-in */
