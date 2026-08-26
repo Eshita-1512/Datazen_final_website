@@ -46,37 +46,37 @@ export default function FocusArea() {
       title: "Machine Learning",
       description:
         "Explore the cutting-edge algorithms that enable systems to learn and improve from experience.",
-      icon: <Brain size={28} />,
+      icon: <Brain size={36} strokeWidth={1.5} />,
     },
     {
       title: "Data Visualization",
       description:
         "Transform complex data into insightful visual representations for better decision making.",
-      icon: <TrendingUp size={28} />,
+      icon: <TrendingUp size={36} strokeWidth={1.5} />,
     },
     {
       title: "Big Data Analytics",
       description:
         "Work with massive datasets to uncover patterns and insights that drive innovation.",
-      icon: <Database size={28} />,
+      icon: <Database size={36} strokeWidth={1.5} />,
     },
     {
       title: "AI Development",
       description:
         "Create intelligent systems that can perceive, learn, reason and solve complex problems.",
-      icon: <Code size={28} />,
+      icon: <Code size={36} strokeWidth={1.5} />,
     },
     {
       title: "Deep Learning",
       description:
         "Build neural networks that mimic human brain function to solve complex real-world problems.",
-      icon: <Layers size={28} />,
+      icon: <Layers size={36} strokeWidth={1.5} />,
     },
     {
       title: "Data Cleaning",
       description:
         "Ensure data quality by identifying and correcting errors, inconsistencies, and missing values.",
-      icon: <Database size={28} />,
+      icon: <Database size={36} strokeWidth={1.5} />,
     },
   ];
 
@@ -201,13 +201,7 @@ export default function FocusArea() {
                 variants={cardAnimation}
               >
                 <div className="p-8">
-                  <div
-                    className="w-16 h-16 rounded-xl flex items-center justify-center mb-6"
-                    style={{
-                      background: `linear-gradient(135deg, ${color}20, ${color}40)`,
-                      color,
-                    }}
-                  >
+                  <div className="mb-6" style={{ color }}>
                     {area.icon}
                   </div>
 

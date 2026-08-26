@@ -5,6 +5,7 @@ import { ArrowLeft, ArrowUp, Calendar, MapPin, Trophy, ExternalLink } from "luci
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import EventImage from "@/components/EventImage";
+import TopographyBackground from "@/components/TopographyBackground";
 import { getEventBySlug } from "@/data/events";
 
 export default function EventDetail() {
@@ -33,8 +34,9 @@ export default function EventDetail() {
   if (!event) {
     return (
       <div className="min-h-screen flex flex-col bg-background text-foreground">
+        <TopographyBackground />
         <Navbar />
-        <main className="flex-1 pt-32 pb-24">
+        <main className="flex-1 pt-32 pb-24 relative z-10">
           <div className="container mx-auto px-6 text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
               Event <span className="text-gradient">Not Found</span>
@@ -57,6 +59,7 @@ export default function EventDetail() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
+      <TopographyBackground />
       <motion.div
         className="fixed top-0 left-0 right-0 h-1 bg-gradient-red z-50"
         style={{ scaleX, transformOrigin: "0%" }}
@@ -64,7 +67,7 @@ export default function EventDetail() {
 
       <Navbar />
 
-      <main className="flex-1 pt-20">
+      <main className="flex-1 pt-20 relative z-10">
         {/* Hero */}
         <section className="py-20 md:py-28 bg-transparent relative overflow-hidden">
           <div className="absolute inset-0 pointer-events-none z-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_50%,rgba(183,32,46,0.08)_0%,transparent_100%)]" />

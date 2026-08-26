@@ -43,43 +43,43 @@ function Stat({ value, label, description, icon, delay }: StatProps) {
   return (
     <motion.div
       ref={statRef}
-      className="bg-white/10 backdrop-blur-sm p-6 rounded-xl overflow-hidden relative group"
+      className="bg-card border border-border p-6 rounded-xl overflow-hidden relative group shadow-[0_10px_40px_rgba(0,0,0,0.05)] dark:shadow-[0_10px_40px_rgba(0,0,0,0.2)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:hover:shadow-[0_20px_50px_rgba(0,0,0,0.3)] transition-all duration-300"
       initial={{ opacity: 0, y: 40 }}
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
       transition={{ duration: 0.7, delay, type: "spring", stiffness: 50 }}
       whileHover={{ y: -5, transition: { duration: 0.2 } }}
     >
       {/* Decorative element */}
-      <motion.div 
-        className="absolute -right-6 -top-6 w-12 h-12 rounded-full bg-white/10"
+      <motion.div
+        className="absolute -right-6 -top-6 w-12 h-12 rounded-full bg-[var(--power-red)] opacity-5"
         initial={{ scale: 0 }}
         animate={isInView ? { scale: 1 } : { scale: 0 }}
         transition={{ duration: 0.7, delay: delay + 0.3 }}
       />
-      
+
       <div className="flex items-start gap-4">
-        <div className="bg-white/20 p-3 rounded-lg">
+        <div className="bg-[var(--power-red)]/10 p-3 rounded-lg">
           {icon}
         </div>
-        
+
         <div className="flex-1">
           <div className="flex items-baseline gap-1">
-            <div className="text-4xl md:text-5xl font-bold tracking-tight">{count}</div>
-            <div className="text-xl font-bold text-black/80">+</div>
+            <div className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">{count}</div>
+            <div className="text-xl font-bold text-[var(--vitality-red)]">+</div>
           </div>
-          
-          <h3 className="text-xl font-semibold mt-1 mb-2">{label}</h3>
-          
-          <p className="text-sm text-white/70 leading-relaxed">
+
+          <h3 className="text-xl font-semibold mt-1 mb-2 text-foreground">{label}</h3>
+
+          <p className="text-sm text-muted-foreground leading-relaxed">
             {description}
           </p>
         </div>
       </div>
-      
+
       {/* Bottom progress bar */}
-      <div className="w-full h-1 bg-white/10 mt-4 rounded-full overflow-hidden">
-        <motion.div 
-          className="h-full bg-white"
+      <div className="w-full h-1 bg-muted mt-4 rounded-full overflow-hidden">
+        <motion.div
+          className="h-full bg-gradient-red"
           initial={{ width: 0 }}
           animate={isInView ? { width: "100%" } : { width: 0 }}
           transition={{ duration: 2, delay: delay + 0.3, ease: "easeOut" }}
@@ -103,25 +103,25 @@ export default function Stats() {
   const bgY = useTransform(scrollYProgress, [0, 1], [0, -100]);
   
   const stats = [
-    { 
-      value: 10, 
-      label: "Industrial Collaborations", 
+    {
+      value: 10,
+      label: "Industrial Collaborations",
       description: "Collaborations with leading tech companies and organizations.",
-      icon: <Users className="w-5 h-5 text-white" />,
-      delay: 0.1 
+      icon: <Users className="w-5 h-5 text-[var(--vitality-red)]" />,
+      delay: 0.1
     },
-    { 
-      value: 5, 
-      label: "Workshops & Events", 
+    {
+      value: 5,
+      label: "Workshops & Events",
       description: "Hands-on learning experiences and networking opportunities.",
-      icon: <Award className="w-5 h-5 text-white" />,
-      delay: 0.2 
+      icon: <Award className="w-5 h-5 text-[var(--vitality-red)]" />,
+      delay: 0.2
     },
-    { 
-      value: 1600, 
-      label: "Students Impacted", 
+    {
+      value: 1600,
+      label: "Students Impacted",
       description: "Empowering the next generation of data scientists across campus.",
-      icon: <BarChart3 className="w-5 h-5 text-white" />,
+      icon: <BarChart3 className="w-5 h-5 text-[var(--vitality-red)]" />,
       delay: 0.1
     },
   
@@ -137,63 +137,68 @@ export default function Stats() {
         <defs>
           <pattern id="statsPattern" patternUnits="userSpaceOnUse" width="50" height="50" patternTransform="rotate(30)">
             <rect width="100%" height="100%" fill="none" />
-            <path d="M0,0 L50,50" stroke="white" strokeWidth="1" />
-            <circle cx="25" cy="25" r="3" fill="white" opacity="0.3" />
+            <path d="M0,0 L50,50" stroke="var(--power-red)" strokeWidth="1" />
+            <circle cx="25" cy="25" r="3" fill="var(--power-red)" opacity="0.3" />
           </pattern>
         </defs>
         <rect width="100%" height="100%" fill="url(#statsPattern)" />
       </svg>
     </motion.div>
   );
-  
+
   return (
-    <section 
-      id="stats" 
-      className="py-20 md:py-32 relative overflow-hidden"
+    <section
+      id="stats"
+      className="py-20 md:py-32 bg-transparent relative overflow-hidden"
       ref={containerRef}
-      style={{
-        background: "linear-gradient(135deg, var(--power-red), var(--vitality-red))"
-      }}
     >
       {/* Decorative background */}
       <DataPattern />
-      
-      <div className="absolute top-0 right-0 w-64 h-64 rounded-full bg-white opacity-5" />
-      <div className="absolute bottom-0 left-0 w-80 h-80 rounded-full bg-white opacity-5" />
-      
+
+      <div className="absolute top-0 right-0 w-64 h-64 rounded-full bg-[var(--power-red)] opacity-5" />
+      <div className="absolute bottom-0 left-0 w-80 h-80 rounded-full bg-[var(--vitality-red)] opacity-5" />
+
       <div className="container mx-auto px-6 relative z-10" ref={ref}>
-        <motion.div 
-          className="max-w-3xl mx-auto text-center mb-16 md:mb-20 text-white"
+        <motion.div
+          className="max-w-3xl mx-auto text-center mb-16 md:mb-20"
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          <motion.span 
-            className="inline-block mb-4 px-4 py-1 rounded-full bg-white/10 text-white text-sm font-medium"
+          <motion.span
+            className="inline-block mb-4 px-4 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
             transition={{ duration: 0.6 }}
           >
             By The Numbers
           </motion.span>
-          
-          <motion.h2 
+
+          <motion.h2
             className="text-4xl md:text-5xl font-bold mb-6 tracking-tight leading-tight"
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            Our Growth & Impact
+            <span className="text-foreground">Our Growth </span>
+            <span className="text-gradient">& Impact</span>
           </motion.h2>
-          
-          <motion.p 
-            className="text-xl text-white/80 max-w-2xl mx-auto"
+
+          <motion.p
+            className="text-xl text-muted-foreground max-w-2xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             The DataZen community continues to expand its reach and influence in the data science ecosystem at Somaiya Vidyavihar University and beyond.
           </motion.p>
+
+          <motion.div
+            className="h-1 w-20 bg-gradient-red mx-auto mt-8"
+            initial={{ opacity: 0, width: 0 }}
+            animate={isInView ? { opacity: 1, width: 80 } : { opacity: 0, width: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+          />
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
@@ -218,23 +223,23 @@ export default function Stats() {
         >
           <svg className="w-full h-full" viewBox="0 0 1000 100">
             {/* Visualization lines */}
-            <path 
-              d="M0,50 Q250,90 500,50 Q750,10 1000,50" 
-              fill="none" 
-              stroke="white" 
-              strokeWidth="1.5" 
-              strokeDasharray="5,5" 
+            <path
+              d="M0,50 Q250,90 500,50 Q750,10 1000,50"
+              fill="none"
+              stroke="var(--power-red)"
+              strokeWidth="1.5"
+              strokeDasharray="5,5"
               opacity="0.3"
             />
-            <path 
-              d="M0,50 Q250,10 500,50 Q750,90 1000,50" 
-              fill="none" 
-              stroke="white" 
-              strokeWidth="1.5" 
-              strokeDasharray="5,5" 
+            <path
+              d="M0,50 Q250,10 500,50 Q750,90 1000,50"
+              fill="none"
+              stroke="var(--vitality-red)"
+              strokeWidth="1.5"
+              strokeDasharray="5,5"
               opacity="0.3"
             />
-            
+
             {/* Data points */}
             {[1, 2, 3, 4, 5, 6, 7].map((_, i) => (
               <motion.circle
@@ -242,7 +247,7 @@ export default function Stats() {
                 cx={i * 150 + 50}
                 cy={50 + Math.sin(i * 0.8) * 20}
                 r="3"
-                fill="white"
+                fill="var(--vitality-red)"
                 initial={{ opacity: 0, scale: 0 }}
                 animate={isInView ? { opacity: 0.7, scale: 1 } : { opacity: 0, scale: 0 }}
                 transition={{ duration: 0.5, delay: 0.7 + i * 0.1 }}
