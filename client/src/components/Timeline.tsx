@@ -272,8 +272,8 @@ export default function Timeline() {
 
   /* ── Scroll-driven progress for path draw ── */
   const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start 70%", "end 60%"],
+    target: wrapRef,
+    offset: ["start 80%", "end 50%"],
   });
   const smoothProgress = useSpring(scrollYProgress, {
     stiffness: 60,
@@ -294,17 +294,7 @@ export default function Timeline() {
 
   /* ──────────────────────────────────────────────────────────────────────
    * Compute the snake path.
-   *
-   * Layout:  Left cards occupy 0–62 %, right cards 38–100 %.
-   *          Node dots sit at 72 % (left) / 28 % (right).
-   *
-   * Path:    Starts at left edge → node 1 → right edge → U-turn ↓ →
-   *          node 2 → left edge → U-turn ↓ → node 3 → … (snake pattern)
-   *
-   * U-turns use cubic bezier curves with control points that bulge
-   * slightly beyond the container edge (≈ 3.5 % of width) so the turn
-   * looks rounded, not sharp.  Because 4 % + 3.5 % = 7.5 % < 50 %,
-   * the curves never exceed the wrapper boundaries.
+   * Path snakes vertically down through the nodes, and horizontally BETWEEN the cards.
    * ────────────────────────────────────────────────────────────────────── */
   const compute = useCallback(() => {
     const wrap = wrapRef.current;
@@ -315,9 +305,9 @@ export default function Timeline() {
     const wrapRect = wrap.getBoundingClientRect();
     setWrapSize({ w: W, h: H });
 
-    // X position of each node dot
-    const NX_L = W * 0.72; // right of a left-aligned card
-    const NX_R = W * 0.28; // left of a right-aligned card
+    // Node X positions
+    const NX_L = W * 0.75; // Right node (for left card)
+    const NX_R = W * 0.25; // Left node (for right card)
 
     const positions: { x: number; y: number }[] = [];
     rowRefs.current.forEach((el, i) => {
@@ -333,29 +323,34 @@ export default function Timeline() {
     setNodes(positions);
 
     // Path geometry
-    const LE = W * 0.04; // left edge of the horizontal runs
-    const RE = W * 0.96; // right edge
-    const CR = W * 0.035; // curve radius (control-point offset)
+    const R = Math.min(40, W * 0.1); 
 
-    // Start from the left edge, draw a line to the first node
-    let d = `M ${LE} ${positions[0].y} L ${positions[0].x} ${positions[0].y}`;
+    let d = `M ${positions[0].x} 0 L ${positions[0].x} ${positions[0].y}`;
 
     for (let i = 0; i < positions.length - 1; i++) {
       const c = positions[i];
       const n = positions[i + 1];
+      const turn_y = (c.y + n.y) / 2;
 
-      if (timelineEvents[i].align === "left") {
-        // Path goes RIGHT from left-card node → right edge → U-turn → next node
-        d += ` L ${RE} ${c.y}`;
-        d += ` C ${RE + CR} ${c.y}, ${RE + CR} ${n.y}, ${RE} ${n.y}`;
-        d += ` L ${n.x} ${n.y}`;
+      d += ` L ${c.x} ${turn_y - R}`;
+
+      if (c.x > n.x) {
+        // From right spine to left spine
+        d += ` Q ${c.x} ${turn_y}, ${c.x - R} ${turn_y}`;
+        d += ` L ${n.x + R} ${turn_y}`;
+        d += ` Q ${n.x} ${turn_y}, ${n.x} ${turn_y + R}`;
       } else {
-        // Path goes LEFT from right-card node → left edge → U-turn → next node
-        d += ` L ${LE} ${c.y}`;
-        d += ` C ${LE - CR} ${c.y}, ${LE - CR} ${n.y}, ${LE} ${n.y}`;
-        d += ` L ${n.x} ${n.y}`;
+        // From left spine to right spine
+        d += ` Q ${c.x} ${turn_y}, ${c.x + R} ${turn_y}`;
+        d += ` L ${n.x - R} ${turn_y}`;
+        d += ` Q ${n.x} ${turn_y}, ${n.x} ${turn_y + R}`;
       }
+      
+      d += ` L ${n.x} ${n.y}`;
     }
+    
+    // Extend to bottom
+    d += ` L ${positions[positions.length - 1].x} ${H}`;
 
     setSvgD(d);
   }, []);
@@ -373,16 +368,20 @@ export default function Timeline() {
 
   // Measure total path length for stroke-dasharray animation
   useEffect(() => {
-    if (svgPathRef.current && svgD) {
-      setPathLen(svgPathRef.current.getTotalLength());
-    }
-  }, [svgD]);
+    if (!svgPathRef.current || !svgD) return;
+    const req = requestAnimationFrame(() => {
+      if (svgPathRef.current) {
+        setPathLen(svgPathRef.current.getTotalLength());
+      }
+    });
+    return () => cancelAnimationFrame(req);
+  }, [svgD, wrapSize]);
 
   const dashOff = pathLen * (1 - progress);
 
   // Card-edge X for connector lines
-  const CE_L = wrapSize.w * 0.62; // right edge of left cards
-  const CE_R = wrapSize.w * 0.38; // left edge of right cards
+  const CE_L = wrapSize.w * 0.60; // right edge of left cards
+  const CE_R = wrapSize.w * 0.40; // left edge of right cards
 
   return (
     <section
@@ -506,17 +505,17 @@ export default function Timeline() {
               {nodes.map((nd, i) => {
                 const isL = timelineEvents[i].align === "left";
                 const ceX = isL ? CE_L : CE_R;
+                const endX = isL ? nd.x + 40 : nd.x - 40;
                 return (
                   <g key={i}>
-                    {/* Dashed horizontal connector from card edge → node */}
+                    {/* Crosshair horizontal connector */}
                     <line
-                      x1={Math.min(nd.x, ceX)}
+                      x1={ceX}
                       y1={nd.y}
-                      x2={Math.max(nd.x, ceX)}
+                      x2={endX}
                       y2={nd.y}
-                      stroke="rgba(237,28,36,0.4)"
+                      stroke="rgba(237,28,36,0.6)"
                       strokeWidth="2"
-                      strokeDasharray="6 4"
                     />
                     {/* Outer pulsing ring */}
                     <circle
@@ -570,7 +569,7 @@ export default function Timeline() {
                     : "justify-end"
                 } pl-10 md:pl-0`}
               >
-                <div className="w-full md:w-[62%]">
+                <div className="w-full md:w-[60%]">
                   <TimelineCard event={ev} index={i} />
                 </div>
               </div>
