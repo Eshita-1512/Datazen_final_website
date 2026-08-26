@@ -273,18 +273,13 @@ export default function Timeline() {
   /* ── Scroll-driven progress for path draw ── */
   const { scrollYProgress } = useScroll({
     target: wrapRef,
-    offset: ["start 80%", "end 50%"],
+    offset: ["start 65%", "end 65%"],
   });
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 60,
-    damping: 20,
-    restDelta: 0.001,
+    stiffness: 250,
+    damping: 30,
+    restDelta: 0.0001,
   });
-  const [progress, setProgress] = useState(0);
-  useEffect(
-    () => smoothProgress.on("change", (v) => setProgress(v)),
-    [smoothProgress]
-  );
 
   /* ── SVG path state ── */
   const [svgD, setSvgD] = useState("");
@@ -356,8 +351,8 @@ export default function Timeline() {
   }, []);
 
   useEffect(() => {
-    const t1 = setTimeout(compute, 300);
-    const t2 = setTimeout(compute, 900); // backup for slow renders
+    const t1 = setTimeout(compute, 200);
+    const t2 = setTimeout(compute, 600);
     window.addEventListener("resize", compute);
     return () => {
       clearTimeout(t1);
@@ -365,19 +360,6 @@ export default function Timeline() {
       window.removeEventListener("resize", compute);
     };
   }, [compute]);
-
-  // Measure total path length for stroke-dasharray animation
-  useEffect(() => {
-    if (!svgPathRef.current || !svgD) return;
-    const req = requestAnimationFrame(() => {
-      if (svgPathRef.current) {
-        setPathLen(svgPathRef.current.getTotalLength());
-      }
-    });
-    return () => cancelAnimationFrame(req);
-  }, [svgD, wrapSize]);
-
-  const dashOff = pathLen * (1 - progress);
 
   // Card-edge X for connector lines
   const CE_L = wrapSize.w * 0.60; // right edge of left cards
@@ -487,18 +469,15 @@ export default function Timeline() {
                 strokeLinecap="round"
               />
 
-              {/* Animated glowing drawn path */}
-              <path
-                ref={svgPathRef}
+              {/* Animated glowing drawn path (fluid hardware-accelerated scroll tracking) */}
+              <motion.path
                 d={svgD}
                 fill="none"
                 stroke="url(#tl-grad)"
-                strokeWidth="3"
+                strokeWidth="3.5"
                 strokeLinecap="round"
                 filter="url(#tl-glow)"
-                strokeDasharray={pathLen}
-                strokeDashoffset={dashOff}
-                style={{ transition: "stroke-dashoffset 0.04s linear" }}
+                style={{ pathLength: smoothProgress }}
               />
 
               {/* Connector lines + Node dots */}
@@ -549,8 +528,8 @@ export default function Timeline() {
             <motion.div
               className="absolute top-0 left-0 right-0 bg-gradient-to-b from-[var(--vitality-red)] via-[var(--power-red)] to-[var(--vitality-red)] rounded-full shadow-[0_0_12px_rgba(237,28,36,0.6)]"
               style={{
-                height: `${progress * 100}%`,
-                transition: "height 0.05s linear",
+                scaleY: smoothProgress,
+                transformOrigin: "top",
               }}
             />
           </div>
