@@ -41,7 +41,15 @@ export default function Home() {
     
     // Add scroll event listener
     window.addEventListener('scroll', handleScroll);
-    
+
+    // Scroll to the target section if the URL includes a hash (e.g. /#timeline)
+    const hash = window.location.hash;
+    if (hash) {
+      requestAnimationFrame(() => {
+        document.querySelector(hash)?.scrollIntoView({ behavior: "auto" });
+      });
+    }
+
     // Clean up
     return () => {
       window.removeEventListener('scroll', handleScroll);

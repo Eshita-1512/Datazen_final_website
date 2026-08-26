@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import { motion, useInView, useScroll, useSpring } from "framer-motion";
 import { ArrowRight, Trophy, Sparkles } from "lucide-react";
-import { useLocation } from "wouter";
+import { Link, useLocation } from "wouter";
 import { timelineEvents, type TimelineEventData } from "@/data/events";
 import EventImage from "@/components/EventImage";
 
@@ -30,6 +30,15 @@ function TimelineCard({
               } ${isHovered ? "tl-card-hover" : ""}`
         }`}
         onClick={() => setLocation(`/events/${event.slug}`)}
+        role="link"
+        tabIndex={0}
+        aria-label={`Explore ${event.title}`}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            setLocation(`/events/${event.slug}`);
+          }
+        }}
         initial={{ opacity: 0, x: isLeft ? -60 : 60, y: 14 }}
         animate={
           isInView
@@ -148,13 +157,15 @@ function TimelineCard({
           </div>
 
           {/* CTA */}
-          <div
+          <Link
+            href={`/events/${event.slug}`}
+            onClick={(e) => e.stopPropagation()}
             className="inline-flex items-center gap-2 font-bold text-sm text-[var(--vitality-red)] transition-all duration-300"
             style={{ gap: isHovered ? "14px" : "8px" }}
           >
             <span>Explore Event</span>
             <ArrowRight className="w-4 h-4" />
-          </div>
+          </Link>
         </div>
       </motion.div>
     </div>
