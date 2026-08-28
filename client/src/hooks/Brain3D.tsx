@@ -31,7 +31,7 @@ function getBrainRadius(phi: number, theta: number) {
   
   const distToCerebellum = Math.sqrt((px-bx)**2 + (py-by)**2 + (pz-bz)**2);
   if (distToCerebellum < 0.6) {
-    r += 0.3 * (1 - distToCerebellum/0.6);
+    r += 0.1 * (1 - distToCerebellum/0.6);
   }
 
   // 5. Brainstem
@@ -127,7 +127,7 @@ export default function Brain3D() {
         </bufferGeometry>
         <pointsMaterial 
           size={0.03} 
-          color="#ff003c" 
+          color="#4a0505" 
           transparent 
           opacity={0.8} 
           sizeAttenuation 
@@ -144,9 +144,9 @@ export default function Brain3D() {
           />
         </bufferGeometry>
         <lineBasicMaterial 
-          color="#ff2a2a" 
+          color="#3a0505" 
           transparent 
-          opacity={0.4} 
+          opacity={0.5} 
           blending={THREE.AdditiveBlending} 
         />
       </lineSegments>

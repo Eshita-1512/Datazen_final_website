@@ -16,11 +16,11 @@
 
 /* Category buttons */
 .category-button {
-  padding: 0.6rem 1.4rem;
-  border-radius: 9999px;
+  padding: 0.5rem 1.25rem;
+  border-radius: 0px;
   white-space: nowrap;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  border: 1px solid rgba(183, 32, 46, 0.25);
+  transition: all 0.15s ease-out;
+  border: 1px solid hsl(var(--border) / 0.8);
   background-color: hsl(var(--card) / 0.8);
   color: hsl(var(--foreground));
   display: inline-flex;
@@ -31,24 +31,22 @@
 }
 
 .category-button:hover {
-  background-color: rgba(183, 32, 46, 0.15);
-  border-color: var(--vitality-red);
-  transform: translateY(-2px);
+  background-color: hsl(var(--secondary));
+  border-color: rgba(188, 168, 136, 0.4);
 }
 
 .category-button.active {
-  background: linear-gradient(135deg, var(--vitality-red), var(--power-red));
-  color: white;
-  border-color: var(--vitality-red);
-  box-shadow: 0 8px 20px rgba(237, 28, 36, 0.35);
-  transform: translateY(-2px);
+  background: var(--power-red);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: none;
 }
 
-/* Team Card base overflow fix */
+/* Team Card base overflow */
 .team-member-card {
   position: relative;
   overflow: hidden;
-  border-radius: 1.5rem;
+  border-radius: 0px;
 }
 
 /* Lusion Red Tech Shimmer Skeleton Animation */

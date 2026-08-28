@@ -498,113 +498,65 @@ export default function Resources() {
       <main className="flex-1 pt-20">
         {/* Hero Section */}
         {/* Hero Section */}
-        <section className="py-20 md:py-28 bg-background relative overflow-hidden">
-          {/* Binary Background Pattern */}
-          <motion.div className="absolute inset-0 overflow-hidden opacity-5 pointer-events-none">
-            <div className="absolute inset-0 font-mono text-sm text-[var(--power-red)] leading-none flex flex-wrap">
-              {Array.from({ length: 100 }).map((_, i) => (
-                <div key={i} className="p-2">
-                  {Array.from({ length: 8 }).map((_, j) => (
-                    <span key={j}>{Math.round(Math.random())}</span>
-                  ))}
-                </div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Decorative elements */}
-          <motion.div
-            className="absolute -top-12 -right-12 w-64 h-64 rounded-full bg-gradient-red opacity-10"
-            style={{
-              backgroundImage:
-                "radial-gradient(circle at center, var(--power-red) 0%, transparent 70%)",
-            }}
-          />
-
-          <motion.div
-            className="absolute -bottom-12 -left-12 w-64 h-64 rounded-full bg-gradient-red opacity-10"
-            style={{
-              backgroundImage:
-                "radial-gradient(circle at center, var(--vitality-red) 0%, transparent 70%)",
-            }}
-          />
-
+        <section className="py-20 md:py-28 bg-transparent relative overflow-hidden">
           <div className="container mx-auto px-6 relative z-10">
             <motion.div
               className="max-w-3xl mx-auto text-center"
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
+              transition={{ duration: 0.5 }}
             >
-              <motion.span
-                className="inline-block mb-4 px-4 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6 }}
-              >
-                Learning Resources
-              </motion.span>
+              <span className="inline-block mb-3 px-3 py-1 rounded-full bg-secondary text-secondary-foreground text-xs font-mono tracking-widest uppercase border border-border">
+                Curated Repository
+              </span>
 
-              <motion.h1
-                className="text-4xl md:text-5xl font-bold mb-6 tracking-tight leading-tight"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-              >
+              <h1 className="text-3xl md:text-5xl font-extrabold mb-4 tracking-tight leading-tight font-display">
                 <span className="text-foreground">Data Science </span>
                 <span className="text-gradient">Resources</span>
-              </motion.h1>
+              </h1>
 
-              <motion.p
-                className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-              >
-                Curated collection of tutorials, datasets, tools, and learning materials 
-                to accelerate your data science journey.
-              </motion.p>
+              <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto mb-6 leading-relaxed font-body">
+                Open tutorials, benchmark datasets, and technical references curated by DataZen mentors for Somaiya students.
+              </p>
 
-              <motion.div
-                className="h-1 w-20 bg-gradient-red mx-auto"
-                initial={{ opacity: 0, width: 0 }}
-                animate={{ opacity: 1, width: 80 }}
-                transition={{ duration: 0.8, delay: 0.3 }}
-              />
+              <div className="h-[2px] w-16 bg-primary mx-auto mt-6" />
             </motion.div>
           </div>
-        </section>        {/* Search and Filter Section */}
-        <section className="py-8 bg-card/50">
+        </section>
+
+        {/* Search and Filter Section */}
+        <section className="py-6 bg-card/40 border-y border-border backdrop-blur-md">
           <div className="container mx-auto px-6">
             <div className="max-w-4xl mx-auto">
-              <div className="flex flex-col md:flex-row gap-4 mb-8">
+              <div className="flex flex-col md:flex-row gap-4 mb-6">
                 {/* Search Input */}
                 <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+                  <Search className="absolute left-3.5 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
                   <Input
                     type="text"
                     placeholder="Search resources, tools, tutorials..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-12 h-12"
+                    className="pl-10 h-11 rounded-none bg-card/80 border-border"
                   />
                   {searchTerm && (
                     <button
                       onClick={() => setSearchTerm("")}
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                      className="absolute right-3.5 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                      aria-label="Clear search"
                     >
-                      <X className="w-5 h-5" />
+                      <X className="w-4 h-4" />
                     </button>
                   )}
                 </div>
 
                 {/* Category Filter */}
                 <div className="flex items-center gap-2">
-                  <Filter className="w-5 h-5 text-muted-foreground" />
+                  <Filter className="w-4 h-4 text-muted-foreground" />
                   <select
                     value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value)}
-                    className="h-12 px-4 rounded-md border border-input bg-background text-foreground"
+                    className="h-11 px-4 rounded-none border border-border bg-card text-foreground text-sm focus:outline-none focus:ring-1 focus:ring-primary"
                   >
                     {categories.map((category) => (
                       <option key={category} value={category}>
@@ -616,7 +568,7 @@ export default function Resources() {
               </div>
 
               {/* Results count */}
-              <p className="text-muted-foreground text-center">
+              <p className="text-xs font-mono text-muted-foreground text-center">
                 Found {filteredResources.length} resources
                 {selectedCategory !== "All" && ` in ${selectedCategory}`}
                 {searchTerm && ` matching "${searchTerm}"`}
@@ -633,42 +585,42 @@ export default function Resources() {
               className="mb-20"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: 0.5 }}
             >
               <div className="flex items-center gap-4 mb-8">
-                <div className="w-12 h-12 rounded-xl bg-green-500/10 flex items-center justify-center">
-                  <BookOpen className="w-6 h-6 text-green-500" />
+                <div className="w-10 h-10 rounded-none bg-primary/10 border border-primary/20 flex items-center justify-center">
+                  <BookOpen className="w-5 h-5 text-primary" />
                 </div>
                 <div>
-                  <h2 className="text-3xl font-bold text-foreground">Books & Publications</h2>
-                  <p className="text-muted-foreground">Essential reading materials and references</p>
+                  <h2 className="text-2xl font-bold text-foreground font-display">Books &amp; Publications</h2>
+                  <p className="text-muted-foreground text-sm font-body">Essential reading materials and references</p>
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredResources.filter(resource => resource.category === "Books").map((resource, index) => (
                   <motion.div
                     key={resource.id}
-                    className="bg-card rounded-xl p-6 border border-border hover:border-green-500/50 transition-all duration-300 hover:shadow-lg group flex flex-col h-full"
+                    className="bg-card/90 rounded-none p-6 border border-border hover:border-primary/50 transition-colors duration-150 group flex flex-col h-full"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    transition={{ duration: 0.4, delay: index * 0.05 }}
                   >
                     <div className="flex items-center gap-3 mb-4">
-                      <div className="w-10 h-10 rounded-lg bg-green-500/10 flex items-center justify-center text-green-500">
+                      <div className="w-9 h-9 rounded-none bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
                         {getResourceIcon(resource.type)}
                       </div>
                       {resource.featured && (
-                        <Badge variant="secondary" className="text-xs">Featured</Badge>
+                        <Badge variant="secondary" className="text-xs font-mono rounded-none">Featured</Badge>
                       )}
                     </div>
-                    <h3 className="font-bold text-lg mb-2 group-hover:text-green-500 transition-colors">
+                    <h3 className="font-bold text-lg mb-2 group-hover:text-primary transition-colors font-display">
                       {resource.title}
                     </h3>
-                    <p className="text-muted-foreground text-sm mb-4 line-clamp-3 flex-grow">
+                    <p className="text-muted-foreground text-sm mb-4 line-clamp-3 flex-grow font-body">
                       {resource.description}
                     </p>
-                    <div className="flex items-center justify-between mb-4">
-                      <Badge className={getLevelColor(resource.level)} variant="outline">
+                    <div className="flex items-center justify-between mb-4 font-mono text-xs">
+                      <Badge className={`${getLevelColor(resource.level)} rounded-none`} variant="outline">
                         {resource.level}
                       </Badge>
                       <span className="text-xs text-muted-foreground">
@@ -677,12 +629,12 @@ export default function Resources() {
                     </div>
                     <div className="flex flex-wrap gap-1 mb-4">
                       {resource.tags.slice(0, 3).map((tag) => (
-                        <Badge key={tag} variant="secondary" className="text-xs">
+                        <Badge key={tag} variant="secondary" className="text-xs font-mono rounded-none">
                           {tag}
                         </Badge>
                       ))}
                     </div>
-                    <Button size="sm" asChild className="w-full mt-auto">
+                    <Button size="sm" asChild className="w-full mt-auto rounded-none font-display">
                       <a href={resource.url} target="_blank" rel="noopener noreferrer">
                         Read Book <ExternalLink className="w-4 h-4 ml-1" />
                       </a>
@@ -697,42 +649,42 @@ export default function Resources() {
               className="mb-20"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
             >
               <div className="flex items-center gap-4 mb-8">
-                <div className="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center">
-                  <Database className="w-6 h-6 text-purple-500" />
+                <div className="w-10 h-10 rounded-none bg-primary/10 border border-primary/20 flex items-center justify-center">
+                  <Database className="w-5 h-5 text-primary" />
                 </div>
                 <div>
-                  <h2 className="text-3xl font-bold text-foreground">Datasets & Data Sources</h2>
-                  <p className="text-muted-foreground">Curated datasets for practice and projects</p>
+                  <h2 className="text-2xl font-bold text-foreground font-display">Datasets &amp; Data Sources</h2>
+                  <p className="text-muted-foreground text-sm font-body">Curated datasets for practice, benchmark models, and projects</p>
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredResources.filter(resource => resource.category === "Datasets").map((resource, index) => (
                   <motion.div
                     key={resource.id}
-                    className="bg-card rounded-xl p-6 border border-border hover:border-purple-500/50 transition-all duration-300 hover:shadow-lg group flex flex-col h-full"
+                    className="bg-card/90 rounded-none p-6 border border-border hover:border-primary/50 transition-colors duration-150 group flex flex-col h-full"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    transition={{ duration: 0.4, delay: index * 0.05 }}
                   >
                     <div className="flex items-center gap-3 mb-4">
-                      <div className="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center text-purple-500">
+                      <div className="w-9 h-9 rounded-none bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
                         {getResourceIcon(resource.type)}
                       </div>
                       {resource.featured && (
-                        <Badge variant="secondary" className="text-xs">Featured</Badge>
+                        <Badge variant="secondary" className="text-xs font-mono rounded-none">Featured</Badge>
                       )}
                     </div>
-                    <h3 className="font-bold text-lg mb-2 group-hover:text-purple-500 transition-colors">
+                    <h3 className="font-bold text-lg mb-2 group-hover:text-primary transition-colors font-display">
                       {resource.title}
                     </h3>
-                    <p className="text-muted-foreground text-sm mb-4 line-clamp-3 flex-grow">
+                    <p className="text-muted-foreground text-sm mb-4 line-clamp-3 flex-grow font-body">
                       {resource.description}
                     </p>
-                    <div className="flex items-center justify-between mb-4">
-                      <Badge className={getLevelColor(resource.level)} variant="outline">
+                    <div className="flex items-center justify-between mb-4 font-mono text-xs">
+                      <Badge className={`${getLevelColor(resource.level)} rounded-none`} variant="outline">
                         {resource.level}
                       </Badge>
                       <span className="text-xs text-muted-foreground">
@@ -741,12 +693,12 @@ export default function Resources() {
                     </div>
                     <div className="flex flex-wrap gap-1 mb-4">
                       {resource.tags.slice(0, 3).map((tag) => (
-                        <Badge key={tag} variant="secondary" className="text-xs">
+                        <Badge key={tag} variant="secondary" className="text-xs font-mono rounded-none">
                           {tag}
                         </Badge>
                       ))}
                     </div>
-                    <Button size="sm" asChild className="w-full mt-auto">
+                    <Button size="sm" asChild className="w-full mt-auto rounded-none font-display">
                       <a href={resource.url} target="_blank" rel="noopener noreferrer">
                         Access Dataset <ExternalLink className="w-4 h-4 ml-1" />
                       </a>
@@ -761,42 +713,42 @@ export default function Resources() {
               className="mb-20"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
             >
               <div className="flex items-center gap-4 mb-8">
-                <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center">
-                  <Code className="w-6 h-6 text-blue-500" />
+                <div className="w-10 h-10 rounded-none bg-primary/10 border border-primary/20 flex items-center justify-center">
+                  <Code className="w-5 h-5 text-primary" />
                 </div>
                 <div>
-                  <h2 className="text-3xl font-bold text-foreground">Tools & Applications</h2>
-                  <p className="text-muted-foreground">Interactive tools and software for data science</p>
+                  <h2 className="text-2xl font-bold text-foreground font-display">Tools &amp; Applications</h2>
+                  <p className="text-muted-foreground text-sm font-body">Interactive platforms, notebooks, and libraries for data science</p>
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredResources.filter(resource => resource.category === "Tools").map((resource, index) => (
                   <motion.div
                     key={resource.id}
-                    className="bg-card rounded-xl p-6 border border-border hover:border-blue-500/50 transition-all duration-300 hover:shadow-lg group flex flex-col h-full"
+                    className="bg-card/90 rounded-none p-6 border border-border hover:border-primary/50 transition-colors duration-150 group flex flex-col h-full"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    transition={{ duration: 0.4, delay: index * 0.05 }}
                   >
                     <div className="flex items-center gap-3 mb-4">
-                      <div className="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500">
+                      <div className="w-9 h-9 rounded-none bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
                         {getResourceIcon(resource.type)}
                       </div>
                       {resource.featured && (
-                        <Badge variant="secondary" className="text-xs">Featured</Badge>
+                        <Badge variant="secondary" className="text-xs font-mono rounded-none">Featured</Badge>
                       )}
                     </div>
-                    <h3 className="font-bold text-lg mb-2 group-hover:text-blue-500 transition-colors">
+                    <h3 className="font-bold text-lg mb-2 group-hover:text-primary transition-colors font-display">
                       {resource.title}
                     </h3>
-                    <p className="text-muted-foreground text-sm mb-4 line-clamp-3 flex-grow">
+                    <p className="text-muted-foreground text-sm mb-4 line-clamp-3 flex-grow font-body">
                       {resource.description}
                     </p>
-                    <div className="flex items-center justify-between mb-4">
-                      <Badge className={getLevelColor(resource.level)} variant="outline">
+                    <div className="flex items-center justify-between mb-4 font-mono text-xs">
+                      <Badge className={`${getLevelColor(resource.level)} rounded-none`} variant="outline">
                         {resource.level}
                       </Badge>
                       <span className="text-xs text-muted-foreground">
@@ -805,12 +757,12 @@ export default function Resources() {
                     </div>
                     <div className="flex flex-wrap gap-1 mb-4">
                       {resource.tags.slice(0, 3).map((tag) => (
-                        <Badge key={tag} variant="secondary" className="text-xs">
+                        <Badge key={tag} variant="secondary" className="text-xs font-mono rounded-none">
                           {tag}
                         </Badge>
                       ))}
                     </div>
-                    <Button size="sm" asChild className="w-full mt-auto">
+                    <Button size="sm" asChild className="w-full mt-auto rounded-none font-display">
                       <a href={resource.url} target="_blank" rel="noopener noreferrer">
                         Open Tool <ExternalLink className="w-4 h-4 ml-1" />
                       </a>
@@ -825,42 +777,42 @@ export default function Resources() {
               className="mb-20"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
             >
               <div className="flex items-center gap-4 mb-8">
-                <div className="w-12 h-12 rounded-xl bg-red-500/10 flex items-center justify-center">
-                  <Video className="w-6 h-6 text-red-500" />
+                <div className="w-10 h-10 rounded-none bg-primary/10 border border-primary/20 flex items-center justify-center">
+                  <Video className="w-5 h-5 text-primary" />
                 </div>
                 <div>
-                  <h2 className="text-3xl font-bold text-foreground">Videos & Tutorials</h2>
-                  <p className="text-muted-foreground">Educational videos and course materials</p>
+                  <h2 className="text-2xl font-bold text-foreground font-display">Videos &amp; Tutorials</h2>
+                  <p className="text-muted-foreground text-sm font-body">Technical walkthroughs and lecture materials</p>
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredResources.filter(resource => resource.category === "Videos").map((resource, index) => (
                   <motion.div
                     key={resource.id}
-                    className="bg-card rounded-xl p-6 border border-border hover:border-red-500/50 transition-all duration-300 hover:shadow-lg group flex flex-col h-full"
+                    className="bg-card/90 rounded-none p-6 border border-border hover:border-primary/50 transition-colors duration-150 group flex flex-col h-full"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    transition={{ duration: 0.4, delay: index * 0.05 }}
                   >
                     <div className="flex items-center gap-3 mb-4">
-                      <div className="w-10 h-10 rounded-lg bg-red-500/10 flex items-center justify-center text-red-500">
+                      <div className="w-9 h-9 rounded-none bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
                         {getResourceIcon(resource.type)}
                       </div>
                       {resource.featured && (
-                        <Badge variant="secondary" className="text-xs">Featured</Badge>
+                        <Badge variant="secondary" className="text-xs font-mono rounded-none">Featured</Badge>
                       )}
                     </div>
-                    <h3 className="font-bold text-lg mb-2 group-hover:text-red-500 transition-colors">
+                    <h3 className="font-bold text-lg mb-2 group-hover:text-primary transition-colors font-display">
                       {resource.title}
                     </h3>
-                    <p className="text-muted-foreground text-sm mb-4 line-clamp-3 flex-grow">
+                    <p className="text-muted-foreground text-sm mb-4 line-clamp-3 flex-grow font-body">
                       {resource.description}
                     </p>
-                    <div className="flex items-center justify-between mb-4">
-                      <Badge className={getLevelColor(resource.level)} variant="outline">
+                    <div className="flex items-center justify-between mb-4 font-mono text-xs">
+                      <Badge className={`${getLevelColor(resource.level)} rounded-none`} variant="outline">
                         {resource.level}
                       </Badge>
                       <span className="text-xs text-muted-foreground">
@@ -869,12 +821,12 @@ export default function Resources() {
                     </div>
                     <div className="flex flex-wrap gap-1 mb-4">
                       {resource.tags.slice(0, 3).map((tag) => (
-                        <Badge key={tag} variant="secondary" className="text-xs">
+                        <Badge key={tag} variant="secondary" className="text-xs font-mono rounded-none">
                           {tag}
                         </Badge>
                       ))}
                     </div>
-                    <Button size="sm" asChild className="w-full mt-auto">
+                    <Button size="sm" asChild className="w-full mt-auto rounded-none font-display">
                       <a href={resource.url} target="_blank" rel="noopener noreferrer">
                         Watch Video <ExternalLink className="w-4 h-4 ml-1" />
                       </a>
@@ -889,33 +841,24 @@ export default function Resources() {
               const categoryResources = filteredResources.filter(resource => resource.category === category);
               if (categoryResources.length === 0) return null;
 
-              const categoryColors: { [key: string]: { bg: string; text: string; border: string } } = {
-                "Tutorials": { bg: "bg-orange-500/10", text: "text-orange-500", border: "border-orange-500/50" },
-                "Courses": { bg: "bg-indigo-500/10", text: "text-indigo-500", border: "border-indigo-500/50" },
-                "Research Papers": { bg: "bg-yellow-500/10", text: "text-yellow-500", border: "border-yellow-500/50" },
-                "Competitions": { bg: "bg-pink-500/10", text: "text-pink-500", border: "border-pink-500/50" }
-              };
-
-              const colors = categoryColors[category];
-
               return (
                 <motion.div
                   key={category}
                   className="mb-20"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.8 + categoryIndex * 0.2 }}
+                  transition={{ duration: 0.5, delay: 0.4 + categoryIndex * 0.1 }}
                 >
                   <div className="flex items-center gap-4 mb-8">
-                    <div className={`w-12 h-12 rounded-xl ${colors.bg} flex items-center justify-center`}>
-                      {category === "Tutorials" && <BookOpen className={`w-6 h-6 ${colors.text}`} />}
-                      {category === "Courses" && <Users className={`w-6 h-6 ${colors.text}`} />}
-                      {category === "Research Papers" && <FileText className={`w-6 h-6 ${colors.text}`} />}
-                      {category === "Competitions" && <Users className={`w-6 h-6 ${colors.text}`} />}
+                    <div className="w-10 h-10 rounded-none bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                      {category === "Tutorials" && <BookOpen className="w-5 h-5" />}
+                      {category === "Courses" && <Users className="w-5 h-5" />}
+                      {category === "Research Papers" && <FileText className="w-5 h-5" />}
+                      {category === "Competitions" && <Users className="w-5 h-5" />}
                     </div>
                     <div>
-                      <h2 className="text-3xl font-bold text-foreground">{category}</h2>
-                      <p className="text-muted-foreground">
+                      <h2 className="text-2xl font-bold text-foreground font-display">{category}</h2>
+                      <p className="text-muted-foreground text-sm font-body">
                         {category === "Tutorials" && "Step-by-step learning guides"}
                         {category === "Courses" && "Structured learning programs"}
                         {category === "Research Papers" && "Academic papers and research"}
@@ -927,27 +870,27 @@ export default function Resources() {
                     {categoryResources.map((resource, index) => (
                       <motion.div
                         key={resource.id}
-                        className={`bg-card rounded-xl p-6 border border-border hover:${colors.border} transition-all duration-300 hover:shadow-lg group flex flex-col h-full`}
+                        className="bg-card/90 rounded-none p-6 border border-border hover:border-primary/50 transition-colors duration-150 group flex flex-col h-full"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: index * 0.1 }}
+                        transition={{ duration: 0.4, delay: index * 0.05 }}
                       >
                         <div className="flex items-center gap-3 mb-4">
-                          <div className={`w-10 h-10 rounded-lg ${colors.bg} flex items-center justify-center ${colors.text}`}>
+                          <div className="w-9 h-9 rounded-none bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
                             {getResourceIcon(resource.type)}
                           </div>
                           {resource.featured && (
-                            <Badge variant="secondary" className="text-xs">Featured</Badge>
+                            <Badge variant="secondary" className="text-xs font-mono rounded-none">Featured</Badge>
                           )}
                         </div>
-                        <h3 className={`font-bold text-lg mb-2 group-hover:${colors.text} transition-colors`}>
+                        <h3 className="font-bold text-lg mb-2 group-hover:text-primary transition-colors font-display">
                           {resource.title}
                         </h3>
-                        <p className="text-muted-foreground text-sm mb-4 line-clamp-3 flex-grow">
+                        <p className="text-muted-foreground text-sm mb-4 line-clamp-3 flex-grow font-body">
                           {resource.description}
                         </p>
-                        <div className="flex items-center justify-between mb-4">
-                          <Badge className={getLevelColor(resource.level)} variant="outline">
+                        <div className="flex items-center justify-between mb-4 font-mono text-xs">
+                          <Badge className={`${getLevelColor(resource.level)} rounded-none`} variant="outline">
                             {resource.level}
                           </Badge>
                           <span className="text-xs text-muted-foreground">
@@ -956,12 +899,12 @@ export default function Resources() {
                         </div>
                         <div className="flex flex-wrap gap-1 mb-4">
                           {resource.tags.slice(0, 3).map((tag) => (
-                            <Badge key={tag} variant="secondary" className="text-xs">
+                            <Badge key={tag} variant="secondary" className="text-xs font-mono rounded-none">
                               {tag}
                             </Badge>
                           ))}
                         </div>
-                        <Button size="sm" asChild className="w-full mt-auto">
+                        <Button size="sm" asChild className="w-full mt-auto rounded-none font-display">
                           <a href={resource.url} target="_blank" rel="noopener noreferrer">
                             View Resource <ExternalLink className="w-4 h-4 ml-1" />
                           </a>
@@ -976,29 +919,26 @@ export default function Resources() {
         </section>
 
         {/* Call to Action */}
-        <section className="py-16 bg-card/50">
+        <section className="py-16 border-t border-border bg-card/40">
           <div className="container mx-auto px-6">
             <motion.div
               className="max-w-4xl mx-auto text-center"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: 0.5 }}
             >
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              <h2 className="text-3xl md:text-4xl font-extrabold mb-4 font-display">
                 <span className="text-foreground">Have a </span>
                 <span className="text-gradient">Resource </span>
                 <span className="text-foreground">to Share?</span>
               </h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto mb-8">
-                Help grow our community by suggesting valuable resources for fellow data science enthusiasts.
+              <p className="text-muted-foreground max-w-2xl mx-auto mb-8 font-body text-base">
+                Help build our open repository by suggesting valuable research papers, notebooks, or benchmark datasets for Somaiya students.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg">
-                  Suggest a Resource <ChevronRight className="w-4 h-4 ml-1" />
-                </Button>
-                <Button size="lg" variant="outline">
-                  Join Our Community
-                </Button>
+                <button className="dz-button-primary px-8 py-3 text-base">
+                  Suggest a Resource
+                </button>
               </div>
             </motion.div>
           </div>

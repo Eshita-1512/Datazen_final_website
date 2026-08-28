@@ -10,31 +10,32 @@ export default function Hero() {
           <canvas id="brainCanvas" ref={canvasRef}></canvas>
 
           <div className="stext stext-left" id="txt1" ref={txt1Ref}>
-            <span className="eyebrow">About Us</span>
-            <h2>Pioneering <span className="red">Data Science</span> at Somaiya</h2>
-            <p>DataZen sits at the intersection of innovation and education — empowering students to explore and master the world of data through collaboration and hands-on learning.</p>
+            <span className="eyebrow">Data Science Council</span>
+            <h2>Student <span className="red">Data Science</span> at Somaiya</h2>
+            <p>We run campus hackathons, technical workshops, and open data projects for students across Somaiya Vidyavihar University.</p>
           </div>
 
           <div className="stext stext-right" id="txt2" ref={txt2Ref}>
-            <span className="eyebrow">Our Vision</span>
-            <h2>A Vibrant <span className="red">Community</span></h2>
-            <p>Fostering innovation and excellence in the field of data science through collaboration and hands-on learning.</p>
+            <span className="eyebrow">Practical Learning</span>
+            <h2>Peer Sprints &amp; <span className="red">Workshops</span></h2>
+            <p>Hands-on sessions covering machine learning, analytics, and data engineering tools led by experienced student mentors.</p>
           </div>
 
           <div className="stext stext-left" id="txt3" ref={txt3Ref}>
-            <span className="eyebrow">University Affiliation</span>
-            <h2>Proudly <span className="red">Somaiya</span></h2>
-            <p>DataZen is proudly affiliated with Somaiya Vidyavihar University, upholding its tradition of academic excellence and innovation.</p>
+            <span className="eyebrow">Campus Affiliation</span>
+            <h2>Somaiya <span className="red">Vidyavihar</span></h2>
+            <p>An official student body supporting data science initiatives, research papers, and inter-collegiate technical competitions.</p>
           </div>
 
           <div className="stext stext-right" id="txt4" ref={txt4Ref}>
-            <span className="eyebrow">Our Community</span>
-            <h2>Diverse &amp; <span className="red">Driven</span></h2>
-            <p>A diverse network of students, faculty, and industry experts collaborating to advance data science knowledge and real-world applications.</p>
-          </div>          <div className="scenehint" id="sceneHint" ref={hintRef}>scroll<span className="m"></span></div>
+            <span className="eyebrow">Council Operations</span>
+            <h2>Student <span className="red">Committees</span></h2>
+            <p>Teams across Technical, Logistics, Design, Public Relations, and Sponsorship managing year-round data initiatives.</p>
+          </div>
+          <div className="scenehint" id="sceneHint" ref={hintRef}>scroll<span className="m"></span></div>
         </div>
       </div>
-      <div className="flytitle" id="flyTitle" ref={flyTitleRef}>Data<span>Zen</span></div>
+      <div className="flytitle tracking-wider font-bold uppercase" id="flyTitle" ref={flyTitleRef} style={{ fontFamily: "'Tektur', sans-serif" }}>DATA<span>ZEN</span></div>
     </>
   );
 }

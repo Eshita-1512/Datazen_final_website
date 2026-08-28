@@ -419,67 +419,42 @@ export default function Team() {
   return (
     <section
       id="team"
-      className="py-20 md:py-28 bg-transparent relative overflow-hidden select-none"
+      className="py-16 md:py-20 bg-transparent relative overflow-hidden select-none"
       ref={containerRef}
     >
       {/* Background pattern */}
       <BinaryBackground />
 
-      {/* Decorative radial glows */}
-      <div className="absolute -top-12 -right-12 w-64 h-64 rounded-full bg-[radial-gradient(circle_at_center,var(--power-red)_0%,transparent_70%)] opacity-10 pointer-events-none" />
-      <div className="absolute -bottom-12 -left-12 w-64 h-64 rounded-full bg-[radial-gradient(circle_at_center,var(--vitality-red)_0%,transparent_70%)] opacity-10 pointer-events-none" />
-
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         {/* Header */}
         <motion.div
-          className="max-w-3xl mx-auto text-center mb-12 md:mb-16"
-          initial={{ opacity: 0, y: 30 }}
+          className="max-w-3xl mx-auto text-center mb-10 md:mb-14"
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          transition={{ duration: 0.5 }}
         >
-          <motion.span
-            className="inline-block mb-4 px-4 py-1.5 rounded-full bg-[var(--power-red)]/10 text-[var(--vitality-red)] text-xs md:text-sm font-semibold tracking-wider uppercase border border-[var(--power-red)]/30"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6 }}
-          >
-            Our Council
-          </motion.span>
+          <span className="inline-block mb-3 px-3 py-1 rounded-full bg-secondary text-secondary-foreground text-xs font-mono tracking-widest uppercase border border-border">
+            Council Directory
+          </span>
 
-          <motion.h2
-            className="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight leading-tight"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-          >
-            <span className="text-foreground">The Team </span>
-            <span className="text-gradient">Behind </span>
-            <span className="text-foreground">DataZen</span>
-          </motion.h2>
+          <h2 className="text-3xl md:text-5xl font-extrabold mb-4 tracking-tight leading-tight font-display">
+            <span className="text-foreground">Student Leadership &amp; </span>
+            <span className="text-gradient">Teams</span>
+          </h2>
 
-          <motion.p
-            className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
+          <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed font-body">
             Meet our passionate council members driving innovation and excellence in
             data science.
-          </motion.p>
+          </p>
 
-          <motion.div
-            className="h-1 w-20 bg-gradient-red mx-auto mt-6 rounded-full"
-            initial={{ opacity: 0, width: 0 }}
-            animate={{ opacity: 1, width: 80 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-          />
+          <div className="h-1 w-16 bg-primary mx-auto mt-6 rounded-full" />
         </motion.div>
 
         {/* Team Category Selection Menu */}
         <div className="mb-12 max-w-5xl mx-auto">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg md:text-xl font-bold text-foreground tracking-wide">
-              Filter by Team
+            <h3 className="text-sm font-mono text-muted-foreground uppercase tracking-wider">
+              Filter by Department
             </h3>
           </div>
 
@@ -574,10 +549,10 @@ export default function Team() {
                   >
                     {/* Left-Aligned Full Photo Card */}
                     <div
-                      className={`team-member-card group relative w-[285px] md:w-[325px] h-[470px] rounded-3xl overflow-hidden flex flex-col justify-end p-6 text-left border transition-all duration-500 bg-card ${
+                      className={`team-member-card group relative w-[285px] md:w-[325px] h-[470px] overflow-hidden flex flex-col justify-end p-6 text-left border transition-all duration-300 bg-card ${
                         isActive
-                          ? "border-[var(--vitality-red)] shadow-[0_0_40px_rgba(237,28,36,0.45)]"
-                          : "border-[var(--power-red)]/25 shadow-lg hover:border-[var(--vitality-red)]/60 opacity-90"
+                          ? "border-primary shadow-xl"
+                          : "border-border/80 hover:border-primary/60 opacity-85"
                       }`}
                     >
                       {/* Lusion-Style Skeleton & Photo */}
@@ -588,36 +563,36 @@ export default function Team() {
                       />
 
                       {/* Smooth Bottom Gradient Fade */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 via-50% to-transparent rounded-3xl pointer-events-none" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/75 via-50% to-transparent pointer-events-none" />
 
                       {/* Floating Department Badge (Top Right) */}
                       <div className="absolute top-4 right-4 z-20">
-                        <span className="text-[0.68rem] font-bold px-3 py-1 rounded-full bg-black/60 text-[var(--vitality-red)] border border-[var(--vitality-red)]/40 backdrop-blur-md uppercase tracking-wider shadow-lg">
+                        <span className="text-[0.68rem] font-mono font-bold px-2.5 py-0.5 bg-black/80 text-accent border border-border uppercase tracking-wider backdrop-blur-md">
                           {member.category}
                         </span>
                       </div>
 
                       {/* Left-Aligned Details Overlay at Bottom */}
                       <div className="relative z-10 w-full text-left flex flex-col items-start gap-1">
-                        <span className="text-[0.7rem] font-extrabold uppercase tracking-widest text-[var(--vitality-red)]">
+                        <span className="text-[0.7rem] font-mono font-bold uppercase tracking-widest text-accent">
                           {member.role}
                         </span>
 
-                        <h3 className="text-2xl font-extrabold text-white tracking-tight leading-tight">
+                        <h3 className="text-2xl font-extrabold text-white tracking-tight leading-tight font-display">
                           {member.name}
                         </h3>
 
-                        <p className="text-xs md:text-sm text-gray-300 italic leading-relaxed line-clamp-2 mt-1 mb-3 font-normal">
+                        <p className="text-xs md:text-sm text-gray-300 italic leading-relaxed line-clamp-2 mt-1 mb-3 font-normal font-body">
                           "{member.description}"
                         </p>
 
                         {/* Social Links */}
-                        <div className="flex items-center gap-2.5 pt-1">
+                        <div className="flex items-center gap-2 pt-1">
                           <a
                             href={member.github}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="w-9 h-9 rounded-full bg-white/10 backdrop-blur-md hover:bg-[var(--vitality-red)] hover:text-white flex items-center justify-center transition-all duration-200 border border-white/20"
+                            className="w-8 h-8 rounded-none bg-black/40 hover:bg-primary hover:text-white flex items-center justify-center transition-all duration-150 border border-white/20"
                             aria-label={`${member.name}'s GitHub`}
                             onClick={(e) => e.stopPropagation()}
                           >
@@ -627,7 +602,7 @@ export default function Team() {
                             href={member.linkedin}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="w-9 h-9 rounded-full bg-white/10 backdrop-blur-md hover:bg-[var(--vitality-red)] hover:text-white flex items-center justify-center transition-all duration-200 border border-white/20"
+                            className="w-8 h-8 rounded-none bg-black/40 hover:bg-primary hover:text-white flex items-center justify-center transition-all duration-150 border border-white/20"
                             aria-label={`${member.name}'s LinkedIn`}
                             onClick={(e) => e.stopPropagation()}
                           >
@@ -637,7 +612,7 @@ export default function Team() {
                             href={member.instagram}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="w-9 h-9 rounded-full bg-white/10 backdrop-blur-md hover:bg-[var(--vitality-red)] hover:text-white flex items-center justify-center transition-all duration-200 border border-white/20"
+                            className="w-8 h-8 rounded-none bg-black/40 hover:bg-primary hover:text-white flex items-center justify-center transition-all duration-150 border border-white/20"
                             aria-label={`${member.name}'s Instagram`}
                             onClick={(e) => e.stopPropagation()}
                           >
@@ -702,31 +677,6 @@ export default function Team() {
             </button>
           </div>
         </div>
-
-        {/* Stats about the team */}
-        <motion.div
-          className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-6 text-center bg-card/80 backdrop-blur-md border border-[var(--power-red)]/20 rounded-2xl shadow-xl p-8"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-        >
-          <div>
-            <p className="text-3xl md:text-4xl font-extrabold text-[var(--vitality-red)]">30+</p>
-            <p className="text-muted-foreground mt-1 text-sm md:text-base font-medium">Team Members</p>
-          </div>
-          <div>
-            <p className="text-3xl md:text-4xl font-extrabold text-[var(--vitality-red)]">6</p>
-            <p className="text-muted-foreground mt-1 text-sm md:text-base font-medium">Departments</p>
-          </div>
-          <div>
-            <p className="text-3xl md:text-4xl font-extrabold text-[var(--vitality-red)]">15+</p>
-            <p className="text-muted-foreground mt-1 text-sm md:text-base font-medium">Projects</p>
-          </div>
-          <div>
-            <p className="text-3xl md:text-4xl font-extrabold text-[var(--vitality-red)]">5+</p>
-            <p className="text-muted-foreground mt-1 text-sm md:text-base font-medium">Events Per Year</p>
-          </div>
-        </motion.div>
       </div>
     </section>
   );

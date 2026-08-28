@@ -70,8 +70,6 @@ export default function EventDetail() {
       <main className="flex-1 pt-20 relative z-10">
         {/* Hero */}
         <section className="py-20 md:py-28 bg-transparent relative overflow-hidden">
-          <div className="absolute inset-0 pointer-events-none z-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_50%,rgba(183,32,46,0.08)_0%,transparent_100%)]" />
-
           <div className="container mx-auto px-6 relative z-10 max-w-4xl">
             <Link
               href="/#timeline"
@@ -81,20 +79,20 @@ export default function EventDetail() {
             </Link>
 
             {event.isFlagship && (
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-gradient-red text-white text-xs font-bold uppercase tracking-wider mb-4 shadow-md">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-primary text-primary-foreground text-xs font-mono font-bold uppercase tracking-wider mb-4">
                 <Trophy className="w-3.5 h-3.5" /> Flagship Event
               </div>
             )}
 
-            <div className="text-xs md:text-sm font-bold tracking-[2.5px] text-[var(--vitality-red)] uppercase mb-4">
+            <div className="text-xs md:text-sm font-mono font-bold tracking-widest text-accent uppercase mb-3">
               {event.date}
             </div>
 
-            <h1 className="text-4xl md:text-6xl font-extrabold mb-6 tracking-tight leading-tight">
+            <h1 className="text-3xl md:text-5xl font-extrabold mb-5 tracking-tight leading-tight font-display">
               <span className="text-gradient">{event.title}</span>
             </h1>
 
-            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl leading-relaxed">
+            <p className="text-base md:text-lg text-muted-foreground max-w-2xl leading-relaxed font-body">
               {event.description}
             </p>
 
@@ -102,21 +100,21 @@ export default function EventDetail() {
               {event.tags.map((tag, i) => (
                 <span
                   key={i}
-                  className="text-xs font-semibold px-3 py-1 rounded bg-[var(--power-red)]/10 text-[var(--vitality-red)] border border-[var(--power-red)]/20 tracking-wide"
+                  className="text-xs font-mono px-2.5 py-0.5 bg-secondary text-secondary-foreground border border-border tracking-wide"
                 >
                   {tag}
                 </span>
               ))}
             </div>
 
-            <div className="h-1 w-20 bg-gradient-red mt-8" />
+            <div className="h-[2px] w-16 bg-primary mt-6" />
           </div>
         </section>
 
         {/* Details + Image */}
         <section className="pb-24 relative">
           <div className="container mx-auto px-6 max-w-4xl">
-            <div className="rounded-xl overflow-hidden shadow-2xl mb-12 max-w-2xl mx-auto">
+            <div className="border border-border mb-10 max-w-2xl mx-auto overflow-hidden">
               <EventImage
                 src={event.image}
                 alt={event.title}
@@ -125,20 +123,24 @@ export default function EventDetail() {
               />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
-              <div className="flex items-start gap-4 bg-card border border-border rounded-xl p-6">
-                <Calendar className="text-[var(--vitality-red)] mt-1" size={20} />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
+              <div className="flex items-start gap-4 surface-card p-6">
+                <div className="w-9 h-9 bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shrink-0">
+                  <Calendar size={18} />
+                </div>
                 <div>
-                  <div className="text-sm font-semibold text-foreground mb-1">Date</div>
-                  <div className="text-sm text-muted-foreground">{event.date}</div>
+                  <div className="text-sm font-bold text-foreground mb-1 font-display">Date</div>
+                  <div className="text-sm text-muted-foreground font-body">{event.date}</div>
                 </div>
               </div>
 
-              <div className="flex items-start gap-4 bg-card border border-border rounded-xl p-6">
-                <MapPin className="text-[var(--vitality-red)] mt-1" size={20} />
+              <div className="flex items-start gap-4 surface-card p-6">
+                <div className="w-9 h-9 bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shrink-0">
+                  <MapPin size={18} />
+                </div>
                 <div>
-                  <div className="text-sm font-semibold text-foreground mb-1">Location</div>
-                  <div className="text-sm text-muted-foreground">{event.location}</div>
+                  <div className="text-sm font-bold text-foreground mb-1 font-display">Location</div>
+                  <div className="text-sm text-muted-foreground font-body">{event.location}</div>
                 </div>
               </div>
             </div>
@@ -149,9 +151,9 @@ export default function EventDetail() {
                   href={event.registrationUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 bg-gradient-red text-white font-semibold px-8 py-4 rounded-lg shadow-lg hover:opacity-90 transition-all text-lg"
+                  className="dz-button-primary inline-flex items-center gap-2 px-8 py-3.5 text-base"
                 >
-                  Register Now <ExternalLink size={18} />
+                  Register for Event <ExternalLink size={18} />
                 </a>
               </div>
             )}

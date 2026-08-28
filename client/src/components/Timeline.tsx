@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import { motion, useInView, useScroll, useSpring } from "framer-motion";
-import { ArrowRight, Trophy, Sparkles } from "lucide-react";
+import { ArrowRight, Trophy, Calendar } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { timelineEvents, type TimelineEventData } from "@/data/events";
 import EventImage from "@/components/EventImage";
@@ -22,12 +22,8 @@ function TimelineCard({
   return (
     <div ref={cardRef}>
       <motion.div
-        className={`group relative rounded-xl overflow-hidden border cursor-pointer ${
-          event.isFlagship
-            ? "tl-card-flagship tl-card-inview border-[var(--vitality-red)] shadow-[0_0_40px_rgba(237,28,36,0.25)] bg-card/95"
-            : `border-[var(--power-red)]/25 bg-card/90 shadow-xl hover:border-[var(--vitality-red)] ${
-                isInView ? "tl-card-inview" : ""
-              } ${isHovered ? "tl-card-hover" : ""}`
+        className={`group relative overflow-hidden cursor-pointer border border-border bg-card/90 hover:border-primary/60 transition-colors duration-150 ${
+          event.isFlagship ? "border-primary/80 bg-card/95" : ""
         }`}
         onClick={() => setLocation(`/events/${event.slug}`)}
         role="link"
@@ -39,34 +35,23 @@ function TimelineCard({
             setLocation(`/events/${event.slug}`);
           }
         }}
-        initial={{ opacity: 0, x: isLeft ? -60 : 60, y: 14 }}
+        initial={{ opacity: 0, x: isLeft ? -40 : 40, y: 12 }}
         animate={
           isInView
             ? { opacity: 1, x: 0, y: 0 }
-            : { opacity: 0, x: isLeft ? -60 : 60, y: 14 }
+            : { opacity: 0, x: isLeft ? -40 : 40, y: 12 }
         }
         transition={{
-          duration: 0.85,
+          duration: 0.5,
           ease: [0.16, 1, 0.3, 1],
           delay: index * 0.04,
         }}
-        whileHover={{ y: -5, scale: 1.005 }}
         onHoverStart={() => setIsHovered(true)}
         onHoverEnd={() => setIsHovered(false)}
-        style={{
-          borderColor:
-            isHovered && !event.isFlagship
-              ? "var(--vitality-red)"
-              : undefined,
-          boxShadow:
-            isHovered && !event.isFlagship
-              ? "0 20px 50px rgba(237,28,36,0.2), 0 0 0 1px rgba(237,28,36,0.25)"
-              : undefined,
-        }}
       >
         {/* Accent top bar */}
         <div
-          className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-red origin-left transition-transform duration-500 z-10"
+          className="absolute top-0 left-0 right-0 h-[2px] bg-primary origin-left transition-transform duration-300 z-10"
           style={{
             transform:
               isHovered || event.isFlagship ? "scaleX(1)" : "scaleX(0)",
@@ -75,97 +60,62 @@ function TimelineCard({
 
         <div className="p-6 md:p-8">
           {event.isFlagship && (
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-gradient-red text-white text-xs font-bold uppercase tracking-wider mb-4 shadow-md">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-primary text-primary-foreground text-xs font-mono font-bold uppercase tracking-wider mb-4">
               <Trophy className="w-3.5 h-3.5" /> Flagship Event
             </div>
           )}
 
           {/* Date */}
-          <div className="text-[0.7rem] md:text-xs font-bold tracking-[2.5px] text-[var(--vitality-red)] uppercase mb-2">
+          <div className="text-xs font-mono font-bold tracking-widest text-accent uppercase mb-2">
             {event.date}
           </div>
 
-          {/* Title — Lusion text reveal */}
+          {/* Title */}
           <div className="overflow-hidden mb-3">
-            <motion.h3
-              className="text-2xl md:text-3xl font-extrabold text-foreground tracking-tight leading-tight transition-colors duration-300"
+            <h3
+              className="text-2xl md:text-3xl font-extrabold text-foreground tracking-tight leading-tight transition-colors duration-200 font-display"
               style={{
-                color: isHovered ? "var(--vitality-red)" : undefined,
-              }}
-              initial={{ y: "100%", opacity: 0 }}
-              animate={
-                isInView
-                  ? { y: "0%", opacity: 1 }
-                  : { y: "100%", opacity: 0 }
-              }
-              transition={{
-                duration: 0.85,
-                ease: [0.16, 1, 0.3, 1],
-                delay: 0.12 + index * 0.04,
+                color: isHovered ? "var(--power-red)" : undefined,
               }}
             >
               {event.title}
-            </motion.h3>
+            </h3>
           </div>
 
-          {/* Description — Lusion text reveal */}
+          {/* Description */}
           <div className="overflow-hidden mb-5">
-            <motion.p
-              className="text-sm md:text-base text-muted-foreground leading-relaxed"
-              initial={{ y: "100%", opacity: 0 }}
-              animate={
-                isInView
-                  ? { y: "0%", opacity: 1 }
-                  : { y: "100%", opacity: 0 }
-              }
-              transition={{
-                duration: 0.85,
-                ease: [0.16, 1, 0.3, 1],
-                delay: 0.2 + index * 0.04,
-              }}
-            >
+            <p className="text-sm md:text-base text-muted-foreground leading-relaxed font-body">
               {event.description}
-            </motion.p>
+            </p>
           </div>
 
           {/* Tags */}
-          <div className="flex flex-wrap gap-2 mb-5">
+          <div className="flex flex-wrap gap-2 mb-6">
             {event.tags.map((tag, j) => (
-              <motion.span
+              <span
                 key={j}
-                className="text-[0.7rem] font-semibold px-3 py-1 rounded bg-[var(--power-red)]/10 text-[var(--vitality-red)] border border-[var(--power-red)]/20 tracking-wide"
-                initial={{ opacity: 0, scale: 0.85 }}
-                animate={
-                  isInView
-                    ? { opacity: 1, scale: 1 }
-                    : { opacity: 0, scale: 0.85 }
-                }
-                transition={{ delay: 0.26 + j * 0.05, duration: 0.4 }}
+                className="text-xs font-mono px-2.5 py-0.5 bg-secondary text-secondary-foreground border border-border tracking-wide"
               >
                 {tag}
-              </motion.span>
+              </span>
             ))}
           </div>
 
-          {/* Image — clip-path bottom→top reveal on scroll-in */}
-          <div className="tl-img-wrap rounded-lg overflow-hidden mb-5">
+          {/* Image */}
+          <div className="overflow-hidden border border-border mb-6">
             <EventImage
               src={event.image}
               alt={event.title}
               gradient={event.fallbackGradient}
+              className="w-full h-44 md:h-52"
             />
           </div>
 
-          {/* CTA */}
-          <Link
-            href={`/events/${event.slug}`}
-            onClick={(e) => e.stopPropagation()}
-            className="inline-flex items-center gap-2 font-bold text-sm text-[var(--vitality-red)] transition-all duration-300"
-            style={{ gap: isHovered ? "14px" : "8px" }}
-          >
-            <span>Explore Event</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
+          {/* Action Link */}
+          <div className="flex items-center gap-2 text-sm font-semibold text-foreground group-hover:text-primary transition-colors duration-150 font-display">
+            <span>View Event Brief</span>
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-150" />
+          </div>
         </div>
       </motion.div>
     </div>
@@ -281,66 +231,28 @@ export default function Timeline() {
     <section
       id="timeline"
       ref={sectionRef}
-      className="py-24 md:py-36 bg-transparent relative overflow-hidden"
+      className="py-16 md:py-20 bg-transparent relative overflow-hidden"
     >
-      {/* Subtle radial glow */}
-      <div className="absolute inset-0 pointer-events-none z-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_50%,rgba(183,32,46,0.05)_0%,transparent_100%)]" />
-
       <div className="container mx-auto px-4 md:px-8 relative z-10">
         {/* ── Section Header ── */}
         <div
           ref={headerRef}
-          className="max-w-3xl mx-auto text-center mb-20 md:mb-28"
+          className="max-w-3xl mx-auto text-center mb-12 md:mb-16"
         >
-          <motion.span
-            className="inline-flex items-center gap-2 mb-4 px-4 py-1.5 rounded-full bg-[var(--power-red)]/10 text-[var(--vitality-red)] text-xs md:text-sm font-semibold tracking-wider uppercase border border-[var(--power-red)]/30"
-            initial={{ opacity: 0, y: 20 }}
-            animate={
-              isHeaderInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
-            }
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <Sparkles className="w-4 h-4" /> Bold Ideas Brought To Life
-          </motion.span>
+          <span className="inline-flex items-center gap-1.5 mb-3 px-3 py-1 rounded-full bg-secondary text-secondary-foreground text-xs font-mono tracking-widest uppercase border border-border">
+            <Calendar className="w-3.5 h-3.5" /> Annual Calendar
+          </span>
 
-          <motion.h2
-            className="text-4xl md:text-6xl font-extrabold mb-6 tracking-tight leading-tight"
-            initial={{ opacity: 0, y: 24 }}
-            animate={
-              isHeaderInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }
-            }
-            transition={{
-              duration: 0.7,
-              ease: [0.16, 1, 0.3, 1],
-              delay: 0.1,
-            }}
-          >
-            <span className="text-foreground">Our Featured </span>
-            <span className="text-gradient">Timeline</span>
-          </motion.h2>
+          <h2 className="text-3xl md:text-5xl font-extrabold mb-4 tracking-tight leading-tight font-display">
+            <span className="text-foreground">Council Events &amp; </span>
+            <span className="text-gradient">Hackathons</span>
+          </h2>
 
-          <motion.p
-            className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            animate={
-              isHeaderInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
-            }
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            Journey through our landmark hackathons, industry workshops, and
-            data competitions across the academic year.
-          </motion.p>
+          <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed font-body">
+            Major technical competitions, Datathons, hands-on bootcamps, and guest lectures hosted throughout the academic term.
+          </p>
 
-          <motion.div
-            className="h-1 bg-gradient-red mx-auto mt-8 rounded-full"
-            initial={{ opacity: 0, width: 0 }}
-            animate={
-              isHeaderInView
-                ? { opacity: 1, width: 80 }
-                : { opacity: 0, width: 0 }
-            }
-            transition={{ duration: 0.8, delay: 0.3 }}
-          />
+          <div className="h-1 w-16 bg-primary mx-auto mt-6 rounded-full" />
         </div>
 
         {/* ── Events + Snake SVG ── */}

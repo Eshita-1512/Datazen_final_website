@@ -97,11 +97,11 @@ export function useBrainScene() {
       
       // 1. Elongate front-to-back (Z-axis). 
       // theta=PI/2 is +Z (front), theta=3PI/2 is -Z (back)
-      r *= 1.0 + 0.35 * Math.pow(Math.sin(theta), 2);
+      r *= 1.0 + 0.6 * Math.pow(Math.sin(theta), 2);
 
       // 2. Flatten the bottom
       if (phi > Math.PI / 2) {
-        r *= 1.0 - 0.4 * Math.pow(Math.cos(phi), 2);
+        r *= 1.0 - 0.8 * Math.pow(Math.cos(phi), 2);
       }
 
       // 3. Longitudinal fissure (split left and right hemispheres)
@@ -121,18 +121,18 @@ export function useBrainScene() {
       
       const distToCerebellum = Math.sqrt((px-bx)**2 + (py-by)**2 + (pz-bz)**2);
       if (distToCerebellum < 0.6) {
-        r += 0.3 * (1 - distToCerebellum/0.6);
+        r += 0.1 * (1 - distToCerebellum/0.4);
       }
 
       // 5. Brainstem
       const distToStem = Math.sqrt((px-0)**2 + (pz - -0.3)**2); 
       if (phi > Math.PI - 0.5 && distToStem < 0.3) {
-        r += 0.4 * (1 - distToStem/0.3);
+        r += 0.9 * (1 - distToStem/0.6);
       }
 
       // 6. Surface folds (Gyri and Sulci)
-      const folds = 0.04 * Math.sin(phi * 22) * Math.sin(theta * 22) + 
-                    0.02 * Math.sin(phi * 35) * Math.cos(theta * 35);
+      const folds = 0.06 * Math.sin(phi * 22) * Math.sin(theta * 22) + 
+                    0.04 * Math.sin(phi * 35) * Math.cos(theta * 35);
       r += folds;
 
       return r;
@@ -153,7 +153,7 @@ export function useBrainScene() {
       nv.push([x, y, z]);
     }
 
-    const K = 4, MAXD = 0.35, edgeIdx: number[] = [];
+    const K = 5, MAXD = 0.6, edgeIdx: number[] = [];
     const seen = new Set();
     for (let i = 0; i < NODES; i++) {
       const a = nv[i], d: [number, number][] = [];
@@ -224,10 +224,10 @@ export function useBrainScene() {
     const tex = disc();
     const nodeTex = tex;
 
-    // Node vertex colors: OFF=dim unlit, RED=lit red, GRN=highlighted (warm orange for contrast)
-    const OFF  = [0.35, 0.07, 0.05], RED = [1.00, 0.26, 0.14], GRN = [1.00, 0.62, 0.10];
-    // Edge colors: EGREY=dim unlit, ESOFT=fully lit vivid red
-    const EGREY = [0.22, 0.04, 0.03], ESOFT = [0.93, 0.30, 0.18];
+    // Node vertex colors: Subtle Wine base & Warm Gold focus synapses
+    const OFF  = [0.12, 0.01, 0.01], RED = [0.42, 0.04, 0.02], GRN = [0.92, 0.68, 0.15];
+    // Edge colors: Deep subtle wine wireframe (toned down, no glowing orange)
+    const EGREY = [0.08, 0.01, 0.01], ESOFT = [0.28, 0.03, 0.02];
 
     const npos = new Float32Array(NODES * 3), ncol = new Float32Array(NODES * 3);
     for (let i = 0; i < NODES; i++) {
@@ -240,8 +240,8 @@ export function useBrainScene() {
     nGeo.setAttribute('position', new THREE.Float32BufferAttribute(npos, 3));
     nGeo.setAttribute('color', new THREE.Float32BufferAttribute(ncol, 3));
     const nMat = new THREE.PointsMaterial({
-      size: 5.5, map: nodeTex, transparent: true, depthWrite: false,
-      blending: THREE.AdditiveBlending, vertexColors: true, opacity: .95
+      size: 3.5, map: nodeTex, transparent: true, depthWrite: false,
+      blending: THREE.NormalBlending, vertexColors: true, opacity: 0.90
     });
     group.add(new THREE.Points(nGeo, nMat));
 
@@ -250,16 +250,16 @@ export function useBrainScene() {
       const n = edgeIdx[e];
       epos[e * 3] = nv[n][0] * SCALE; epos[e * 3 + 1] = nv[n][1] * SCALE; epos[e * 3 + 2] = nv[n][2] * SCALE;
     }
-    // Use LineSegmentsGeometry + LineMaterial for thick lines (LineBasicMaterial ignores linewidth in WebGL)
+    // Use LineSegmentsGeometry + LineMaterial for hairline structural lines
     const eGeo = new LineSegmentsGeometry();
     eGeo.setPositions(epos);
     eMatLine = new LineMaterial({
-      color: 0xe74c3c,     // vivid DataZen red
+      color: 0x4a0a10,     // Deep muted wine/crimson
       transparent: true,
-      opacity: 0.70,       // solid enough to see the mesh clearly
+      opacity: 0.70,       // higher opacity prevents washing out to pink
       depthWrite: false,
-      blending: THREE.NormalBlending, // crisp solid lines, not glowing additive
-      linewidth: 1.0,      // thinner lines as requested
+      blending: THREE.NormalBlending,
+      linewidth: 1.0,      // crisp hairline
       resolution: new THREE.Vector2(stage.clientWidth, stage.clientHeight),
     });
     const eMat = eMatLine;
@@ -272,8 +272,8 @@ export function useBrainScene() {
     const hGeo = new THREE.BufferGeometry(); 
     hGeo.setAttribute('position', new THREE.Float32BufferAttribute(hpos, 3));
     const hMat = new THREE.PointsMaterial({
-      size: 9, map: tex, transparent: true, depthWrite: false,
-      blending: THREE.AdditiveBlending, color: 0x24ff7a, opacity: 0
+      size: 10, map: tex, transparent: true, depthWrite: false,
+      blending: THREE.NormalBlending, color: 0xe6b864, opacity: 0 // Warm Amber Gold
     });
     group.add(new THREE.Points(hGeo, hMat));
 
@@ -313,8 +313,8 @@ export function useBrainScene() {
       const off = sideSign * W * 0.26;
       return { rx, ry, rz: 0, px: -_v.x + off, py: -_v.y, pz: -_v.z, cz };
     }
-    const START = { rx: 0.05, ry: -Math.PI / 2, rz: 0, px: 0, py: 0, pz: 0, cz: 215 };
-    const TEND = { rx: 0.05, ry: -Math.PI / 2 + Math.PI * 2, rz: 0, px: 0, py: 0, pz: 0, cz: 215 };
+    const START = { rx: 0.05, ry: -Math.PI / 2, rz: 0, px: 0, py: -15, pz: 0, cz: 215 };
+    const TEND = { rx: 0.05, ry: -Math.PI / 2 + Math.PI * 2, rz: 0, px: 0, py: -15, pz: 0, cz: 215 };
     const lerpS = (A: any, B: any, t: number) => ({
       rx: lerp(A.rx, B.rx, t), ry: lerp(A.ry, B.ry, t), rz: lerp(A.rz, B.rz, t),
       px: lerp(A.px, B.px, t), py: lerp(A.py, B.py, t), pz: lerp(A.pz, B.pz, t), cz: lerp(A.cz, B.cz, t)
@@ -406,13 +406,13 @@ export function useBrainScene() {
       
       nGeo.attributes.color.needsUpdate = true;
       nMat.color.setRGB(1, 1, 1);
-      nMat.opacity = 0.50 + 0.50 * S;         // dots fade in with the power-on
-      nMat.size    = 4.5 + 3.0 * S;           // dots grow as brain lights up
+      nMat.opacity = 0.35 + 0.40 * S;         // refined node opacity
+      nMat.size    = 2.8 + 1.2 * S;           // refined node scale
       eMat.color.setRGB(lerp(EGREY[0], ESOFT[0], S), lerp(EGREY[1], ESOFT[1], S), lerp(EGREY[2], ESOFT[2], S));
       
       const gf = nodeLit(env, time, 0.37);
-      eMat.opacity = 0.18 + 0.52 * S + (powering ? 0.10 * gf : 0); // lines visible and bold
-      hMat.opacity = cur.hi * S * (0.82 + 0.18 * Math.sin(time * 3));
+      eMat.opacity = 0.12 + 0.22 * S + (powering ? 0.05 * gf : 0); // subtle hairline wireframe opacity
+      hMat.opacity = cur.hi * S * (0.75 + 0.15 * Math.sin(time * 3));
       
       renderer.render(scene, cam);
     };

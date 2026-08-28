@@ -1,4 +1,4 @@
-import { useRef } from "react";
+ import { useRef } from "react";
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { Brain, Code, Database, Layers, TrendingUp } from "lucide-react";
 
@@ -40,190 +40,121 @@ export default function FocusArea() {
     },
   };
 
-  // The 6 focus-area blocks — content unchanged, carried over from the former About Us section
+  // The 6 focus-area blocks — domain tracks without artificial step numbering
   const focusAreas = [
     {
       title: "Machine Learning",
+      track: "Core Modeling",
       description:
-        "Explore the cutting-edge algorithms that enable systems to learn and improve from experience.",
-      icon: <Brain size={36} strokeWidth={1.5} />,
+        "Supervised and unsupervised learning, classification models, regression pipelines, and algorithm evaluation.",
+      icon: <Brain size={24} strokeWidth={1.5} />,
     },
     {
       title: "Data Visualization",
+      track: "Visual Analytics",
       description:
-        "Transform complex data into insightful visual representations for better decision making.",
-      icon: <TrendingUp size={36} strokeWidth={1.5} />,
+        "Interactive dashboards, exploratory data analysis, chart grammar, and decision-support graphics.",
+      icon: <TrendingUp size={24} strokeWidth={1.5} />,
     },
     {
       title: "Big Data Analytics",
+      track: "Data Engineering",
       description:
-        "Work with massive datasets to uncover patterns and insights that drive innovation.",
-      icon: <Database size={36} strokeWidth={1.5} />,
+        "Distributed computing frameworks, large-scale query processing, and data warehouse workflows.",
+      icon: <Database size={24} strokeWidth={1.5} />,
     },
     {
       title: "AI Development",
+      track: "Applied Systems",
       description:
-        "Create intelligent systems that can perceive, learn, reason and solve complex problems.",
-      icon: <Code size={36} strokeWidth={1.5} />,
+        "End-to-end intelligent applications, API integration, agent workflows, and practical deployment.",
+      icon: <Code size={24} strokeWidth={1.5} />,
     },
     {
       title: "Deep Learning",
+      track: "Neural Architectures",
       description:
-        "Build neural networks that mimic human brain function to solve complex real-world problems.",
-      icon: <Layers size={36} strokeWidth={1.5} />,
+        "Computer vision, natural language processing, transformer architectures, and deep neural networks.",
+      icon: <Layers size={24} strokeWidth={1.5} />,
     },
     {
       title: "Data Cleaning",
+      track: "Pipeline Quality",
       description:
-        "Ensure data quality by identifying and correcting errors, inconsistencies, and missing values.",
-      icon: <Database size={36} strokeWidth={1.5} />,
+        "Feature engineering, missing value imputation, schema validation, and preprocessing pipelines.",
+      icon: <Database size={24} strokeWidth={1.5} />,
     },
   ];
-
-  const DataFlow = () => (
-    <svg
-      className="absolute inset-0 w-full h-full opacity-10 z-0"
-      viewBox="0 0 1000 1000"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <defs>
-        <linearGradient id="focusDataGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="var(--power-red)" />
-          <stop offset="100%" stopColor="var(--vitality-red)" />
-        </linearGradient>
-      </defs>
-
-      {Array.from({ length: 20 }).map((_, i) => (
-        <path
-          key={i}
-          d={`M${100 + i * 40},${100 + Math.sin(i) * 50}
-              C${300 + i * 5},${200 + Math.cos(i) * 100}
-               ${500 - i * 10},${400 + Math.sin(i) * 150}
-               ${800 + Math.cos(i) * 100},${700 + Math.sin(i) * 100}`}
-          fill="none"
-          stroke="url(#focusDataGradient)"
-          strokeWidth="1.5"
-          strokeDasharray="5,5"
-          opacity={0.3 + (i % 3) * 0.2}
-        />
-      ))}
-
-      {Array.from({ length: 15 }).map((_, i) => (
-        <circle
-          key={i}
-          cx={200 + (i % 5) * 150}
-          cy={200 + Math.floor(i / 5) * 200}
-          r={5 + (i % 3) * 3}
-          fill="var(--power-red)"
-          opacity={0.5 + (i % 2) * 0.3}
-        />
-      ))}
-    </svg>
-  );
 
   return (
     <section
       id="focus-area"
-      className="py-20 md:py-32 bg-transparent relative overflow-hidden"
+      className="py-16 md:py-20 bg-transparent relative overflow-hidden"
       ref={containerRef}
     >
-      <DataFlow />
-
-      <motion.div
-        className="absolute top-[10%] right-[10%] w-40 h-40 rounded-full bg-[var(--power-red)] opacity-5 z-0"
-        style={{ y: y1 }}
-      />
-      <motion.div
-        className="absolute bottom-[30%] left-[5%] w-32 h-32 rounded-full bg-[var(--vitality-red)] opacity-5 z-0"
-        style={{ y: y2 }}
-      />
-      <motion.div
-        className="absolute bottom-[10%] right-[15%] w-24 h-24 rounded-full bg-[var(--somaiya-black)] opacity-5 z-0"
-        style={{ y: y3 }}
-      />
-
       <div className="container mx-auto px-6 relative z-10" ref={ref}>
         <motion.div
-          className="max-w-3xl mx-auto text-center mb-16 md:mb-24"
-          initial={{ opacity: 0, y: 50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="max-w-3xl mx-auto text-center mb-10 md:mb-14"
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.5 }}
         >
-          <motion.span
-            className="inline-block mb-4 px-4 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
-            transition={{ duration: 0.6 }}
-          >
-            Our Focus Area
-          </motion.span>
+          <span className="inline-block mb-3 px-3 py-1 bg-secondary text-secondary-foreground text-xs font-mono tracking-widest uppercase border border-border">
+            Technical Domains
+          </span>
 
-          <motion.h2
-            className="text-4xl md:text-5xl font-bold mb-6 tracking-tight leading-tight"
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-          >
+          <h2 className="text-3xl md:text-5xl font-extrabold mb-4 tracking-tight leading-tight font-display">
             <span className="text-foreground">Disciplines We </span>
             <span className="text-gradient">Explore</span>
-          </motion.h2>
+          </h2>
 
-          <motion.p
-            className="text-xl text-muted-foreground max-w-2xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            At DataZen, we explore multiple disciplines within data science, equipping students
-            with the tools and knowledge to excel in today's data-driven world.
-          </motion.p>
+          <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed font-body">
+            Student project tracks, peer-led reading groups, and practical coding labs conducted throughout the academic calendar.
+          </p>
 
-          <motion.div
-            className="h-1 w-20 bg-gradient-red mx-auto mt-8"
-            initial={{ opacity: 0, width: 0 }}
-            animate={isInView ? { opacity: 1, width: 80 } : { opacity: 0, width: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-          />
+          <div className="h-[2px] w-16 bg-primary mx-auto mt-6" />
         </motion.div>
 
+        {/* Swiss Monolithic 0px Grid */}
         <motion.div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+          className="border border-border bg-card/80 backdrop-blur-md grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto"
           variants={containerAnimation}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
         >
           {focusAreas.map((area, index) => {
-            const color = index % 2 === 0 ? "var(--power-red)" : "var(--vitality-red)";
+            const mobileBorder = index < 5 ? "border-b border-border md:border-b-0" : "";
+            const tabletBorder = `${index < 4 ? "md:border-b md:border-border" : "md:border-b-0"} ${index % 2 === 0 ? "md:border-r md:border-border" : "md:border-r-0"}`;
+            const desktopBorder = `${index < 3 ? "lg:border-b lg:border-border" : "lg:border-b-0"} ${index % 3 !== 2 ? "lg:border-r lg:border-border" : "lg:border-r-0"}`;
+
             return (
               <motion.div
                 key={index}
-                className="bg-card rounded-xl overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.05)] dark:shadow-[0_10px_40px_rgba(0,0,0,0.2)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:hover:shadow-[0_20px_50px_rgba(0,0,0,0.3)] transition-all duration-300 transform hover:-translate-y-2"
+                className={`group p-8 flex flex-col justify-between transition-colors duration-150 hover:bg-secondary/40 relative ${mobileBorder} ${tabletBorder} ${desktopBorder}`}
                 variants={cardAnimation}
               >
-                <div className="p-8">
-                  <div className="mb-6" style={{ color }}>
-                    {area.icon}
+                <div>
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="w-9 h-9 bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                      {area.icon}
+                    </div>
+                    <span className="font-mono text-xs text-muted-foreground uppercase tracking-wider">
+                      {area.track}
+                    </span>
                   </div>
 
-                  <h3 className="text-xl font-semibold mb-4 text-foreground">{area.title}</h3>
+                  <h3 className="text-xl font-bold tracking-tight text-foreground mb-2.5 font-display">
+                    {area.title}
+                  </h3>
 
-                  <p className="text-muted-foreground">{area.description}</p>
-
-                  <div className="h-1 w-12 mt-6" style={{ background: color }} />
+                  <p className="text-sm text-muted-foreground leading-relaxed font-body">
+                    {area.description}
+                  </p>
                 </div>
               </motion.div>
             );
           })}
         </motion.div>
-      </div>
-
-      <div className="absolute bottom-0 left-0 w-full overflow-hidden z-10">
-        <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-16 md:h-24">
-          <path
-            d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
-            className="fill-background"
-          ></path>
-        </svg>
       </div>
     </section>
   );

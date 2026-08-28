@@ -17,14 +17,17 @@ export default function TopographyBackground() {
     const ROWS = 60;
     const SPACING = 50;
     
-    // Smooth pseudo-random noise using multiple sine waves
+    // Dynamic undulating multi-frequency topographical waves (3 orthogonal harmonics)
     const getZ = (x: number, y: number, t: number) => {
-      const xFreq = 0.04;
-      const yFreq = 0.04;
+      const xFreq = 0.050;
+      const yFreq = 0.045;
       
-      let val = Math.sin(x * xFreq + t * 0.5) * Math.cos(y * yFreq + t * 0.3) * 60;
-      val += Math.sin(x * xFreq * 2 - t * 0.4) * Math.sin(y * yFreq * 1.5 + t * 0.5) * 30;
-      val += Math.cos(x * xFreq * 0.5 + t * 0.2) * Math.sin(y * yFreq * 0.5 - t * 0.6) * 40;
+      // Primary rolling swells
+      let val = Math.sin(x * xFreq + t * 0.55) * Math.cos(y * yFreq + t * 0.35) * 115;
+      // Secondary crests and cross-ripples
+      val += Math.sin(x * xFreq * 1.8 - t * 0.45) * Math.sin(y * yFreq * 1.5 + t * 0.50) * 65;
+      // Deep rolling ground tide
+      val += Math.cos(x * xFreq * 0.65 + t * 0.25) * Math.sin(y * yFreq * 0.65 - t * 0.60) * 55;
       
       return val;
     };
@@ -41,7 +44,7 @@ export default function TopographyBackground() {
       const width = canvas.width;
       const height = canvas.height;
       
-      const horizon = height * 0.4; // 40% down from the top
+      const horizon = height * 0.48; // Natural perspective horizon
       const cameraHeight = 220; // How high the camera is above the base ground
       
       const points: {x: number, y: number}[] = [];
@@ -86,7 +89,7 @@ export default function TopographyBackground() {
           
           // Fade opacity based on depth (row index)
           const depthAlpha = Math.max(0, 1 - (i / ROWS));
-          ctx.strokeStyle = `rgba(231, 76, 60, ${depthAlpha * 0.35})`; // DataZen red
+          ctx.strokeStyle = `rgba(143, 23, 34, ${depthAlpha * 0.45})`; // Somaiya Heritage Crimson
           
           ctx.beginPath();
           // Draw to right
@@ -121,7 +124,11 @@ export default function TopographyBackground() {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 pointer-events-none z-0"
-      style={{ opacity: 0.8 }}
+      style={{ 
+        opacity: 0.85,
+        maskImage: 'radial-gradient(ellipse 60% 50% at 50% 46%, rgba(0,0,0,0) 0%, rgba(0,0,0,0.05) 30%, rgba(0,0,0,0.6) 65%, rgba(0,0,0,1) 100%)',
+        WebkitMaskImage: 'radial-gradient(ellipse 60% 50% at 50% 46%, rgba(0,0,0,0) 0%, rgba(0,0,0,0.05) 30%, rgba(0,0,0,0.6) 65%, rgba(0,0,0,1) 100%)',
+      }}
     />
   );
 }

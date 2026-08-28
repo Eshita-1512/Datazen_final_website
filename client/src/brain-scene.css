@@ -1,10 +1,11 @@
 /* brain-scene.css */
 :root {
-  --bg:#0d0d0d;
-  --red-bright:#e74c3c;
-  --white:#ffffff;
-  --muted:#aaaaaa;
-  --head:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --bg:#0e1015;
+  --red-bright:#b7202e;
+  --white:#e4dfd7;
+  --muted:#8f94a6;
+  --sand:#bca888;
+  --head:'Plus Jakarta Sans', sans-serif;
 }
 
 /* ==================== NEURAL BRAIN SCROLL SCENE ==================== */
@@ -21,17 +22,17 @@ html::-webkit-scrollbar{width:0;height:0;display:none}
 /* ONE continuous backdrop for the whole page -> no seam when the scene unlocks */
 .brain-scene-active::before{
   content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
-  background:radial-gradient(circle at 50% 42%,#161219 0%,var(--bg) 56%,#070707 100%)
+  background:radial-gradient(circle at 50% 42%,#171a22 0%,var(--bg) 60%,#08090c 100%)
 }
 
 .scene {
   position:relative;
-  height:960vh;
+  height:450vh;
 }
 
 /* pin the brain to the viewport with position:fixed */
 .scene .stage {
-  position:fixed;inset:0;height:100vh;width:100%;overflow:hidden;background:transparent;
+  position:fixed;top:64px;left:0;right:0;height:calc(100vh - 64px);width:100%;overflow:hidden;background:transparent;
   z-index:1;pointer-events:none;will-change:opacity
 }
 #brainCanvas {
@@ -40,8 +41,8 @@ html::-webkit-scrollbar{width:0;height:0;display:none}
 
 /* flying DataZen wordmark: centre -> top-left */
 .flytitle{
-  position:fixed;left:0;top:0;z-index:120;white-space:nowrap;font-family:var(--head);
-  font-weight:900;letter-spacing:-2px;line-height:1;color:var(--white);pointer-events:none;
+  position:fixed;left:0;top:0;z-index:120;white-space:nowrap;font-family:'Tektur', 'Plus Jakarta Sans', sans-serif;
+  font-weight:700;letter-spacing:0.04em;line-height:1;color:var(--white);pointer-events:none;
   will-change:transform,font-size;
 }
 .flytitle span{color:var(--red-bright)}
@@ -51,24 +52,28 @@ html::-webkit-scrollbar{width:0;height:0;display:none}
 .stext{
   position:absolute;top:50%;transform:translateY(-50%);z-index:60;width:min(33%,410px);
   opacity:0;pointer-events:none;will-change:opacity,transform;
+  font-family:'IBM Plex Sans', sans-serif;
 }
 .stext-left{left:6.5%}
 .stext-right{right:6.5%;text-align:right}
 
 .stext::before{
   content:'';position:absolute;inset:-40% -55% -40% -35%;z-index:-1;
-  background:radial-gradient(ellipse at 35% 50%,rgba(6,6,8,.82),rgba(6,6,8,0) 72%)
+  background:radial-gradient(ellipse at 35% 50%,rgba(14,16,21,.9),rgba(14,16,21,0) 72%)
 }
 .stext-right::before{
   inset:-40% -35% -40% -55%;
-  background:radial-gradient(ellipse at 65% 50%,rgba(6,6,8,.82),rgba(6,6,8,0) 72%)
+  background:radial-gradient(ellipse at 65% 50%,rgba(14,16,21,.9),rgba(14,16,21,0) 72%)
 }
 
 .stext .eyebrow{
-  font-size:.72rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;color:var(--red-bright)
+  font-size:.72rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;color:var(--sand);
+  font-family:'IBM Plex Mono', monospace;
 }
 .stext h2{
-  font-size:clamp(1.55rem,2.9vw,2.5rem);font-weight:800;line-height:1.12;margin:12px 0 14px;letter-spacing:-.6px
+  font-family:'Plus Jakarta Sans', sans-serif;
+  font-size:clamp(1.55rem,2.9vw,2.5rem);font-weight:800;line-height:1.15;margin:12px 0 14px;letter-spacing:-.5px;
+  color:var(--white);
 }
 .stext p{
   color:var(--muted);font-size:clamp(.9rem,1.15vw,1.05rem);line-height:1.62;max-width:40ch
