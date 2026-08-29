@@ -26,6 +26,7 @@ export default function EventImage({
   const [images, setImages] = useState<DriveImage[]>([]);
   const [loading, setLoading] = useState<boolean>(!!eventSlug);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [srcFailed, setSrcFailed] = useState<boolean>(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -196,8 +197,19 @@ export default function EventImage({
             </>
           )}
         </div>
+      ) : src && !srcFailed ? (
+        /* 2. STATIC / DIRECT EVENT IMAGE */
+        <div className="relative w-full h-full bg-black/40 overflow-hidden">
+          <img
+            src={src}
+            alt={alt}
+            loading="lazy"
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            onError={() => setSrcFailed(true)}
+          />
+        </div>
       ) : (
-        /* 2. PLACEHOLDER / LOADING / FALLBACK */
+        /* 3. PLACEHOLDER / LOADING / FALLBACK */
         <div
           className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center"
           style={{

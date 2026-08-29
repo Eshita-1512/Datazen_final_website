@@ -1,6 +1,7 @@
 import { google } from 'googleapis';
 import { getGoogleAuth } from './google-auth';
 import https from 'https';
+import { URL } from 'url';
 
 export interface DriveImageFile {
   id: string;
@@ -20,6 +21,8 @@ const DEFAULT_EVENT_FOLDER_MAP: Record<string, string> = {
   "data-trek": "1YWZ1QMn-ze39jaBSReRl8EIjz7ASsssu",
   "zenconnect": "1SjUMDrodFhu-rewYj8s4ytkgC_HnoKVs",
   "zenconnect-25": "1SjUMDrodFhu-rewYj8s4ytkgC_HnoKVs",
+  "zenconnect-26": "1SjUMDrodFhu-rewYj8s4ytkgC_HnoKVs",
+  "zenconnect-2026": "1SjUMDrodFhu-rewYj8s4ytkgC_HnoKVs",
 };
 
 // 30-second memory cache for quick Google Drive sync
@@ -34,17 +37,17 @@ const CACHE_TTL_MS = 30 * 1000;
 export function getFolderIdForEvent(eventSlug: string): string | undefined {
   const normalized = eventSlug.toLowerCase().trim();
 
-  if (normalized.includes("case-study") && process.env.GOOGLE_DRIVE_FOLDER_CASE_STUDY) {
-    return process.env.GOOGLE_DRIVE_FOLDER_CASE_STUDY;
+  if (normalized.includes("case-study")) {
+    return process.env.GOOGLE_DRIVE_FOLDER_CASE_STUDY || DEFAULT_EVENT_FOLDER_MAP["case-study"];
   }
-  if (normalized.includes("datathon") && process.env.GOOGLE_DRIVE_FOLDER_DATATHON) {
-    return process.env.GOOGLE_DRIVE_FOLDER_DATATHON;
+  if (normalized.includes("datathon")) {
+    return process.env.GOOGLE_DRIVE_FOLDER_DATATHON || DEFAULT_EVENT_FOLDER_MAP["datathon"];
   }
-  if (normalized.includes("trek") && process.env.GOOGLE_DRIVE_FOLDER_DATATREK) {
-    return process.env.GOOGLE_DRIVE_FOLDER_DATATREK;
+  if (normalized.includes("trek")) {
+    return process.env.GOOGLE_DRIVE_FOLDER_DATATREK || DEFAULT_EVENT_FOLDER_MAP["datatrek"];
   }
-  if (normalized.includes("zenconnect") && process.env.GOOGLE_DRIVE_FOLDER_ZENCONNECT) {
-    return process.env.GOOGLE_DRIVE_FOLDER_ZENCONNECT;
+  if (normalized.includes("zenconnect")) {
+    return process.env.GOOGLE_DRIVE_FOLDER_ZENCONNECT || DEFAULT_EVENT_FOLDER_MAP["zenconnect"];
   }
 
   return DEFAULT_EVENT_FOLDER_MAP[normalized];
@@ -79,11 +82,19 @@ export async function fetchEventImages(eventSlug: string): Promise<DriveImageFil
 
     const drive = google.drive(driveOptions);
     
-    const res: any = await drive.files.list({
+    const listParams: any = {
       q: `'${folderId}' in parents and trashed = false`,
       fields: 'files(id, name, mimeType, thumbnailLink, webViewLink, webContentLink)',
       pageSize: 50,
-    } as any);
+      supportsAllDrives: true,
+      includeItemsFromAllDrives: true,
+    };
+
+    if (typeof auth === 'string') {
+      listParams.key = auth;
+    }
+
+    const res: any = await drive.files.list(listParams);
 
     const allFiles: any[] = res.data.files || [];
 
@@ -113,6 +124,8 @@ export async function fetchEventImages(eventSlug: string): Promise<DriveImageFil
       };
     });
 
+    console.log(`[Google Drive] Loaded ${images.length} images for event "${eventSlug}" (Folder: ${folderId})`);
+
     // Update cache
     imageCache.set(folderId, {
       timestamp: Date.now(),
@@ -121,9 +134,46 @@ export async function fetchEventImages(eventSlug: string): Promise<DriveImageFil
 
     return images;
   } catch (error: any) {
-    console.error(`Error fetching images from Google Drive folder ${folderId}:`, error?.message || error);
+    console.error(`[Google Drive] Error fetching images for folder ${folderId} (slug "${eventSlug}"):`, error?.message || error);
     return [];
   }
+}
+
+// Helper to follow HTTP redirects for streaming thumbnails
+function getStreamWithRedirects(url: string, maxRedirects = 5): Promise<{ stream: any; mimeType: string } | null> {
+  return new Promise((resolve) => {
+    function request(currentUrl: string, redirectsRemaining: number) {
+      if (redirectsRemaining <= 0) {
+        console.warn("Too many redirects fetching Drive image stream");
+        resolve(null);
+        return;
+      }
+      https.get(currentUrl, (res) => {
+        if (res.statusCode && res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+          let nextUrl = res.headers.location;
+          if (nextUrl.startsWith('/')) {
+            const parsed = new URL(currentUrl);
+            nextUrl = `${parsed.protocol}//${parsed.host}${nextUrl}`;
+          }
+          request(nextUrl, redirectsRemaining - 1);
+          return;
+        }
+        if (res.statusCode === 200) {
+          resolve({
+            stream: res,
+            mimeType: (res.headers['content-type'] as string) || 'image/jpeg',
+          });
+        } else {
+          console.warn(`Drive image stream returned HTTP ${res.statusCode} for ${currentUrl}`);
+          resolve(null);
+        }
+      }).on('error', (err) => {
+        console.error("Error fetching thumbnail stream:", err);
+        resolve(null);
+      });
+    }
+    request(url, maxRedirects);
+  });
 }
 
 // Proxy stream Google Drive image converted as JPEG directly to browser
@@ -141,35 +191,38 @@ export async function fetchDriveImageStream(fileId: string): Promise<{ stream: a
 
     const drive = google.drive(driveOptions);
 
-    const meta: any = await drive.files.get({
+    const metaParams: any = {
       fileId,
       fields: 'thumbnailLink, mimeType',
-    });
+      supportsAllDrives: true,
+    };
+    if (typeof auth === 'string') {
+      metaParams.key = auth;
+    }
+
+    const meta: any = await drive.files.get(metaParams);
 
     const rawThumb = meta.data.thumbnailLink;
     if (rawThumb) {
       const highResThumbUrl = rawThumb.replace(/=s\d+/, '=s1000');
-      
-      return new Promise((resolve) => {
-        https.get(highResThumbUrl, (res) => {
-          if (res.statusCode === 200) {
-            resolve({
-              stream: res,
-              mimeType: 'image/jpeg',
-            });
-          } else {
-            resolve(null);
-          }
-        }).on('error', (err) => {
-          console.error("Error fetching thumbnail stream:", err);
-          resolve(null);
-        });
-      });
+      const streamRes = await getStreamWithRedirects(highResThumbUrl);
+      if (streamRes) {
+        return streamRes;
+      }
     }
 
-    // Fallback if no thumbnailLink
+    // Fallback if no thumbnailLink or stream failed
+    const mediaParams: any = {
+      fileId,
+      alt: 'media',
+      supportsAllDrives: true,
+    };
+    if (typeof auth === 'string') {
+      mediaParams.key = auth;
+    }
+
     const media: any = await drive.files.get(
-      { fileId, alt: 'media' },
+      mediaParams,
       { responseType: 'stream' }
     );
 
