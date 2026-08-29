@@ -15,7 +15,6 @@ interface TeamMember {
   name: string;
   role: string;
   category: string;
-  description: string;
   github?: string;
   linkedin?: string;
   instagram?: string;
@@ -52,8 +51,8 @@ function MemberPhoto({
           src={src}
           alt={alt}
           loading="eager"
-          className={`w-full h-full object-cover object-top group-hover:scale-105 transition-all duration-700 ${
-            loaded ? "opacity-100 scale-100" : "opacity-0 scale-105"
+          className={`w-full h-full object-cover object-[center_20%] scale-110 group-hover:scale-115 transition-all duration-700 ${
+            loaded ? "opacity-100" : "opacity-0"
           }`}
           onLoad={() => setLoaded(true)}
           onError={() => setError(true)}
@@ -97,7 +96,6 @@ export default function Team() {
         name: "Dr. Urmi Thakkar",
         role: "Faculty Advisor",
         category: "Faculty Advisors",
-        description: "Guiding the vision and execution of the council.",
         photo: "/urmi.jpg"
       },
       {
@@ -105,7 +103,6 @@ export default function Team() {
         name: "Dr. Prasanna Shete",
         role: "Faculty Advisor",
         category: "Faculty Advisors",
-        description: "Mentoring the next generation of data scientists.",
         photo: "/prasanna.jpg"
       },
       {
@@ -113,7 +110,6 @@ export default function Team() {
         name: "Ms. Priyanka Shetty",
         role: "Faculty Advisor",
         category: "Faculty Advisors",
-        description: "Empowering students through technical leadership.",
         photo: "/priyanka.jpg"
       },
       {
@@ -121,8 +117,7 @@ export default function Team() {
         name: "Suryaansh Jain",
         role: "Co-Committee Head",
         category: "Core",
-        description: "Leading with data-driven strategies.",
-        photo: "/suryaansh.jpg",
+        photo: "/Suryaansh_jain.webp",
         github: "https://github.com/suryaansh-jain",
         linkedin: "https://www.linkedin.com/in/suryaansh-jain-61b74b28a/",
         instagram: "https://www.instagram.com/suryaansh._._?igsh=cmw0OXh4ZHY4Nzlm"
@@ -132,8 +127,7 @@ export default function Team() {
         name: "Ankita Kotkar",
         role: "Co-Committee Head",
         category: "Core",
-        description: "Driving the core operations and vision.",
-        photo: "/ankita.jpg",
+        photo: "/Ankita_Kotkar.webp",
         github: "https://github.com/ankitakotkar",
         linkedin: "https://www.linkedin.com/in/ankita-kotkar/",
         instagram: "https://www.instagram.com/ankita.kotkar/"
@@ -143,8 +137,7 @@ export default function Team() {
         name: "Abhishek Joshi",
         role: "Treasurer",
         category: "Core",
-        description: "Managing finances and operational efficiency.",
-        photo: "/abhishek.png",
+        photo: "/Abhishek_Joshi.webp",
         github: "https://github.com/ketanabhishek8",
         linkedin: "https://www.linkedin.com/in/abhishek-joshi2/",
         instagram: "https://www.instagram.com/ketanabhishek8/"
@@ -154,8 +147,7 @@ export default function Team() {
         name: "Eshita",
         role: "Head",
         category: "Tech",
-        description: "Spearheading the technical endeavors.",
-        photo: "/eshita.jpg",
+        photo: "/Eshita.webp",
         github: "https://github.com/Eshita-1512",
         linkedin: "https://www.linkedin.com/in/eshita-b108b9320/"
       },
@@ -164,16 +156,14 @@ export default function Team() {
         name: "Sadhil Madan",
         role: "Member",
         category: "Tech",
-        description: "Building scalable data solutions.",
-        photo: "/sadhil.jpg"
+        photo: "/Sadhil_Madan.webp"
       },
       {
         id: 9,
         name: "Maahnal Chauhan",
         role: "Member",
         category: "Tech",
-        description: "Teaching machines to think (and sometimes overthink).",
-        photo: "/manhal.jpg",
+        photo: "/Maahnal_Chauhan.webp",
         github: "https://github.com/Maahnal",
         linkedin: "https://www.linkedin.com/in/maahnalchauhan5/",
         instagram: "https://www.instagram.com/maahnalc?igsh=ZTl1ZHFkaXBudWoz&utm_source=qr"
@@ -183,16 +173,14 @@ export default function Team() {
         name: "Khushi Chaturvedi",
         role: "Member",
         category: "Tech",
-        description: "Passionate about artificial intelligence.",
-        photo: "/khushi.jpg"
+        photo: "/Khushi_Chaturvedi.webp"
       },
       {
         id: 11,
         name: "Harsh Zope",
         role: "Member",
         category: "Tech",
-        description: "Transforming code into impactful systems.",
-        photo: "/harsh.jpg",
+        photo: "/Harsh_Zope.webp",
         github: "https://github.com/Hersheys6969",
         linkedin: "https://www.linkedin.com/in/harshzope/"
       },
@@ -201,8 +189,7 @@ export default function Team() {
         name: "Mehak Trivedi",
         role: "Head",
         category: "PR",
-        description: "Managing public relations and outreach.",
-        photo: "/mehak.jpg",
+        photo: "/Mehak_Trivedi.webp",
         github: "https://github.com/mehak-t",
         linkedin: "https://www.linkedin.com/in/mehak-trivedi/",
         instagram: "https://www.instagram.com/mehaktrivedi?igsh=d2Y1eW1sZjZvNjQy&utm_source=qr"
@@ -212,16 +199,14 @@ export default function Team() {
         name: "Avani Maniyar",
         role: "Member",
         category: "PR",
-        description: "Connecting the council with the community.",
-        photo: "/avani.jpg"
+        photo: "/Avani_Maniyar.webp"
       },
       {
         id: 14,
         name: "Fiona Kotak",
         role: "Member",
         category: "PR",
-        description: "Crafting narratives and maintaining relationships.",
-        photo: "/fiona.jpg",
+        photo: "/Fiona_Kotak.webp",
         github: "https://github.com/fionakotak",
         linkedin: "https://www.linkedin.com/in/fiona-kotak-015569376",
         instagram: "https://www.instagram.com/fiona.kotak?igsh=MWRsMmw1cjJwMmpkZA=="
@@ -231,8 +216,7 @@ export default function Team() {
         name: "Avani Tiwari",
         role: "Member",
         category: "PR",
-        description: "Spreading the word of our initiatives.",
-        photo: "/avani_t.jpg",
+        photo: "/Avani_Tiwari.webp",
         github: "https://github.com/avanitiwari-coder",
         linkedin: "https://www.linkedin.com/in/avani-tiwari777",
         instagram: "https://www.instagram.com/avanitiwari27?igsh=MW94M3RydjdlaTV4MQ%3D%3D&utm_source=qr"
@@ -242,8 +226,7 @@ export default function Team() {
         name: "Rayan Castelino",
         role: "Head",
         category: "Operations",
-        description: "Ensuring smooth and effective operations.",
-        photo: "/rayan.jpg",
+        photo: "/Rayan_Castelino.webp",
         github: "https://github.com/rayanxc",
         linkedin: "https://www.linkedin.com/in/rayan-castelino-279795334/",
         instagram: "https://www.instagram.com/rayancastelino?igsh=MXdkM2FwazBvcnYzeg=="
@@ -253,8 +236,7 @@ export default function Team() {
         name: "Divith Kapri",
         role: "Member",
         category: "Operations",
-        description: "Optimizing logistics for events and projects.",
-        photo: "/divith.jpg",
+        photo: "/Divith_Kapri.webp",
         github: "https://github.com/divithkapri-svg",
         linkedin: "https://www.linkedin.com/in/divith-kapri-b68788382",
         instagram: "https://www.instagram.com/divith___?igsh=aG9pcHR6cHppZ3py"
@@ -264,8 +246,7 @@ export default function Team() {
         name: "Eklavya Pokhriyal",
         role: "Member",
         category: "Operations",
-        description: "Executing operational plans with precision.",
-        photo: "/eklavya.jpg",
+        photo: "/Eklavya_Pokriyal.webp",
         github: "https://github.com/kanha310107",
         linkedin: "https://www.linkedin.com/in/eklavya-pokhriyal-809722397/",
         instagram: "https://www.instagram.com/eklavya310107/"
@@ -275,40 +256,35 @@ export default function Team() {
         name: "Naga Tejas Nama",
         role: "Member",
         category: "Operations",
-        description: "Handling the groundwork of council events.",
-        photo: "/naga.jpg"
+        photo: "/Tejas_Nama.webp"
       },
       {
         id: 20,
         name: "Sanvi Kadu",
         role: "Head",
         category: "Creative",
-        description: "Guiding the creative direction and designs.",
-        photo: "/sanvi.jpg"
+        photo: "/Sanvi_Kadu.webp"
       },
       {
         id: 21,
         name: "Jash Adsule",
         role: "Member",
         category: "Creative",
-        description: "Designing visual experiences and assets.",
-        photo: "/jash.jpg"
+        photo: "/Jash_Adsule.webp"
       },
       {
         id: 22,
         name: "Mahek Agnihotri",
         role: "Member",
         category: "Creative",
-        description: "Infusing creativity into everything we do.",
-        photo: "/mahek.jpg"
+        photo: "/Mahek_Agnihotri.webp"
       },
       {
         id: 23,
         name: "Ishaan Singh Khanka",
         role: "Member",
         category: "Creative",
-        description: "Curating aesthetic content and interfaces.",
-        photo: "/ishaan.jpg",
+        photo: "/Ishhaan_Singh_Khanka.webp",
         github: "https://github.com/IshaanSKhanka28",
         linkedin: "https://www.linkedin.com/in/Ishaan-Singh-Khanka",
         instagram: "https://www.instagram.com/ser_ishaan_the_incredible/"
@@ -318,8 +294,7 @@ export default function Team() {
         name: "Shravika Mhatre",
         role: "Head",
         category: "Marketing",
-        description: "Leading marketing campaigns and strategy.",
-        photo: "/shravika.jpg",
+        photo: "/Shravika_Mhatre.webp",
         github: "https://github.com/shravikamhatre",
         linkedin: "https://www.linkedin.com/in/shravika-mhatre/"
       },
@@ -328,8 +303,7 @@ export default function Team() {
         name: "Ishita Sharma",
         role: "Member",
         category: "Marketing",
-        description: "Promoting the council's vision and events.",
-        photo: "/ishita.jpg",
+        photo: "/Ishita_Sharma.webp",
         github: "https://github.com/ishshsh21",
         linkedin: "https://www.linkedin.com/in/ishita-sharma-2151a438b/"
       },
@@ -338,8 +312,7 @@ export default function Team() {
         name: "Vaibhavi Ajila",
         role: "Member",
         category: "Marketing",
-        description: "Connecting people with data science.",
-        photo: "/vaibhavi.jpg",
+        photo: "/Vaibhavi_Ajila.webp",
         linkedin: "https://www.linkedin.com/in/vaibhavi-ajila-0b2a26322/"
       },
       {
@@ -347,8 +320,7 @@ export default function Team() {
         name: "Ronit Chandarana",
         role: "Member",
         category: "Marketing",
-        description: "Managing digital marketing initiatives.",
-        photo: "/ronit.jpg",
+        photo: "/Ronit_Chandarana.webp",
         github: "https://github.com/ronitrc",
         linkedin: "https://www.linkedin.com/in/ronit-chandarana-92b428371/",
         instagram: "https://www.instagram.com/ronit.rc6/"
@@ -358,8 +330,7 @@ export default function Team() {
         name: "Nehal Gaba",
         role: "Member",
         category: "Marketing",
-        description: "Driving engagement and outreach efforts.",
-        photo: "/nehal.jpg",
+        photo: "/Nehal_Gaba.webp",
         github: "https://github.com/nehalgaba123",
         linkedin: "https://www.linkedin.com/in/nehal-gaba/",
         instagram: "https://www.instagram.com/nehal.gaba/"
@@ -568,10 +539,10 @@ export default function Team() {
                   >
                     {/* Left-Aligned Full Photo Card */}
                     <div
-                      className={`team-member-card group relative w-[285px] md:w-[325px] h-[470px] overflow-hidden flex flex-col justify-end p-6 text-left border transition-all duration-300 bg-card ${
+                      className={`team-member-card group relative w-[285px] md:w-[325px] h-[470px] overflow-hidden flex flex-col justify-end p-6 text-left transition-all duration-300 bg-card rounded-3xl ${
                         isActive
-                          ? "border-primary shadow-xl"
-                          : "border-border/80 hover:border-primary/60 opacity-85"
+                          ? "shadow-xl"
+                          : "opacity-85"
                       }`}
                     >
                       {/* Lusion-Style Skeleton & Photo */}
@@ -581,8 +552,8 @@ export default function Team() {
                         initials={getInitials(member.name)}
                       />
 
-                      {/* Smooth Bottom Gradient Fade */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/75 via-50% to-transparent pointer-events-none" />
+                      {/* Smooth Bottom Gradient Fade - scoped tightly to text area */}
+                      <div className="absolute inset-x-0 bottom-0 h-[45%] bg-gradient-to-t from-black via-black/70 via-40% to-transparent pointer-events-none" />
 
                       {/* Floating Department Badge (Top Right) */}
                       <div className="absolute top-4 right-4 z-20">
@@ -597,13 +568,9 @@ export default function Team() {
                           {member.role}
                         </span>
 
-                        <h3 className="text-2xl font-extrabold text-white tracking-tight leading-tight font-display">
+                        <h3 className="text-2xl font-extrabold text-white tracking-tight leading-tight font-display mb-2">
                           {member.name}
                         </h3>
-
-                        <p className="text-xs md:text-sm text-gray-300 italic leading-relaxed line-clamp-2 mt-1 mb-3 font-normal font-body">
-                          "{member.description}"
-                        </p>
 
                         {/* Social Links */}
                         <div className="flex items-center gap-2 pt-1">
