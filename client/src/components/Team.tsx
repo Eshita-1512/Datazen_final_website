@@ -753,8 +753,8 @@ export default function Team() {
         </div>
 
         {/* ── Pill Navigation Bar with Red Accents ── */}
-        <div className="flex justify-center items-center mt-4 md:mt-5 relative z-30">
-          <div className="inline-flex items-center gap-4 px-6 py-2.5 rounded-full bg-black/80 backdrop-blur-lg border border-[var(--power-red)]/40 shadow-[0_0_25px_rgba(237,28,36,0.2)] pointer-events-auto">
+        <div className="flex justify-center items-center mt-4 md:mt-5 relative z-30 px-4">
+          <div className="inline-flex items-center gap-4 px-5 py-2 rounded-full bg-black/85 backdrop-blur-lg border border-[var(--power-red)]/40 shadow-[0_0_25px_rgba(237,28,36,0.2)] pointer-events-auto">
             {/* Prev Arrow */}
             <button
               onClick={(e) => {
@@ -767,26 +767,16 @@ export default function Team() {
               <ChevronLeft className="w-5 h-5" />
             </button>
 
-            {/* Pagination Dots */}
-            {filteredMembers.length > 1 && (
-              <div className="flex items-center gap-2">
-                {filteredMembers.map((_, idx) => (
-                  <button
-                    key={idx}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setActiveIndex(idx);
-                    }}
-                    className={`transition-all duration-300 rounded-full h-2.5 cursor-pointer ${
-                      idx === activeIndex
-                        ? "w-7 bg-[var(--vitality-red)] shadow-[0_0_12px_rgba(237,28,36,0.8)]"
-                        : "w-2.5 bg-white/25 hover:bg-white/50"
-                    }`}
-                    aria-label={`Go to slide ${idx + 1}`}
-                  />
-                ))}
-              </div>
-            )}
+            {/* Clean Numeric Progress Counter Badge */}
+            <div className="flex items-center gap-2 font-mono text-xs text-white/90 px-3 py-0.5 rounded-full bg-white/5 border border-white/10 select-none">
+              <span className="text-[var(--vitality-red)] font-bold text-sm">
+                {String(activeIndex + 1).padStart(2, "0")}
+              </span>
+              <span className="text-white/30">/</span>
+              <span className="text-white/60 font-medium">
+                {String(filteredMembers.length).padStart(2, "0")}
+              </span>
+            </div>
 
             {/* Next Arrow */}
             <button

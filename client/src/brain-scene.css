@@ -98,11 +98,39 @@ html::-webkit-scrollbar{width:0;height:0;display:none}
 @keyframes wheel{0%{opacity:1;top:6px}70%{opacity:0;top:16px}100%{opacity:0}}
 
 @media(max-width:900px),(orientation:portrait){
-  .stext{width:80%;left:10%;right:auto;text-align:center;top:auto;bottom:8%}
-  .stext-right{left:10%;right:auto;text-align:center}
+  .stext{
+    width:92%;
+    left:4%;
+    right:auto;
+    text-align:center;
+    top:auto;
+    bottom:6%;
+    padding:0 8px;
+  }
+  .stext-right{left:4%;right:auto;text-align:center}
   .stext-right p{margin:0 auto}
+  .stext h2{
+    font-size:clamp(1.25rem, 5.5vw, 1.75rem);
+    margin:6px 0 8px;
+    line-height:1.2;
+  }
+  .stext p{
+    font-size:clamp(0.82rem, 3.4vw, 0.95rem);
+    line-height:1.5;
+    margin:0 auto;
+    max-width:38ch;
+  }
   .stext::before,.stext-right::before{
-    inset:-30% -20%;
-    background:radial-gradient(ellipse at 50% 50%,rgba(6,6,8,.8),rgba(6,6,8,0) 75%)
+    inset:-25% -15%;
+    background:radial-gradient(ellipse at 50% 50%,rgba(6,6,8,.92),rgba(6,6,8,0) 80%)
+  }
+  .scenehint{
+    bottom:14px;
+    font-size:0.72rem;
+  }
+  .scenehint .m{
+    width:18px;
+    height:28px;
+    margin:4px auto 0;
   }
 }

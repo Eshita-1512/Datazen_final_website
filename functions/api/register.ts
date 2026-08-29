@@ -123,29 +123,18 @@ export async function onRequestPost(context: any) {
     
     // Validate the data
     const validatedData = teamRegistrationSchema.parse(body);
-<<<<<<< Updated upstream
 
     console.log('Registration request received:', {
-=======
-    
-    console.log('Data validated:', {
->>>>>>> Stashed changes
       teamName: validatedData.teamName,
       college: validatedData.college,
       email: validatedData.email,
     });
-<<<<<<< Updated upstream
 
     const auth = await getAuth(context.env);
     if (!auth) {
       throw new Error('Failed to authenticate with Google Sheets');
     }
 
-=======
-    
-    // Check for required environment variables
-    const credentialsJson = context.env.GOOGLE_SHEETS_CREDENTIALS;
->>>>>>> Stashed changes
     const spreadsheetId = context.env.GOOGLE_SHEETS_ID;
     
     if (!credentialsJson) {
@@ -204,14 +193,8 @@ export async function onRequestPost(context: any) {
       }
     );
   } catch (error) {
-<<<<<<< Updated upstream
     console.error('Registration error:', error instanceof Error ? error.message : String(error));
 
-=======
-    console.error('Registration error:', error);
-    console.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace');
-    
->>>>>>> Stashed changes
     if (error instanceof z.ZodError) {
       const errorMessages = error.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', ');
       return new Response(
@@ -229,13 +212,6 @@ export async function onRequestPost(context: any) {
         }
       );
     }
-<<<<<<< Updated upstream
-
-=======
-    
-    const errorMessage = error instanceof Error ? error.message : 'An error occurred while processing your request';
-    
->>>>>>> Stashed changes
     return new Response(
       JSON.stringify({
         success: false,

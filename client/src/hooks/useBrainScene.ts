@@ -51,7 +51,10 @@ export function useBrainScene() {
 
     const INTRO = 0.13;
     const SMALL = 25.6; // navbar brand size
-    const bigSize = () => Math.max(42, Math.min(140, window.innerWidth * 0.100));
+    const isMob = () => window.innerWidth < 768 || (window.innerWidth < window.innerHeight);
+    const bigSize = () => isMob() 
+      ? Math.max(36, Math.min(68, window.innerWidth * 0.125)) 
+      : Math.max(42, Math.min(140, window.innerWidth * 0.100));
     let lastT = -1;
 
     function layoutTitle(t: number) {
@@ -305,16 +308,28 @@ export function useBrainScene() {
       unwrappedRy[i] = ry;
     }
 
-    const ZOOM_CZ = 98;
+    const isMobile = () => window.innerWidth < 768 || (window.innerWidth < window.innerHeight);
+
     function nodeState(i: number, sideSign: number) {
-      const rx = info[i].rx, ry = unwrappedRy[i], cz = ZOOM_CZ;
+      const mobile = isMobile();
+      const rx = info[i].rx, ry = unwrappedRy[i];
+      // On mobile portrait, keep camera pulled back so the brain cluster stays comfortably in frame
+      const cz = mobile ? 160 : 98;
       _v.copy(info[i].local).applyEuler(_e.set(rx, ry, 0, 'XYZ'));
       const W = Math.tan(FOV) * cz * cam.aspect;
-      const off = sideSign * W * 0.26;
-      return { rx, ry, rz: 0, px: -_v.x + off, py: -_v.y, pz: -_v.z, cz };
+      // On mobile, text is at the bottom, so keep horizontal center and raise brain slightly upward
+      const off = mobile ? 0 : sideSign * W * 0.26;
+      const pyOffset = mobile ? 14 : 0;
+      return { rx, ry, rz: 0, px: -_v.x + off, py: -_v.y + pyOffset, pz: -_v.z, cz };
     }
-    const START = { rx: 0.05, ry: -Math.PI / 2, rz: 0, px: 0, py: -15, pz: 0, cz: 215 };
-    const TEND = { rx: 0.05, ry: -Math.PI / 2 + Math.PI * 2, rz: 0, px: 0, py: -15, pz: 0, cz: 215 };
+
+    function getStartTarget() {
+      const mobile = isMobile();
+      const cz = mobile ? Math.max(260, fitCz()) : 215;
+      const py = mobile ? 8 : -15;
+      return { rx: 0.05, ry: -Math.PI / 2, rz: 0, px: 0, py, pz: 0, cz };
+    }
+
     const lerpS = (A: any, B: any, t: number) => ({
       rx: lerp(A.rx, B.rx, t), ry: lerp(A.ry, B.ry, t), rz: lerp(A.rz, B.rz, t),
       px: lerp(A.px, B.px, t), py: lerp(A.py, B.py, t), pz: lerp(A.pz, B.pz, t), cz: lerp(A.cz, B.cz, t)
@@ -322,6 +337,7 @@ export function useBrainScene() {
 
     function targets(p: number) {
       let st, hi = 0; 
+      const START = getStartTarget();
       const C1 = nodeState(0, 1), C2 = nodeState(1, -1), C3 = nodeState(2, 1), C4 = nodeState(3, -1);
       
       if (p < 0.15) { st = { ...START }; }

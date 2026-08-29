@@ -347,16 +347,26 @@ export default function Timeline() {
             </svg>
           )}
 
-          {/* ── Mobile spine (simple vertical line) ── */}
-          <div className="absolute left-4 top-0 bottom-0 w-[2px] md:hidden z-[5]">
-            <div className="absolute inset-0 bg-[var(--power-red)]/15 rounded-full" />
+          {/* ── Mobile spine (animated glowing vertical line + nodes) ── */}
+          <div className="absolute left-3.5 top-0 bottom-0 w-[3px] md:hidden z-[5]">
+            <div className="absolute inset-0 bg-[var(--power-red)]/20 rounded-full" />
             <motion.div
-              className="absolute top-0 left-0 right-0 bg-gradient-to-b from-[var(--vitality-red)] via-[var(--power-red)] to-[var(--vitality-red)] rounded-full shadow-[0_0_12px_rgba(237,28,36,0.6)]"
+              className="absolute top-0 bottom-0 left-0 right-0 h-full bg-gradient-to-b from-[var(--vitality-red)] via-[var(--power-red)] to-[var(--vitality-red)] rounded-full shadow-[0_0_14px_rgba(237,28,36,0.85)]"
               style={{
                 scaleY: smoothProgress,
                 transformOrigin: "top",
               }}
             />
+            {/* Mobile Waypoint Milestone Nodes */}
+            {nodes.map((nd, i) => (
+              <div
+                key={i}
+                className="absolute -left-[4.5px] -translate-y-1/2 z-10"
+                style={{ top: `${nd.y}px` }}
+              >
+                <div className="w-3 h-3 rounded-full bg-[var(--vitality-red)] border-2 border-background shadow-[0_0_10px_rgba(237,28,36,0.9)]" />
+              </div>
+            ))}
           </div>
 
           {/* ── Event Rows ── */}
@@ -371,7 +381,7 @@ export default function Timeline() {
                   ev.align === "left"
                     ? "justify-start"
                     : "justify-end"
-                } pl-10 md:pl-0`}
+                } pl-9 md:pl-0`}
               >
                 <div className="w-full md:w-[60%]">
                   <TimelineCard event={ev} index={i} />
