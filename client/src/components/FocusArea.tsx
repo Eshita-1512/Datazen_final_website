@@ -1,6 +1,13 @@
- import { useRef } from "react";
+import { useRef } from "react";
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
-import { Brain, Code, Database, Layers, TrendingUp } from "lucide-react";
+import { 
+  SiPytorch, 
+  SiPlotly, 
+  SiApachespark, 
+  SiPython, 
+  SiTensorflow, 
+  SiPandas 
+} from "react-icons/si";
 
 export default function FocusArea() {
   const ref = useRef(null);
@@ -40,49 +47,49 @@ export default function FocusArea() {
     },
   };
 
-  // The 6 focus-area blocks — domain tracks without artificial step numbering
+  // The 6 focus-area blocks — domain tracks with authentic industry framework marks
   const focusAreas = [
     {
       title: "Machine Learning",
       track: "Core Modeling",
       description:
         "Supervised and unsupervised learning, classification models, regression pipelines, and algorithm evaluation.",
-      icon: <Brain size={24} strokeWidth={1.5} />,
+      icon: <SiPytorch className="w-5 h-5" />,
     },
     {
       title: "Data Visualization",
       track: "Visual Analytics",
       description:
         "Interactive dashboards, exploratory data analysis, chart grammar, and decision-support graphics.",
-      icon: <TrendingUp size={24} strokeWidth={1.5} />,
+      icon: <SiPlotly className="w-5 h-5" />,
     },
     {
       title: "Big Data Analytics",
       track: "Data Engineering",
       description:
         "Distributed computing frameworks, large-scale query processing, and data warehouse workflows.",
-      icon: <Database size={24} strokeWidth={1.5} />,
+      icon: <SiApachespark className="w-5 h-5" />,
     },
     {
       title: "AI Development",
       track: "Applied Systems",
       description:
         "End-to-end intelligent applications, API integration, agent workflows, and practical deployment.",
-      icon: <Code size={24} strokeWidth={1.5} />,
+      icon: <SiPython className="w-5 h-5" />,
     },
     {
       title: "Deep Learning",
       track: "Neural Architectures",
       description:
         "Computer vision, natural language processing, transformer architectures, and deep neural networks.",
-      icon: <Layers size={24} strokeWidth={1.5} />,
+      icon: <SiTensorflow className="w-5 h-5" />,
     },
     {
       title: "Data Cleaning",
       track: "Pipeline Quality",
       description:
         "Feature engineering, missing value imputation, schema validation, and preprocessing pipelines.",
-      icon: <Database size={24} strokeWidth={1.5} />,
+      icon: <SiPandas className="w-5 h-5" />,
     },
   ];
 

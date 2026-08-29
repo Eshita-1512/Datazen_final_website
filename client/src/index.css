@@ -8,36 +8,36 @@
     --power-red: #8f1722;       /* Somaiya Heritage Crimson */
     --vitality-red: #b7202e;    /* Active Crimson */
     --academic-sand: #bca888;   /* Academic Ochre / Mineral Sand */
-    --titanium-text: #d8d1c5;   /* High-Legibility Titanium */
-    --somaiya-black: #0e1015;   /* Deep Basalt Slate */
+    --titanium-text: #eae6df;   /* High-Legibility Titanium */
+    --somaiya-black: #000000;   /* Pure OLED Pitch Black */
     
     /* Light theme colors */
-    --background: 36 20% 97%;
-    --foreground: 222 20% 12%;
+    --background: 0 0% 0%;
+    --foreground: 36 20% 92%;
     
-    --card: 0 0% 100%;
-    --card-foreground: 222 20% 12%;
+    --card: 0 0% 4%;
+    --card-foreground: 36 20% 92%;
     
-    --popover: 0 0% 100%;
-    --popover-foreground: 222 20% 12%;
+    --popover: 0 0% 4%;
+    --popover-foreground: 36 20% 92%;
     
     --primary: 355 72% 33%;
     --primary-foreground: 0 0% 98%;
     
-    --secondary: 38 20% 92%;
-    --secondary-foreground: 222 20% 18%;
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 38 28% 70%;
     
-    --muted: 36 15% 90%;
-    --muted-foreground: 222 10% 40%;
+    --muted: 0 0% 8%;
+    --muted-foreground: 226 11% 65%;
     
     --accent: 38 28% 68%;
-    --accent-foreground: 222 20% 10%;
+    --accent-foreground: 0 0% 0%;
     
     --destructive: 0 75% 45%;
     --destructive-foreground: 0 0% 98%;
     
-    --border: 36 15% 85%;
-    --input: 36 15% 85%;
+    --border: 0 0% 14%;
+    --input: 0 0% 14%;
     --ring: 355 72% 33%;
     
     --radius: 0px; /* Swiss Editorial Grid: Crisp 0px geometric architecture */
@@ -50,44 +50,44 @@
     --chart-5: 38 35% 40%;
     
     /* Sidebar */
-    --sidebar-background: 36 20% 97%;
-    --sidebar-foreground: 222 20% 12%;
+    --sidebar-background: 0 0% 0%;
+    --sidebar-foreground: 36 20% 92%;
     --sidebar-primary: 355 72% 33%;
     --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 38 20% 92%;
-    --sidebar-accent-foreground: 222 20% 18%;
-    --sidebar-border: 36 15% 85%;
+    --sidebar-accent: 0 0% 10%;
+    --sidebar-accent-foreground: 38 28% 70%;
+    --sidebar-border: 0 0% 14%;
     --sidebar-ring: 355 72% 33%;
   }
 
   .dark {
-    /* Grounded Basalt Slate & Mineral Academic Dark Theme */
-    --background: 222 20% 7%;      /* #0e1015 */
-    --foreground: 36 24% 88%;      /* #d8d1c5 - warm titanium */
+    /* Pure Sleek OLED Black Theme */
+    --background: 0 0% 0%;         /* #000000 - Pure Pitch Black */
+    --foreground: 36 24% 92%;      /* #ede9e1 - clean white-titanium */
     
-    --card: 224 19% 11%;           /* #171a22 - basalt slate surface */
-    --card-foreground: 36 24% 88%;
+    --card: 0 0% 4%;              /* #0a0a0a - deep black surface */
+    --card-foreground: 36 24% 92%;
     
-    --popover: 224 19% 11%;
-    --popover-foreground: 36 24% 88%;
+    --popover: 0 0% 4%;
+    --popover-foreground: 36 24% 92%;
     
     --primary: 355 72% 33%;        /* #8f1722 - Somaiya Crimson */
     --primary-foreground: 36 24% 96%;
     
-    --secondary: 224 16% 16%;      /* #222631 */
+    --secondary: 0 0% 10%;         /* #1a1a1a */
     --secondary-foreground: 38 28% 70%; /* #bca888 - Academic Sand */
     
-    --muted: 224 14% 15%;
-    --muted-foreground: 226 11% 60%; /* #8f94a6 */
+    --muted: 0 0% 8%;
+    --muted-foreground: 226 11% 65%; /* #9ea3b5 */
     
     --accent: 38 28% 68%;          /* #bca888 - Academic Sand Accent */
-    --accent-foreground: 222 20% 7%;
+    --accent-foreground: 0 0% 0%;
     
     --destructive: 0 75% 50%;
     --destructive-foreground: 0 0% 98%;
     
-    --border: 224 18% 18%;         /* #242936 - hairline border */
-    --input: 224 18% 18%;
+    --border: 0 0% 14%;           /* #242424 - sleek hairline border */
+    --input: 0 0% 14%;
     --ring: 355 72% 33%;
     
     /* Chart colors */

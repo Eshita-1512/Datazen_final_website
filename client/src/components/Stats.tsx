@@ -1,16 +1,15 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
-import { BarChart3, Brain, Code, LineChart, Users, Award, BookOpen } from "lucide-react";
 
 interface StatProps {
   value: number;
   label: string;
   description: string;
-  icon: React.ReactNode;
+  index: number;
   delay: number;
 }
 
-function Stat({ value, label, description, icon, delay }: StatProps) {
+function Stat({ value, label, description, index, delay }: StatProps) {
   const [count, setCount] = useState(0);
   const statRef = useRef(null);
   const isInView = useInView(statRef, { once: false, margin: "-20%" });
@@ -49,11 +48,11 @@ function Stat({ value, label, description, icon, delay }: StatProps) {
     >
       <div>
         <div className="flex items-center justify-between mb-8">
-          <div className="w-9 h-9 bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
-            {icon}
-          </div>
-          <span className="font-mono text-xs text-muted-foreground uppercase tracking-widest">
-            Metric
+          <span className="font-mono text-xs text-primary font-bold tracking-wider">
+            [ METRIC.0{index + 1} ]
+          </span>
+          <span className="font-mono text-xs text-muted-foreground/60 uppercase tracking-widest">
+            Annual Benchmark
           </span>
         </div>
 
@@ -83,21 +82,18 @@ export default function Stats() {
       value: 10,
       label: "Industry & Academic Talks",
       description: "Guest technical sessions with data professionals and university researchers.",
-      icon: <Users className="w-5 h-5" strokeWidth={1.5} />,
       delay: 0.1
     },
     {
       value: 5,
       label: "Annual Campus Events",
       description: "Flagship hackathons, Datathons, and student coding bootcamps.",
-      icon: <Award className="w-5 h-5" strokeWidth={1.5} />,
       delay: 0.2
     },
     {
-      value: 1600,
+      value: 2100,
       label: "Student Participants",
       description: "Attendees across practical workshops, project tracks, and campus competitions.",
-      icon: <BarChart3 className="w-5 h-5" strokeWidth={1.5} />,
       delay: 0.3
     },
   ];
@@ -136,10 +132,10 @@ export default function Stats() {
           {stats.map((stat, index) => (
             <Stat
               key={index}
+              index={index}
               value={stat.value}
               label={stat.label}
               description={stat.description}
-              icon={stat.icon}
               delay={stat.delay}
             />
           ))}
