@@ -10,8 +10,8 @@ export default function Hero() {
           <canvas id="brainCanvas" ref={canvasRef}></canvas>
 
           <div className="stext stext-left" id="txt1" ref={txt1Ref}>
-            <span className="eyebrow">Data Science Council</span>
-            <h2>Student <span className="red">Data Science</span> at Somaiya</h2>
+            <span className="eyebrow">Official Student Council</span>
+            <h2>Data Science Council of <span className="red">Somaiya Vidyavihar</span></h2>
             <p>We run campus hackathons, technical workshops, and open data projects for students across Somaiya Vidyavihar University.</p>
           </div>
 
@@ -29,8 +29,8 @@ export default function Hero() {
 
           <div className="stext stext-right" id="txt4" ref={txt4Ref}>
             <span className="eyebrow">Council Operations</span>
-            <h2>Student <span className="red">Committees</span></h2>
-            <p>Teams across Technical, Logistics, Design, Public Relations, and Sponsorship managing year-round data initiatives.</p>
+            <h2 className="whitespace-nowrap">Cross-Functional <span className="red">Teams</span></h2>
+            <p>Dedicated wings across Tech, PR, Operations, Creative, and Marketing driving impactful data initiatives year-round.</p>
           </div>
           <div className="scenehint" id="sceneHint" ref={hintRef}>scroll<span className="m"></span></div>
         </div>

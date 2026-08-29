@@ -53,7 +53,12 @@ export default function Navbar() {
         <div className="flex justify-between items-center">
           {/* Logo */}
           <div className={`flex items-center ${isHomePage ? 'invisible' : ''}`}>
-            <Link href="/" className="text-primary text-2xl md:text-3xl tracking-wider font-bold uppercase flex items-center gap-0.5" style={{ fontFamily: "'Tektur', sans-serif" }}>
+            <Link 
+              href="/" 
+              onClick={() => window.scrollTo({ top: 0, left: 0, behavior: "instant" })}
+              className="text-primary text-2xl md:text-3xl tracking-wider font-bold uppercase flex items-center gap-0.5" 
+              style={{ fontFamily: "'Tektur', sans-serif" }}
+            >
               <span className="text-foreground">DATA</span>ZEN
             </Link>
           </div>
@@ -72,7 +77,13 @@ export default function Navbar() {
             ) : (
               // Other pages navigation
               <>
-                <Link href="/" className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors">Home</Link>
+                <Link 
+                  href="/" 
+                  onClick={() => window.scrollTo({ top: 0, left: 0, behavior: "instant" })}
+                  className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors"
+                >
+                  Home
+                </Link>
                 <Link href="/#focus-area" className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors">Technical Domains</Link>
                 <Link href="/#timeline" className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors">Timeline</Link>
                 <Link href="/#team" className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors">Team</Link>
@@ -144,7 +155,10 @@ export default function Navbar() {
                   <Link 
                     href="/" 
                     className="block py-2.5 px-4 text-sm font-medium text-foreground/90 hover:bg-accent/20 hover:text-primary rounded-none transition-colors"
-                    onClick={handleLinkClick}
+                    onClick={() => {
+                      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+                      handleLinkClick();
+                    }}
                   >
                     Home
                   </Link>

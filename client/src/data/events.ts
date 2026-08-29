@@ -18,14 +18,14 @@ export interface TimelineEventData {
 export const timelineEvents: TimelineEventData[] = [
   {
     id: 1,
-    slug: "zenconnect-25",
-    date: "3rd September 2025",
-    title: "ZenConnect '25",
+    slug: "zenconnect-26",
+    date: "2nd September 2026",
+    title: "ZenConnect '26",
     description:
       "A sneak peek into the exciting realm of AI & Data with us. Meet the council, explore fun activities, get a roadmap on your data journey, and network at a university level.",
     tags: ["Networking", "Roadmap Session", "Fun Activities"],
     align: "left",
-    image: "/images/zenconnect.jpg",
+    image: "https://lh3.googleusercontent.com/d/1lcD5gVGGiws7EBaqbHswtNXWG4m0Zwp2=w1000",
     fallbackGradient: "linear-gradient(135deg,#1a0505,#6b1010,#c0392b)",
     location: "Somaiya Vidyavihar University, Mumbai",
     registrationUrl: ZENCONNECT_REGISTRATION_URL,

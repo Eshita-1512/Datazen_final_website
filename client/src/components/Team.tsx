@@ -6,6 +6,8 @@ import {
   Github,
   Linkedin,
   Instagram,
+  User,
+  GraduationCap,
 } from "lucide-react";
 import "./Team.css";
 
@@ -15,11 +17,19 @@ interface TeamMember {
   name: string;
   role: string;
   category: string;
-  description: string;
-  github: string;
-  linkedin: string;
-  instagram: string;
+  github?: string;
+  linkedin?: string;
+  instagram?: string;
   photo: string;
+  imagePosition?: string; // e.g. "center 15%", "center top", "center 25%"
+  imageScale?: number;    // e.g. 1.05
+}
+
+interface FacultyAdvisor {
+  id: number;
+  name: string;
+  role: string;
+  department: string;
 }
 
 // ── Lusion Red Shimmer Skeleton Member Photo Component ────────────────────
@@ -27,38 +37,67 @@ function MemberPhoto({
   src,
   alt,
   initials,
+  imagePosition = "center bottom",
+  imageScale = 1.38,
 }: {
   src: string;
   alt: string;
   initials: string;
+  imagePosition?: string;
+  imageScale?: number;
 }) {
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
 
   return (
-    <div className="absolute inset-0 w-full h-full overflow-hidden rounded-3xl bg-[#0a0405]">
+    <div className="absolute inset-0 w-full h-full overflow-hidden rounded-3xl bg-[#080304]">
+      {/* 1. Background image at back (z-0) - scaled & offset to remove top line gap */}
+      <img
+        src="/TeamCardBackground.webp"
+        alt="Card Background"
+        className="absolute -top-2 -left-2 w-[calc(100%+16px)] h-[calc(100%+16px)] object-cover z-0 pointer-events-none scale-[1.05]"
+      />
+
+      {/* 2. Ambient darkness behind person to blend card background seamlessly (z-10) */}
+      <div className="absolute inset-x-0 bottom-0 h-[65%] bg-gradient-to-t from-black via-black/80 via-50% to-transparent pointer-events-none z-10" />
+
       {/* Lusion-style Red Shimmer Skeleton Loader */}
       {!loaded && !error && src && (
-        <div className="absolute inset-0 z-10 team-skeleton" />
+        <div className="absolute inset-0 z-20 team-skeleton" />
       )}
 
-      {/* Fallback for error / missing photo */}
+      {/* 3. Person's Image (z-20) or Reverted Text Initials Fallback */}
       {error || !src ? (
-        <div className="w-full h-full bg-gradient-to-br from-[#2a080a] to-[#0a0505] flex items-center justify-center font-black text-6xl text-[var(--vitality-red)] opacity-35">
+        <div className="absolute inset-0 z-20 flex items-center justify-center font-black text-6xl md:text-7xl text-[var(--vitality-red)] opacity-40 pb-16">
           {initials}
         </div>
       ) : (
-        <img
-          src={src}
-          alt={alt}
-          loading="eager"
-          className={`w-full h-full object-cover object-top group-hover:scale-105 transition-all duration-700 ${
-            loaded ? "opacity-100 scale-100" : "opacity-0 scale-105"
-          }`}
-          onLoad={() => setLoaded(true)}
-          onError={() => setError(true)}
-        />
+        <div className="absolute inset-0 z-20 w-full h-full overflow-hidden flex items-end justify-center">
+          <img
+            src={src}
+            alt={alt}
+            loading="eager"
+            style={
+              {
+                objectPosition: imagePosition,
+                transformOrigin: "bottom center",
+                "--base-scale": imageScale,
+              } as React.CSSProperties
+            }
+            className={`w-full h-full object-cover [transform:scale(var(--base-scale))] group-hover:[transform:scale(calc(var(--base-scale)*1.05))] transition-transform duration-700 ease-out ${
+              loaded ? "opacity-100" : "opacity-0"
+            }`}
+            onLoad={() => setLoaded(true)}
+            onError={() => setError(true)}
+          />
+        </div>
       )}
+
+      {/* 4. Top Vignette: Blends raw background edges smoothly at the top (z-30) */}
+      <div className="absolute inset-x-0 top-0 h-[20%] bg-gradient-to-b from-black/50 via-black/10 to-transparent pointer-events-none z-30" />
+
+      {/* 5. Bottom Gradient Overlay: Ensures crisp text readability over any photo (z-30) */}
+      <div className="absolute inset-x-0 bottom-0 h-[42%] bg-gradient-to-t from-black via-black/75 via-45% to-transparent pointer-events-none z-30" />
     </div>
   );
 }
@@ -77,11 +116,11 @@ export default function Team() {
   useEffect(() => {
     const updateSpacing = () => {
       if (window.innerWidth < 640) {
-        setSpacingStep(260);
+        setSpacingStep(240);
       } else if (window.innerWidth < 1024) {
-        setSpacingStep(300);
+        setSpacingStep(290);
       } else {
-        setSpacingStep(350); // Spaced out to prevent clipping
+        setSpacingStep(340);
       }
     };
     updateSpacing();
@@ -89,261 +128,294 @@ export default function Team() {
     return () => window.removeEventListener("resize", updateSpacing);
   }, []);
 
-  // Team data for 2025-26
-  const teamMembers: TeamMember[] = useMemo(
+  // Faculty Advisory Board
+  const facultyAdvisors: FacultyAdvisor[] = useMemo(
     () => [
       {
         id: 1,
-        name: "Mann Shah",
-        role: "Council Head",
-        category: "Core",
-        description: "Chief of Breaking Things and Fixing Them at 2 AM",
-        photo: "/mann.jpg",
-        github: "https://github.com/mannn13",
-        linkedin: "https://www.linkedin.com/in/mann-shah-3940a3278/",
-        instagram: "https://www.instagram.com/m.annn13/",
+        name: "Dr. Urmi Thakkar",
+        role: "Faculty Advisor",
+        department: "Computer Science & Engineering",
       },
       {
         id: 2,
-        name: "Siddharth Chintawar",
-        role: "Council Head",
-        category: "Core",
-        photo: "/siddarth.jpg",
-        description: "Steering the ship, barely",
-        github: "https://github.com/sidc124",
-        linkedin: "https://www.linkedin.com/in/siddharth-chintawar-a76366291/",
-        instagram: "https://www.instagram.com/godknowssid/",
+        name: "Dr. Prasanna Shete",
+        role: "Faculty Advisor",
+        department: "Computer Science & Engineering",
       },
       {
         id: 3,
-        name: "Shubham Indulkar",
-        role: "Tech Head",
-        category: "Tech",
-        description: "Writing code that works… on the second try",
-        photo: "/shubham.jpg",
-        github: "https://github.com/Thesilentprogramer",
-        linkedin: "https://www.linkedin.com/in/shubham-indulkar-7804561b3/",
-        instagram: "https://www.instagram.com/_shubh.13",
+        name: "Ms. Priyanka Shetty",
+        role: "Faculty Advisor",
+        department: "Computer Science & Engineering",
       },
+    ],
+    []
+  );
+
+  // Team data for 2025-26 (Student Leadership & Committees)
+  const teamMembers: TeamMember[] = useMemo(
+    () => [
       {
         id: 4,
-        name: "Ishika Bhoyar",
-        role: "Tech Member",
-        category: "Tech",
-        description: "Turning ideas into URLs",
-        photo: "/ishika.jpg",
-        github: "https://github.com/ishikabhoyar/",
-        linkedin: "https://www.linkedin.com/in/ishikabhoyar/",
-        instagram: "https://www.instagram.com/ishika.bhoyar?igsh=OGtmdGR1anc3aHE%3D&utm_source=qr",
+        name: "Suryaansh Jain",
+        role: "Co-Committee Head",
+        category: "Core",
+        photo: "/Suryaansh_jain.webp",
+        imageScale: 1.20,
+        imagePosition: "center 90%",
+        github: "https://github.com/suryaansh-jain",
+        linkedin: "https://www.linkedin.com/in/suryaansh-jain-61b74b28a/",
+        instagram: "https://www.instagram.com/suryaansh._._?igsh=cmw0OXh4ZHY4Nzlm"
       },
       {
         id: 5,
-        name: "Soham Gore",
-        role: "Tech Member",
-        category: "Tech",
-        description: "Trained on chaos",
-        photo: "/soham.jpg",
-        github: "https://github.com/debug-soham",
-        linkedin: "https://www.linkedin.com/in/sohamgore",
-        instagram: "https://www.instagram.com/ssoham.jpg",
+        name: "Ankita Kotkar",
+        role: "Co-Committee Head",
+        category: "Core",
+        photo: "/Ankita_Kotkar.webp",
+        imageScale: 1.35,
+        imagePosition: "center 90%",
+        github: "https://github.com/ankitakotkar",
+        linkedin: "https://www.linkedin.com/in/ankita-kotkar/",
+        instagram: "https://www.instagram.com/ankita.kotkar/"
       },
       {
         id: 6,
-        name: "Manas Kolaskar",
-        role: "Tech Member",
-        category: "Tech",
-        description: "Fueling curiosity today to engineer AI tomorrow.",
-        photo: "/manas.jpg",
-        github: "https://github.com/manasscodes",
-        linkedin: "https://www.linkedin.com/in/manaskolaskar/",
-        instagram: "https://www.instagram.com/itsmanaskolaskar/",
+        name: "Abhishek Joshi",
+        role: "Treasurer",
+        category: "Core",
+        photo: "/Abhishek_Joshi.webp",
+        imageScale: 1.35,
+        imagePosition: "center 90%",
+        github: "https://github.com/ketanabhishek8",
+        linkedin: "https://www.linkedin.com/in/abhishek-joshi2/",
+        instagram: "https://www.instagram.com/ketanabhishek8/"
       },
       {
         id: 7,
-        name: "Lakshya Santani",
-        role: "Tech Member",
+        name: "Eshita",
+        role: "Head",
         category: "Tech",
-        description: "Turning data into decisions",
-        photo: "/Lakshya.PNG",
-        github: "https://github.com/Lakshyyaaa",
-        linkedin: "https://www.linkedin.com/in/lakshya-santani-021612292/",
-        instagram: "https://www.instagram.com/lakshyyaaa._/profilecard/?igsh=M2x3azNoc25naTFw",
+        photo: "/Eshita.webp",
+        github: "https://github.com/Eshita-1512",
+        linkedin: "https://www.linkedin.com/in/eshita-b108b9320/"
       },
       {
         id: 8,
-        name: "Swadha Kumari",
-        role: "Creative Head",
-        category: "Creative",
-        description: "Designing seamless digital experiences.",
-        photo: "/swadha.jpg",
-        github: "https://github.com/Swadha06",
-        linkedin: "https://www.linkedin.com/in/swadha-kumari-525a61294/",
-        instagram: "https://www.instagram.com/swaddhaa._/",
+        name: "Sadhil Madan",
+        role: "Member",
+        category: "Tech",
+        photo: "/Sadhil_Madan.webp",
+        imageScale: 1.35,
+        imagePosition: "center 90%"
       },
       {
         id: 9,
-        name: "Riya Gupta",
-        role: "Creative Member",
-        category: "Creative",
-        description: "Designing visual experiences",
-        photo: "/riya.jpg",
-        github: "https://github.com/riyaa-g",
-        linkedin: "https://www.linkedin.com/in/riyagupta70/",
-        instagram: "https://www.instagram.com/_riyaya_07/",
+        name: "Maahnal Chauhan",
+        role: "Member",
+        category: "Tech",
+        photo: "/Maahnal_Chauhan.webp",
+        imageScale: 1.20,
+        imagePosition: "center 90%",
+        github: "https://github.com/Maahnal",
+        linkedin: "https://www.linkedin.com/in/maahnalchauhan5/",
+        instagram: "https://www.instagram.com/maahnalc?igsh=ZTl1ZHFkaXBudWoz&utm_source=qr"
       },
       {
         id: 10,
-        name: "Sachi Parekh",
-        role: "Creative Member",
-        category: "Creative",
-        description: "Exploring stories through data.",
-        photo: "/saachi.jpg",
-        github: "https://github.com/Sachi1312",
-        linkedin: "https://www.linkedin.com/in/sachi-parekh-427239263/",
-        instagram: "https://www.instagram.com/sachi__parekh?igsh=YTU2YmQ0ZDhiNGMw",
+        name: "Khushi Chaturvedi",
+        role: "Member",
+        category: "Tech",
+        photo: "/Khushi_Chaturvedi.webp"
       },
       {
         id: 11,
-        name: "Samiksha Phirangi",
-        role: "Creative Member",
-        category: "Creative",
-        description: "Creating and planning content strategies.",
-        photo: "/samiksha.jpg",
-        github: "https://github.com/samikshaphirangi",
-        linkedin: "https://www.linkedin.com/in/samiksha-phirangi-848531357/",
-        instagram: "https://www.instagram.com/samikshaphirangi?igsh=eXdlcTZrbmkzdWhx&utm_source=qr",
+        name: "Harsh Zope",
+        role: "Member",
+        category: "Tech",
+        photo: "/Harsh_Zope.webp",
+        imageScale: 1.20,
+        imagePosition: "center 90%",
+        github: "https://github.com/Hersheys6969",
+        linkedin: "https://www.linkedin.com/in/harshzope/"
       },
       {
         id: 12,
-        name: "Sohom Mallick",
-        role: "PR Head",
+        name: "Mehak Trivedi",
+        role: "Head",
         category: "PR",
-        description: "Crafting stories, leaving a mark.",
-        photo: "/sohom.jpg",
-        github: "https://github.com/sassysohom48",
-        linkedin: "https://www.linkedin.com/in/sohom-mallick-245965292",
-        instagram: "https://www.instagram.com/whynotsohom_",
+        photo: "/Mehak_Trivedi.webp",
+        imageScale: 1.35,
+        imagePosition: "center 90%",
+        github: "https://github.com/mehak-t",
+        linkedin: "https://www.linkedin.com/in/mehak-trivedi/",
+        instagram: "https://www.instagram.com/mehaktrivedi?igsh=d2Y1eW1sZjZvNjQy&utm_source=qr"
       },
       {
         id: 13,
-        name: "Pratibha Singh",
-        role: "PR Member",
+        name: "Avani Maniyar",
+        role: "Member",
         category: "PR",
-        description: "Designing seamless digital experiences.",
-        photo: "/pratibha.PNG",
-        github: "https://github.com/pratibhasoup",
-        linkedin: "https://www.linkedin.com/in/pratibha-singh-76bb51340/",
-        instagram: "https://www.instagram.com/pratibha.singhh/",
+        photo: "/Avani_Maniyar.webp",
+        imageScale: 1.50,
+        imagePosition: "center 90%",
       },
       {
         id: 14,
-        name: "Mrinali Sharma",
-        role: "PR Member",
+        name: "Fiona Kotak",
+        role: "Member",
         category: "PR",
-        description: "50%sweetness 50%savage",
-        photo: "/mrinali.jpg",
-        github: "https://github.com/mrinalishh",
-        linkedin: "https://www.linkedin.com/in/mrinali-sharma-353b92327/",
-        instagram: "https://www.instagram.com/mrinalish?igsh=MWo2dXJ0bjFuMWpraw==",
+        photo: "/Fiona_Kotak.webp",
+        github: "https://github.com/fionakotak",
+        linkedin: "https://www.linkedin.com/in/fiona-kotak-015569376",
+        instagram: "https://www.instagram.com/fiona.kotak?igsh=MWRsMmw1cjJwMmpkZA=="
       },
       {
         id: 15,
-        name: "Manya Baranwal",
-        role: "PR Member",
+        name: "Avani Tiwari",
+        role: "Member",
         category: "PR",
-        description: "Keeping the vibes alive, one post at a time.",
-        photo: "/manya.jpg",
-        github: "https://github.com/manyab17",
-        linkedin: "https://www.linkedin.com/in/manya-baranwal-a74b6a320/",
-        instagram: "https://www.instagram.com/manya_baranwal17?igsh=MTkwZHBsbWt5bTh6bA==",
+        photo: "/Avani_Tiwari.webp",
+        imageScale: 1.35,
+        imagePosition: "center 90%",
+        github: "https://github.com/avanitiwari-coder",
+        linkedin: "https://www.linkedin.com/in/avani-tiwari777",
+        instagram: "https://www.instagram.com/avanitiwari27?igsh=MW94M3RydjdlaTV4MQ%3D%3D&utm_source=qr"
       },
       {
         id: 16,
-        name: "Abdullah Qureshi",
-        role: "Marketing Head",
-        category: "Marketing",
-        description: "Strategic marketing expert",
-        photo: "/abdullah.jpg",
-        github: "https://github.com/abdullahqureshi",
-        linkedin: "https://www.linkedin.com/in/abdullah-qureshi/",
-        instagram: "https://www.instagram.com/abdullah.qureshi/",
+        name: "Rayan Castelino",
+        role: "Head",
+        category: "Operations",
+        photo: "/Rayan_Castelino.webp",
+        github: "https://github.com/rayanxc",
+        linkedin: "https://www.linkedin.com/in/rayan-castelino-279795334/",
+        instagram: "https://www.instagram.com/rayancastelino?igsh=MXdkM2FwazBvcnYzeg=="
       },
       {
         id: 17,
-        name: "Ankita Kotkar",
-        role: "Marketing Member",
-        category: "Marketing",
-        description: "Keepin' it real",
-        photo: "/ankita.jpg",
-        github: "https://github.com/ankitakotkar",
-        linkedin: "https://www.linkedin.com/in/ankita-kotkar/",
-        instagram: "https://www.instagram.com/ankita.kotkar/",
+        name: "Divith Kapri",
+        role: "Member",
+        category: "Operations",
+        photo: "/Divith_Kapri.webp",
+        imageScale: 1.35,
+        imagePosition: "center 90%",
+        github: "https://github.com/divithkapri-svg",
+        linkedin: "https://www.linkedin.com/in/divith-kapri-b68788382",
+        instagram: "https://www.instagram.com/divith___?igsh=aG9pcHR6cHppZ3py"
       },
       {
         id: 18,
-        name: "Suryaansh Jain",
-        role: "Marketing Member",
-        category: "Marketing",
-        description: "Cold emailing is boring",
-        photo: "/suryaansh.jpg",
-        github: "https://github.com/suryaansh-jain",
-        linkedin: "https://www.linkedin.com/in/suryaansh-jain-61b74b28a/",
-        instagram: "https://www.instagram.com/suryaansh._._?igsh=cmw0OXh4ZHY4Nzlm",
+        name: "Eklavya Pokhriyal",
+        role: "Member",
+        category: "Operations",
+        photo: "/Eklavya_Pokriyal.webp",
+        imageScale: 1.25,
+        imagePosition: "center 90%",
+        github: "https://github.com/kanha310107",
+        linkedin: "https://www.linkedin.com/in/eklavya-pokhriyal-809722397/",
+        instagram: "https://www.instagram.com/eklavya310107/"
       },
       {
         id: 19,
-        name: "Maahnal Chauhan",
-        role: "Marketing Member",
-        category: "Marketing",
-        description: "Teaching machines to think (and sometimes overthink)",
-        photo: "/manhal.jpg",
-        github: "https://github.com/Maahnal",
-        linkedin: "https://www.linkedin.com/in/maahnalchauhan5/",
-        instagram: "https://www.instagram.com/maahnalc?igsh=ZTl1ZHFkaXBudWoz&utm_source=qr",
+        name: "Naga Tejas Nama",
+        role: "Member",
+        category: "Operations",
+        photo: "/Tejas_Nama.webp",
+        imageScale: 1.25,
+        imagePosition: "center 90%"
       },
       {
         id: 20,
-        name: "Vedant Padhy",
-        role: "Operation Head",
-        category: "Operations",
-        description: "Efficiency expert",
-        photo: "/vedant.jpg",
-        github: "https://github.com/vedantpadhy",
-        linkedin: "https://www.linkedin.com/in/vedant-padhy/",
-        instagram: "https://www.instagram.com/vedant.padhy/",
+        name: "Sanvi Kadu",
+        role: "Head",
+        category: "Creative",
+        photo: "/Sanvi_Kadu.webp",
+        imageScale: 1.35,
+        imagePosition: "center 90%",
       },
       {
         id: 21,
-        name: "Abhishek Joshi",
-        role: "Operation Member",
-        category: "Operations",
-        description: "Vibe coded too hard, code's in therapy",
-        photo: "/abhishek.png",
-        github: "https://github.com/ketanabhishek8",
-        linkedin: "https://www.linkedin.com/in/abhishek-joshi2/",
-        instagram: "https://www.instagram.com/ketanabhishek8",
+        name: "Jash Adsule",
+        role: "Member",
+        category: "Creative",
+        photo: "/Jash_Adsule.webp",
+        imageScale: 1.35,
+        imagePosition: "center 90%"
       },
       {
         id: 22,
-        name: "Naman Lodha",
-        role: "Operation Member",
-        category: "Operations",
-        description: "….",
-        photo: "/naman.jpg",
-        github: "https://github.com/naman616",
-        linkedin: "https://www.linkedin.com/in/lodhanaman/",
-        instagram: "https://www.instagram.com/naman.ld",
+        name: "Mahek Agnihotri",
+        role: "Member",
+        category: "Creative",
+        photo: "/Mahek_Agnihotri.webp"
       },
       {
         id: 23,
-        name: "Rayan J Castelino",
-        role: "Operation Member",
-        category: "Operations",
-        description: "Clarity in Chaos",
-        photo: "/rayan.jpg",
-        github: "https://github.com/rayanxc",
-        linkedin: "https://www.linkedin.com/in/rayan-castelino-279795334/",
-        instagram: "https://www.instagram.com/rayancastelino?igsh=MXdkM2FwazBvcnYzeg==",
+        name: "Ishaan Singh Khanka",
+        role: "Member",
+        category: "Creative",
+        photo: "/Ishhaan_Singh_Khanka.webp",
+        github: "https://github.com/IshaanSKhanka28",
+        linkedin: "https://www.linkedin.com/in/Ishaan-Singh-Khanka",
+        instagram: "https://www.instagram.com/ser_ishaan_the_incredible/"
+      },
+      {
+        id: 24,
+        name: "Shravika Mhatre",
+        role: "Head",
+        category: "Marketing",
+        photo: "/Shravika_Mhatre.webp",
+        imageScale: 1.30,
+        imagePosition: "center 90%",
+        github: "https://github.com/shravikamhatre",
+        linkedin: "https://www.linkedin.com/in/shravika-mhatre/"
+      },
+      {
+        id: 25,
+        name: "Ishita Sharma",
+        role: "Member",
+        category: "Marketing",
+        photo: "/Ishita_Sharma.webp",
+        imageScale: 1.25,
+        imagePosition: "center 90%",
+        github: "https://github.com/ishshsh21",
+        linkedin: "https://www.linkedin.com/in/ishita-sharma-2151a438b/"
+      },
+      {
+        id: 26,
+        name: "Vaibhavi Ajila",
+        role: "Member",
+        category: "Marketing",
+        photo: "/Vaibhavi_Ajila.webp",
+        imageScale: 1.30,
+        imagePosition: "center 90%",
+        linkedin: "https://www.linkedin.com/in/vaibhavi-ajila-0b2a26322/"
+      },
+      {
+        id: 27,
+        name: "Ronit Chandarana",
+        role: "Member",
+        category: "Marketing",
+        photo: "/Ronit_Chandarana.webp",
+        imageScale: 1.30,
+        imagePosition: "center 90%",
+        github: "https://github.com/ronitrc",
+        linkedin: "https://www.linkedin.com/in/ronit-chandarana-92b428371/",
+        instagram: "https://www.instagram.com/ronit.rc6/"
+      },
+      {
+        id: 28,
+        name: "Nehal Gaba",
+        role: "Member",
+        category: "Marketing",
+        photo: "/Nehal_Gaba.webp",
+        imageScale: 1.30,
+        imagePosition: "center 90%",
+        github: "https://github.com/nehalgaba123",
+        linkedin: "https://www.linkedin.com/in/nehal-gaba/",
+        instagram: "https://www.instagram.com/nehal.gaba/"
       },
     ],
     []
@@ -419,7 +491,7 @@ export default function Team() {
   return (
     <section
       id="team"
-      className="py-16 md:py-20 bg-transparent relative overflow-hidden select-none"
+      className="py-10 md:py-14 bg-transparent relative overflow-hidden select-none"
       ref={containerRef}
     >
       {/* Background pattern */}
@@ -428,39 +500,90 @@ export default function Team() {
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         {/* Header */}
         <motion.div
-          className="max-w-3xl mx-auto text-center mb-10 md:mb-14"
+          className="max-w-3xl mx-auto text-center mb-6 md:mb-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <span className="inline-block mb-3 px-3 py-1 rounded-full bg-secondary text-secondary-foreground text-xs font-mono tracking-widest uppercase border border-border">
+          <span className="inline-block mb-2 px-3 py-0.5 rounded-full bg-secondary text-secondary-foreground text-xs font-mono tracking-widest uppercase border border-border">
             Council Directory
           </span>
 
-          <h2 className="text-3xl md:text-5xl font-extrabold mb-4 tracking-tight leading-tight font-display">
+          <h2 className="text-2xl md:text-4xl font-extrabold mb-2 tracking-tight leading-tight font-display">
             <span className="text-foreground">Student Leadership &amp; </span>
             <span className="text-gradient">Teams</span>
           </h2>
 
-          <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed font-body">
+          <p className="text-sm md:text-base text-muted-foreground max-w-xl mx-auto leading-relaxed font-body">
             Meet our passionate council members driving innovation and excellence in
             data science.
           </p>
 
-          <div className="h-1 w-16 bg-primary mx-auto mt-6 rounded-full" />
+          <div className="h-1 w-12 bg-primary mx-auto mt-4 rounded-full" />
+        </motion.div>
+
+        {/* ── Faculty Advisors / Mentorship Showcase ── */}
+        <motion.div
+          className="mb-8 md:mb-9 max-w-5xl mx-auto"
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          <div className="text-center mb-4">
+            <span className="inline-block mb-1.5 px-2.5 py-0.5 bg-secondary text-secondary-foreground text-[0.7rem] font-mono tracking-widest uppercase border border-border">
+              Academic Mentorship
+            </span>
+            <h3 className="text-xl md:text-2xl font-extrabold tracking-tight text-foreground font-display">
+              Under the Guidance of Our Faculty Advisors
+            </h3>
+          </div>
+
+          {/* Swiss Monolithic Grid (Compact Style) */}
+          <div className="border border-border bg-card/80 backdrop-blur-md grid grid-cols-1 md:grid-cols-3">
+            {facultyAdvisors.map((advisor, index) => {
+              const mobileBorder = index < 2 ? "border-b border-border md:border-b-0" : "";
+              const desktopBorder = index < 2 ? "md:border-r md:border-border" : "";
+
+              return (
+                <div
+                  key={advisor.id}
+                  className={`group p-4 md:p-5 flex flex-col justify-between transition-colors duration-150 hover:bg-secondary/40 relative ${mobileBorder} ${desktopBorder}`}
+                >
+                  <div>
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="w-8 h-8 bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                        <GraduationCap size={17} strokeWidth={1.5} />
+                      </div>
+                      <span className="font-mono text-[0.7rem] text-muted-foreground uppercase tracking-wider">
+                        {advisor.role}
+                      </span>
+                    </div>
+
+                    <h4 className="text-base md:text-lg font-bold tracking-tight text-foreground mb-1 font-display">
+                      {advisor.name}
+                    </h4>
+
+                    <p className="text-xs text-muted-foreground leading-relaxed font-body">
+                      {advisor.department}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </motion.div>
 
         {/* Team Category Selection Menu */}
-        <div className="mb-12 max-w-5xl mx-auto">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-mono text-muted-foreground uppercase tracking-wider">
+        <div className="mb-6 md:mb-8 max-w-5xl mx-auto">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-xs font-mono text-muted-foreground uppercase tracking-wider">
               Filter by Department
             </h3>
           </div>
 
           <div
             ref={scrollCategoryRef}
-            className="category-filter flex gap-3 overflow-x-auto pb-4 scrollbar-none"
+            className="category-filter flex gap-2.5 overflow-x-auto pb-2 scrollbar-none"
           >
             {teamCategories.map((category) => {
               const count =
@@ -474,13 +597,13 @@ export default function Team() {
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
-                  className={`category-button transition-all duration-300 ${
+                  className={`category-button text-xs md:text-sm py-1.5 px-3.5 transition-all duration-300 ${
                     isActive ? "active" : ""
                   }`}
                 >
-                  <span className="font-semibold text-sm">{category}</span>
+                  <span className="font-semibold">{category}</span>
                   <span
-                    className={`rounded-full text-xs px-2 py-0.5 ml-2 transition-colors ${
+                    className={`rounded-full text-[0.68rem] px-2 py-0.5 ml-2 transition-colors ${
                       isActive
                         ? "bg-white/20 text-white font-bold"
                         : "bg-[var(--power-red)]/20 text-[var(--vitality-red)] font-bold"
@@ -496,10 +619,10 @@ export default function Team() {
 
         {/* ── 3D Coverflow Carousel (Spaced Out & Optimized) ── */}
         <div
-          className="relative max-w-7xl mx-auto py-4 overflow-hidden touch-pan-y"
+          className="relative max-w-7xl mx-auto py-2 overflow-hidden touch-pan-y"
           onWheel={handleWheel}
         >
-          <div className="w-full flex justify-center items-center relative min-h-[520px] perspective-container">
+          <div className="w-full flex justify-center items-center relative min-h-[460px] md:min-h-[500px] perspective-container">
             <AnimatePresence mode="popLayout">
               {filteredMembers.map((member, i) => {
                 const distance = i - activeIndex;
@@ -549,10 +672,10 @@ export default function Team() {
                   >
                     {/* Left-Aligned Full Photo Card */}
                     <div
-                      className={`team-member-card group relative w-[285px] md:w-[325px] h-[470px] overflow-hidden flex flex-col justify-end p-6 text-left border transition-all duration-300 bg-card ${
+                      className={`team-member-card group relative w-[275px] sm:w-[310px] md:w-[335px] lg:w-[350px] h-[390px] sm:h-[420px] md:h-[450px] overflow-hidden flex flex-col justify-end p-5 md:p-6 text-left transition-all duration-300 bg-card rounded-3xl ${
                         isActive
-                          ? "border-primary shadow-xl"
-                          : "border-border/80 hover:border-primary/60 opacity-85"
+                          ? "shadow-2xl ring-1 ring-white/10"
+                          : "opacity-85"
                       }`}
                     >
                       {/* Lusion-Style Skeleton & Photo */}
@@ -560,64 +683,65 @@ export default function Team() {
                         src={member.photo}
                         alt={member.name}
                         initials={getInitials(member.name)}
+                        imagePosition={member.imagePosition}
+                        imageScale={member.imageScale}
                       />
 
-                      {/* Smooth Bottom Gradient Fade */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/75 via-50% to-transparent pointer-events-none" />
-
-                      {/* Floating Department Badge (Top Right) */}
-                      <div className="absolute top-4 right-4 z-20">
+                      {/* Floating Department Badge (Top Right) (Layer 5: z-40) */}
+                      <div className="absolute top-4 right-4 z-40">
                         <span className="text-[0.68rem] font-mono font-bold px-2.5 py-0.5 bg-black/80 text-accent border border-border uppercase tracking-wider backdrop-blur-md">
                           {member.category}
                         </span>
                       </div>
 
-                      {/* Left-Aligned Details Overlay at Bottom */}
-                      <div className="relative z-10 w-full text-left flex flex-col items-start gap-1">
-                        <span className="text-[0.7rem] font-mono font-bold uppercase tracking-widest text-accent">
+                      {/* Left-Aligned Details Overlay at Bottom (Layer 5: z-40) */}
+                      <div className="relative z-40 w-full text-left flex flex-col items-start gap-1">
+                        <span className="text-[0.68rem] font-mono font-bold uppercase tracking-widest text-accent">
                           {member.role}
                         </span>
 
-                        <h3 className="text-2xl font-extrabold text-white tracking-tight leading-tight font-display">
+                        <h3 className="text-xl md:text-2xl font-extrabold text-white tracking-tight leading-tight font-display mb-1.5">
                           {member.name}
                         </h3>
 
-                        <p className="text-xs md:text-sm text-gray-300 italic leading-relaxed line-clamp-2 mt-1 mb-3 font-normal font-body">
-                          "{member.description}"
-                        </p>
-
                         {/* Social Links */}
-                        <div className="flex items-center gap-2 pt-1">
-                          <a
-                            href={member.github}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-8 h-8 rounded-none bg-black/40 hover:bg-primary hover:text-white flex items-center justify-center transition-all duration-150 border border-white/20"
-                            aria-label={`${member.name}'s GitHub`}
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <Github className="w-4 h-4 text-white" />
-                          </a>
-                          <a
-                            href={member.linkedin}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-8 h-8 rounded-none bg-black/40 hover:bg-primary hover:text-white flex items-center justify-center transition-all duration-150 border border-white/20"
-                            aria-label={`${member.name}'s LinkedIn`}
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <Linkedin className="w-4 h-4 text-white" />
-                          </a>
-                          <a
-                            href={member.instagram}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-8 h-8 rounded-none bg-black/40 hover:bg-primary hover:text-white flex items-center justify-center transition-all duration-150 border border-white/20"
-                            aria-label={`${member.name}'s Instagram`}
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <Instagram className="w-4 h-4 text-white" />
-                          </a>
+                        <div className="flex items-center gap-2 pt-0.5">
+                          {member.github && (
+                            <a
+                              href={member.github}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="w-7 h-7 rounded-none bg-black/40 hover:bg-primary hover:text-white flex items-center justify-center transition-all duration-150 border border-white/20"
+                              aria-label={`${member.name}'s GitHub`}
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <Github className="w-3.5 h-3.5 text-white" />
+                            </a>
+                          )}
+                          {member.linkedin && (
+                            <a
+                              href={member.linkedin}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="w-7 h-7 rounded-none bg-black/40 hover:bg-primary hover:text-white flex items-center justify-center transition-all duration-150 border border-white/20"
+                              aria-label={`${member.name}'s LinkedIn`}
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <Linkedin className="w-3.5 h-3.5 text-white" />
+                            </a>
+                          )}
+                          {member.instagram && (
+                            <a
+                              href={member.instagram}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="w-7 h-7 rounded-none bg-black/40 hover:bg-primary hover:text-white flex items-center justify-center transition-all duration-150 border border-white/20"
+                              aria-label={`${member.name}'s Instagram`}
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <Instagram className="w-3.5 h-3.5 text-white" />
+                            </a>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -629,7 +753,7 @@ export default function Team() {
         </div>
 
         {/* ── Pill Navigation Bar with Red Accents ── */}
-        <div className="flex justify-center items-center mt-6 relative z-30">
+        <div className="flex justify-center items-center mt-4 md:mt-5 relative z-30">
           <div className="inline-flex items-center gap-4 px-6 py-2.5 rounded-full bg-black/80 backdrop-blur-lg border border-[var(--power-red)]/40 shadow-[0_0_25px_rgba(237,28,36,0.2)] pointer-events-auto">
             {/* Prev Arrow */}
             <button

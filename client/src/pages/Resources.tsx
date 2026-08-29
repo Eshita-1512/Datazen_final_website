@@ -13,10 +13,12 @@ import {
   Search,
   Filter,
   ChevronRight,
-  X
+  X,
+  GraduationCap
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import TopographyBackground from "@/components/TopographyBackground";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -24,6 +26,7 @@ import { Badge } from "@/components/ui/badge";
 // Resource categories
 const categories = [
   "All",
+  "College Resources",
   "Tutorials",
   "Datasets", 
   "Tools",
@@ -36,6 +39,36 @@ const categories = [
 
 // Resource data
 const resources = [
+  // College Resources - FY & SY Notes
+  {
+    id: 101,
+    title: "FY Notes (First Year)",
+    description: "Curated academic notes, syllabus reference materials, lecture summaries, and foundational engineering subjects for First Year students.",
+    category: "College Resources",
+    type: "book",
+    level: "First Year",
+    rating: 4.9,
+    url: "https://github.com/DZSomaiya/datazen-academic-resources/tree/main/FY",
+    author: "DataZen Team",
+    tags: ["FY Notes", "Foundations", "Syllabus", "Engineering", "Somaiya"],
+    featured: true,
+    dateAdded: "2026-08-29"
+  },
+  {
+    id: 102,
+    title: "SY Notes (Second Year)",
+    description: "Comprehensive notes, data structures, mathematics, core data science theory, and practical lab assignments for Second Year students.",
+    category: "College Resources",
+    type: "book",
+    level: "Second Year",
+    rating: 4.9,
+    url: "https://github.com/DZSomaiya/datazen-academic-resources/tree/main/SY",
+    author: "DataZen Team",
+    tags: ["SY Notes", "Core Subjects", "Data Science", "Labs", "Somaiya"],
+    featured: true,
+    dateAdded: "2026-08-29"
+  },
+
   // DataZen Added Resources - Priority
   {
     id: 1,
@@ -486,7 +519,10 @@ export default function Resources() {
   const featuredResources = resources.filter(resource => resource.featured);
 
   return (
-    <div className="min-h-screen flex flex-col bg-background text-foreground">
+    <div className="min-h-screen flex flex-col bg-transparent text-foreground relative overflow-hidden">
+      {/* Dynamic 3D Topography Background Wave */}
+      <TopographyBackground />
+
       {/* Scroll progress indicator */}
       <motion.div 
         className="fixed top-0 left-0 right-0 h-1 bg-gradient-red z-50"
@@ -495,7 +531,7 @@ export default function Resources() {
 
       <Navbar />
 
-      <main className="flex-1 pt-20">
+      <main className="flex-1 pt-20 relative z-10">
         {/* Hero Section */}
         {/* Hero Section */}
         <section className="py-20 md:py-28 bg-transparent relative overflow-hidden">
@@ -580,6 +616,72 @@ export default function Resources() {
         {/* Category-based Resource Sections */}
         <section className="py-16">
           <div className="container mx-auto px-6">
+            {/* College Resources Section (Top Priority) */}
+            {(selectedCategory === "All" || selectedCategory === "College Resources") && (
+              <motion.div
+                className="mb-20"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="w-10 h-10 rounded-none bg-primary/10 border border-primary/20 flex items-center justify-center">
+                    <GraduationCap className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-foreground font-display">College Resources</h2>
+                    <p className="text-muted-foreground text-sm font-body">Academic notes, study materials, and subject guides for Somaiya students</p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl">
+                  {filteredResources.filter(resource => resource.category === "College Resources").map((resource, index) => (
+                    <motion.div
+                      key={resource.id}
+                      className="bg-card/90 rounded-none p-6 border border-border hover:border-primary/50 transition-colors duration-150 group flex flex-col h-full"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, delay: index * 0.05 }}
+                    >
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-9 h-9 rounded-none bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                          <BookOpen className="w-4 h-4" />
+                        </div>
+                        {resource.featured && (
+                          <Badge variant="secondary" className="text-xs font-mono rounded-none">Featured</Badge>
+                        )}
+                      </div>
+                      <h3 className="font-bold text-lg mb-2 group-hover:text-primary transition-colors font-display">
+                        {resource.title}
+                      </h3>
+                      <p className="text-muted-foreground text-sm mb-4 line-clamp-3 flex-grow font-body">
+                        {resource.description}
+                      </p>
+                      <div className="flex items-center justify-between mb-4 font-mono text-xs">
+                        <Badge className="bg-primary/10 text-primary border-primary/20 rounded-none" variant="outline">
+                          {resource.level}
+                        </Badge>
+                        <span className="text-xs text-muted-foreground">
+                          by {resource.author}
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap gap-1 mb-4">
+                        {resource.tags.slice(0, 4).map((tag) => (
+                          <Badge key={tag} variant="secondary" className="text-xs font-mono rounded-none">
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
+                      <Button size="sm" asChild className="w-full mt-auto rounded-none font-display">
+                        <a href={resource.url} target="_blank" rel="noopener noreferrer">
+                          Access Notes <ExternalLink className="w-4 h-4 ml-1" />
+                        </a>
+                      </Button>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+
             {/* Books Section */}
             <motion.div
               className="mb-20"

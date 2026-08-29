@@ -104,10 +104,11 @@ function TimelineCard({
           {/* Image */}
           <div className="overflow-hidden border border-border mb-6">
             <EventImage
+              eventSlug={event.slug}
               src={event.image}
               alt={event.title}
               gradient={event.fallbackGradient}
-              className="w-full h-44 md:h-52"
+              className="w-full h-60 md:h-72"
             />
           </div>
 
