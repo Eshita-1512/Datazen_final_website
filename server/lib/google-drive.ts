@@ -73,30 +73,33 @@ export async function fetchEventImages(eventSlug: string): Promise<DriveImageFil
   }
 
   try {
-    const driveOptions: any = { version: 'v3' };
+    let allFiles: any[] = [];
+
+    // If auth is an API Key string, use direct REST fetch
     if (typeof auth === 'string') {
-      driveOptions.auth = auth;
+      const query = encodeURIComponent(`'${folderId}' in parents and trashed = false`);
+      const fields = encodeURIComponent('files(id, name, mimeType, thumbnailLink, webViewLink)');
+      const apiUrl = `https://www.googleapis.com/drive/v3/files?q=${query}&fields=${fields}&pageSize=50&supportsAllDrives=true&includeItemsFromAllDrives=true&key=${auth}`;
+
+      const resp = await fetch(apiUrl);
+      if (!resp.ok) {
+        const errText = await resp.text();
+        throw new Error(`Google Drive API returned ${resp.status}: ${errText}`);
+      }
+      const data = await resp.json();
+      allFiles = data.files || [];
     } else {
-      driveOptions.auth = auth;
+      // Service account auth client
+      const drive = google.drive({ version: 'v3', auth });
+      const res: any = await drive.files.list({
+        q: `'${folderId}' in parents and trashed = false`,
+        fields: 'files(id, name, mimeType, thumbnailLink, webViewLink)',
+        pageSize: 50,
+        supportsAllDrives: true,
+        includeItemsFromAllDrives: true,
+      });
+      allFiles = res.data.files || [];
     }
-
-    const drive = google.drive(driveOptions);
-    
-    const listParams: any = {
-      q: `'${folderId}' in parents and trashed = false`,
-      fields: 'files(id, name, mimeType, thumbnailLink, webViewLink, webContentLink)',
-      pageSize: 50,
-      supportsAllDrives: true,
-      includeItemsFromAllDrives: true,
-    };
-
-    if (typeof auth === 'string') {
-      listParams.key = auth;
-    }
-
-    const res: any = await drive.files.list(listParams);
-
-    const allFiles: any[] = res.data.files || [];
 
     // Filter to images & HEIC/HEIF photos
     const imageFiles = allFiles.filter((file: any) => {
@@ -110,15 +113,20 @@ export async function fetchEventImages(eventSlug: string): Promise<DriveImageFil
 
     const images: DriveImageFile[] = imageFiles.map((file: any) => {
       const fileId = file.id || '';
-      // Use local server proxy URL to guarantee JPEG conversion and CORS safety
-      const proxyUrl = `/api/drive/image/${fileId}`;
-      const cdnUrl = file.thumbnailLink ? file.thumbnailLink.replace(/=s\d+/, '=s1000') : proxyUrl;
+      // Direct high-res Google CDN thumbnail URLs
+      const highResUrl = file.thumbnailLink 
+        ? file.thumbnailLink.replace(/=s\d+/, '=w1000') 
+        : `https://lh3.googleusercontent.com/d/${fileId}=w1000`;
+      
+      const thumbUrl = file.thumbnailLink 
+        ? file.thumbnailLink.replace(/=s\d+/, '=w600') 
+        : `https://lh3.googleusercontent.com/d/${fileId}=w600`;
 
       return {
         id: fileId,
         name: file.name || 'Event Image',
-        imageUrl: proxyUrl,
-        thumbnailUrl: cdnUrl,
+        imageUrl: highResUrl,
+        thumbnailUrl: thumbUrl,
         webViewLink: file.webViewLink || `https://drive.google.com/file/d/${fileId}/view`,
         mimeType: file.mimeType || 'image/jpeg',
       };
@@ -182,54 +190,25 @@ export async function fetchDriveImageStream(fileId: string): Promise<{ stream: a
   if (!auth) return null;
 
   try {
-    const driveOptions: any = { version: 'v3' };
-    if (typeof auth === 'string') {
-      driveOptions.auth = auth;
-    } else {
-      driveOptions.auth = auth;
+    const highResThumbUrl = `https://lh3.googleusercontent.com/d/${fileId}=w1000`;
+    const streamRes = await getStreamWithRedirects(highResThumbUrl);
+    if (streamRes) {
+      return streamRes;
     }
 
-    const drive = google.drive(driveOptions);
-
-    const metaParams: any = {
-      fileId,
-      fields: 'thumbnailLink, mimeType',
-      supportsAllDrives: true,
-    };
-    if (typeof auth === 'string') {
-      metaParams.key = auth;
+    if (typeof auth !== 'string') {
+      const drive = google.drive({ version: 'v3', auth });
+      const media: any = await drive.files.get(
+        { fileId, alt: 'media', supportsAllDrives: true },
+        { responseType: 'stream' }
+      );
+      return {
+        stream: media.data,
+        mimeType: 'image/jpeg',
+      };
     }
 
-    const meta: any = await drive.files.get(metaParams);
-
-    const rawThumb = meta.data.thumbnailLink;
-    if (rawThumb) {
-      const highResThumbUrl = rawThumb.replace(/=s\d+/, '=s1000');
-      const streamRes = await getStreamWithRedirects(highResThumbUrl);
-      if (streamRes) {
-        return streamRes;
-      }
-    }
-
-    // Fallback if no thumbnailLink or stream failed
-    const mediaParams: any = {
-      fileId,
-      alt: 'media',
-      supportsAllDrives: true,
-    };
-    if (typeof auth === 'string') {
-      mediaParams.key = auth;
-    }
-
-    const media: any = await drive.files.get(
-      mediaParams,
-      { responseType: 'stream' }
-    );
-
-    return {
-      stream: media.data,
-      mimeType: meta.data.mimeType || 'image/jpeg',
-    };
+    return null;
   } catch (error: any) {
     console.error(`Error streaming file ${fileId} from Google Drive:`, error?.message || error);
     return null;
