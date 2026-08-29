@@ -114,12 +114,13 @@ export default function EventDetail() {
         {/* Details + Image */}
         <section className="pb-24 relative">
           <div className="container mx-auto px-6 max-w-4xl">
-            <div className="border border-border mb-10 max-w-2xl mx-auto overflow-hidden">
+            <div className="border border-border mb-10 max-w-3xl mx-auto overflow-hidden">
               <EventImage
+                eventSlug={event.slug}
                 src={event.image}
                 alt={event.title}
                 gradient={event.fallbackGradient}
-                className="h-64 md:h-80"
+                className="h-80 md:h-[480px]"
               />
             </div>
 

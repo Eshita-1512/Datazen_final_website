@@ -1,43 +1,9 @@
 import { google } from 'googleapis';
 import { TeamRegistration, ContactMessage } from '../../shared/schema';
-import path from 'path';
-import fs from 'fs';
+import { getGoogleAuth } from './google-auth';
 
-const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
-
-// Helper to get authentication client
 async function getAuth() {
-    try {
-        // 1. Try environment variable with JSON content
-        if (process.env.GOOGLE_SHEETS_CREDENTIALS) {
-            try {
-                const credentials = JSON.parse(process.env.GOOGLE_SHEETS_CREDENTIALS);
-                return new google.auth.GoogleAuth({
-                    credentials,
-                    scopes: SCOPES,
-                });
-            } catch (e) {
-                console.error("Failed to parse GOOGLE_SHEETS_CREDENTIALS json", e);
-            }
-        }
-
-        // 2. Try file path from env or default
-        const keyFilePath = process.env.GOOGLE_SHEETS_CREDENTIALS_PATH || 'google-credentials.json';
-        const resolvedPath = path.resolve(process.cwd(), keyFilePath);
-
-        if (fs.existsSync(resolvedPath)) {
-            return new google.auth.GoogleAuth({
-                keyFile: resolvedPath,
-                scopes: SCOPES,
-            });
-        }
-
-        console.warn("No valid Google Sheets credentials found. Missing GOOGLE_SHEETS_CREDENTIALS env or google-credentials.json file.");
-        return null;
-    } catch (error) {
-        console.error("Error setting up Google Auth:", error);
-        return null;
-    }
+    return getGoogleAuth();
 }
 
 // Helper to ensure sheet exists
