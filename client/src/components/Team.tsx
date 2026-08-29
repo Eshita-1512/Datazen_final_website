@@ -6,6 +6,7 @@ import {
   Github,
   Linkedin,
   Instagram,
+  User,
 } from "lucide-react";
 import "./Team.css";
 
@@ -36,14 +37,24 @@ function MemberPhoto({
 
   return (
     <div className="absolute inset-0 w-full h-full overflow-hidden rounded-3xl bg-[#0a0405]">
+      {/* 1. Background image at back (z-0) - scaled & offset to remove top line gap */}
+      <img
+        src="/TeamCardBackground.webp"
+        alt="Card Background"
+        className="absolute -top-2 -left-2 w-[calc(100%+16px)] h-[calc(100%+16px)] object-cover z-0 pointer-events-none scale-[1.05]"
+      />
+
+      {/* 2. Darkness Overlay 1: Behind Person Image to blend card background (z-10) */}
+      <div className="absolute inset-x-0 bottom-0 h-[60%] bg-gradient-to-t from-black via-black/75 via-45% to-transparent pointer-events-none z-10" />
+
       {/* Lusion-style Red Shimmer Skeleton Loader */}
       {!loaded && !error && src && (
-        <div className="absolute inset-0 z-10 team-skeleton" />
+        <div className="absolute inset-0 z-20 team-skeleton" />
       )}
 
-      {/* Fallback for error / missing photo */}
+      {/* 3. Person's Image (z-20) or Reverted Text Initials Fallback */}
       {error || !src ? (
-        <div className="w-full h-full bg-gradient-to-br from-[#2a080a] to-[#0a0505] flex items-center justify-center font-black text-6xl text-[var(--vitality-red)] opacity-35">
+        <div className="absolute inset-0 z-20 flex items-center justify-center font-black text-6xl text-[var(--vitality-red)] opacity-40 pb-16">
           {initials}
         </div>
       ) : (
@@ -51,13 +62,16 @@ function MemberPhoto({
           src={src}
           alt={alt}
           loading="eager"
-          className={`w-full h-full object-cover object-[center_20%] scale-110 group-hover:scale-115 transition-all duration-700 ${
+          className={`absolute inset-0 z-20 w-full h-full object-cover object-[center_10%] scale-115 group-hover:scale-120 transition-all duration-700 ${
             loaded ? "opacity-100" : "opacity-0"
           }`}
           onLoad={() => setLoaded(true)}
           onError={() => setError(true)}
         />
       )}
+
+      {/* 4. Darkness Overlay 2: In Front of Person Image (z-30) - shorter height & gradual fade */}
+      <div className="absolute inset-x-0 bottom-0 h-[35%] bg-gradient-to-t from-black via-black/60 via-40% to-transparent pointer-events-none z-30" />
     </div>
   );
 }
@@ -539,7 +553,7 @@ export default function Team() {
                   >
                     {/* Left-Aligned Full Photo Card */}
                     <div
-                      className={`team-member-card group relative w-[285px] md:w-[325px] h-[470px] overflow-hidden flex flex-col justify-end p-6 text-left transition-all duration-300 bg-card rounded-3xl ${
+                      className={`team-member-card group relative w-[285px] md:w-[325px] h-[410px] overflow-hidden flex flex-col justify-end p-6 text-left transition-all duration-300 bg-card rounded-3xl ${
                         isActive
                           ? "shadow-xl"
                           : "opacity-85"
@@ -552,18 +566,15 @@ export default function Team() {
                         initials={getInitials(member.name)}
                       />
 
-                      {/* Smooth Bottom Gradient Fade - scoped tightly to text area */}
-                      <div className="absolute inset-x-0 bottom-0 h-[45%] bg-gradient-to-t from-black via-black/70 via-40% to-transparent pointer-events-none" />
-
-                      {/* Floating Department Badge (Top Right) */}
-                      <div className="absolute top-4 right-4 z-20">
+                      {/* Floating Department Badge (Top Right) (Layer 5: z-40) */}
+                      <div className="absolute top-4 right-4 z-40">
                         <span className="text-[0.68rem] font-mono font-bold px-2.5 py-0.5 bg-black/80 text-accent border border-border uppercase tracking-wider backdrop-blur-md">
                           {member.category}
                         </span>
                       </div>
 
-                      {/* Left-Aligned Details Overlay at Bottom */}
-                      <div className="relative z-10 w-full text-left flex flex-col items-start gap-1">
+                      {/* Left-Aligned Details Overlay at Bottom (Layer 5: z-40) */}
+                      <div className="relative z-40 w-full text-left flex flex-col items-start gap-1">
                         <span className="text-[0.7rem] font-mono font-bold uppercase tracking-widest text-accent">
                           {member.role}
                         </span>
