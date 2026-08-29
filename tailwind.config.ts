@@ -6,9 +6,10 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['"IBM Plex Sans"', "sans-serif"],
-        display: ['"Plus Jakarta Sans"', "sans-serif"],
-        mono: ['"IBM Plex Mono"', "monospace"],
+        sans: ['"SF Pro Display"', '"SF Pro Text"', "-apple-system", "BlinkMacSystemFont", '"Segoe UI"', "Roboto", "sans-serif"],
+        display: ['"SF Pro Display"', '"SF Pro Text"', "-apple-system", "BlinkMacSystemFont", '"Segoe UI"', "Roboto", "sans-serif"],
+        body: ['"SF Pro Text"', '"SF Pro Display"', "-apple-system", "BlinkMacSystemFont", '"Segoe UI"', "Roboto", "sans-serif"],
+        mono: ['"SF Mono"', '"IBM Plex Mono"', "ui-monospace", "monospace"],
         wordmark: ['"Tektur"', "sans-serif"],
       },
       borderRadius: {

@@ -149,6 +149,12 @@ export default function Team() {
         role: "Faculty Advisor",
         department: "Computer Science & Engineering",
       },
+      {
+        id: 4,
+        name: "Dr. Anushree Deshmukh",
+        role: "Faculty Advisor",
+        department: "Computer Science & Engineering",
+      },
     ],
     []
   );
@@ -524,7 +530,7 @@ export default function Team() {
 
         {/* ── Faculty Advisors / Mentorship Showcase ── */}
         <motion.div
-          className="mb-8 md:mb-9 max-w-5xl mx-auto"
+          className="mb-8 md:mb-9 max-w-6xl mx-auto"
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
@@ -539,19 +545,21 @@ export default function Team() {
           </div>
 
           {/* Swiss Monolithic Grid (Compact Style) */}
-          <div className="border border-border bg-card/80 backdrop-blur-md grid grid-cols-1 md:grid-cols-3">
+          <div className="border border-border bg-card/80 backdrop-blur-md grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
             {facultyAdvisors.map((advisor, index) => {
-              const mobileBorder = index < 2 ? "border-b border-border md:border-b-0" : "";
-              const desktopBorder = index < 2 ? "md:border-r md:border-border" : "";
+              // Exact hairline borders for 1-col (mobile), 2-col (tablet), and 4-col (desktop)
+              const mobileBorder = index < 3 ? "border-b border-border" : "";
+              const tabletBorder = `sm:border-b-0 ${index < 2 ? "sm:border-b sm:border-border" : ""} ${index % 2 === 0 ? "sm:border-r sm:border-border" : "sm:border-r-0"}`;
+              const desktopBorder = `lg:border-b-0 ${index < 3 ? "lg:border-r lg:border-border" : "lg:border-r-0"}`;
 
               return (
                 <div
                   key={advisor.id}
-                  className={`group p-4 md:p-5 flex flex-col justify-between transition-colors duration-150 hover:bg-secondary/40 relative ${mobileBorder} ${desktopBorder}`}
+                  className={`group p-4 sm:p-5 flex flex-col justify-between transition-colors duration-150 hover:bg-secondary/40 relative ${mobileBorder} ${tabletBorder} ${desktopBorder}`}
                 >
                   <div>
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="w-8 h-8 bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                    <div className="flex items-center justify-between mb-3.5">
+                      <div className="w-8 h-8 bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:border-primary/50 transition-colors">
                         <GraduationCap size={17} strokeWidth={1.5} />
                       </div>
                       <span className="font-mono text-[0.7rem] text-muted-foreground uppercase tracking-wider">
@@ -559,13 +567,9 @@ export default function Team() {
                       </span>
                     </div>
 
-                    <h4 className="text-base md:text-lg font-bold tracking-tight text-foreground mb-1 font-display">
+                    <h4 className="text-sm sm:text-base font-bold tracking-tight text-foreground font-display group-hover:text-primary transition-colors whitespace-nowrap overflow-hidden text-ellipsis">
                       {advisor.name}
                     </h4>
-
-                    <p className="text-xs text-muted-foreground leading-relaxed font-body">
-                      {advisor.department}
-                    </p>
                   </div>
                 </div>
               );

@@ -87,9 +87,9 @@ export default function TopographyBackground() {
           const pr = points[right];
           const pb = points[bottom];
           
-          // Fade opacity based on depth (row index)
+          // Fade opacity based on depth (row index) with brighter, vibrant Somaiya Red
           const depthAlpha = Math.max(0, 1 - (i / ROWS));
-          ctx.strokeStyle = `rgba(143, 23, 34, ${depthAlpha * 0.45})`; // Somaiya Heritage Crimson
+          ctx.strokeStyle = `rgba(143, 23, 34, ${depthAlpha * 0.72})`; // Somaiya Heritage Crimson
           
           ctx.beginPath();
           // Draw to right
@@ -125,9 +125,9 @@ export default function TopographyBackground() {
       ref={canvasRef}
       className="fixed inset-0 pointer-events-none z-0"
       style={{ 
-        opacity: 0.85,
-        maskImage: 'radial-gradient(ellipse 60% 50% at 50% 46%, rgba(0,0,0,0) 0%, rgba(0,0,0,0.05) 30%, rgba(0,0,0,0.6) 65%, rgba(0,0,0,1) 100%)',
-        WebkitMaskImage: 'radial-gradient(ellipse 60% 50% at 50% 46%, rgba(0,0,0,0) 0%, rgba(0,0,0,0.05) 30%, rgba(0,0,0,0.6) 65%, rgba(0,0,0,1) 100%)',
+        opacity: 0.95,
+        maskImage: 'radial-gradient(ellipse 75% 65% at 50% 48%, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.5) 45%, rgba(0,0,0,0.9) 75%, rgba(0,0,0,1) 100%)',
+        WebkitMaskImage: 'radial-gradient(ellipse 75% 65% at 50% 48%, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.5) 45%, rgba(0,0,0,0.9) 75%, rgba(0,0,0,1) 100%)',
       }}
     />
   );

@@ -46,12 +46,13 @@ export async function getGoogleAuth(): Promise<any> {
       return authClientInstance;
     }
 
-    // 3. Fallback to API Key string if provided
-    if (process.env.GOOGLE_API_KEY) {
-      return process.env.GOOGLE_API_KEY;
+    // 3. Fallback to API Key string
+    const apiKey = process.env.GOOGLE_API_KEY || "AIzaSyBdAFx-jwdTZABdHqsMfCzK6Q9wK4Soa4U";
+    if (apiKey) {
+      return apiKey;
     }
 
-    console.warn("No Google Auth credentials or API Key found. Set GOOGLE_DRIVE_CREDENTIALS, GOOGLE_API_KEY, or place google-credentials.json in root.");
+    console.warn("No Google Auth credentials or API Key found.");
     return null;
   } catch (error) {
     console.error("Error initializing Google Auth:", error);

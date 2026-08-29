@@ -137,15 +137,19 @@ export default function EventImage({
                 className="w-full h-full shrink-0 snap-center relative bg-black/40"
               >
                 <img
-                  src={img.thumbnailUrl || img.imageUrl}
+                  src={img.imageUrl || img.thumbnailUrl || `https://lh3.googleusercontent.com/d/${img.id}=w1000`}
                   alt={img.name || `${alt} photo ${idx + 1}`}
                   loading="lazy"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   onError={(e) => {
-                    // If thumbnailUrl fails, fall back to proxy imageUrl
                     const target = e.currentTarget;
-                    if (target.src !== img.imageUrl) {
-                      target.src = img.imageUrl;
+                    const lh3Url = `https://lh3.googleusercontent.com/d/${img.id}=w1000`;
+                    const driveThumbUrl = `https://drive.google.com/thumbnail?id=${img.id}&sz=w1000`;
+                    
+                    if (!target.src.includes("lh3.googleusercontent.com")) {
+                      target.src = lh3Url;
+                    } else if (!target.src.includes("drive.google.com/thumbnail")) {
+                      target.src = driveThumbUrl;
                     }
                   }}
                 />
