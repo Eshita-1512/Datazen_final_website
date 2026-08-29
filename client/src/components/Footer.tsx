@@ -1,156 +1,82 @@
-import { Mail, Github, Twitter, Linkedin, ArrowUp, Database, BarChart, Code,InstagramIcon } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { Mail, Github, Linkedin, ArrowUp, MapPin, Instagram } from "lucide-react";
+import { Link } from "wouter";
+import { motion } from "framer-motion";
 
 export default function Footer() {
-  const containerRef = useRef(null);
-  
-  // Parallax effect for background elements
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end end"]
-  });
-  
-  const y1 = useTransform(scrollYProgress, [0, 1], [100, 0]);
-  
-  const quickLinks = [
-    { name: "Home", href: "#home" },
-    { name: "About Us", href: "#about" },
-    { name: "Activities", href: "#activities" },
-    { name: "Timeline", href: "#timeline" },
+  const navigationLinks = [
+    { name: "Home", href: "/#home" },
+    { name: "Focus Areas", href: "/#focus-area" },
+    { name: "Timeline", href: "/#timeline" },
+    { name: "Team", href: "/#team" },
+    { name: "Resources", href: "/resources" },
   ];
-  
-  const resourceLinks = [
-    { name: "Events", href: "#" },
-    { name: "Workshops", href: "#" },
-    { name: "Projects", href: "#" },
-    { name: "Research", href: "#" },
-    { name: "Blog", href: "#" }
-  ];
-  
+
   const socialLinks = [
     { 
-      icon: <Github className="h-5 w-5" />, 
+      icon: <Github className="h-4 w-4" />, 
       href: "https://github.com/DataZenSomaiya", 
       label: "GitHub",
-      color: "hover:text-white"
     },
     { 
-      icon: <InstagramIcon className="h-5 w-5" />, 
+      icon: <Instagram className="h-4 w-4" />, 
       href: "https://www.instagram.com/datazensomaiya/", 
       label: "Instagram",
-      color: "hover:text-blue-400"
     },
     { 
-      icon: <Linkedin className="h-5 w-5" />, 
+      icon: <Linkedin className="h-4 w-4" />, 
       href: "https://www.linkedin.com/company/datazen-somaiya/?originalSubdomain=in", 
       label: "LinkedIn",
-      color: "hover:text-blue-500"
     }
   ];
-  
-  // Data pattern for footer background
-  const DataPattern = () => (
-    <div className="absolute inset-0 overflow-hidden">
-      {/* Binary dots */}
-      <div className="absolute top-0 left-0 right-0 h-10 w-full overflow-hidden opacity-5">
-        {Array.from({ length: 100 }).map((_, i) => (
-          <div 
-            key={i} 
-            className="absolute rounded-full bg-white"
-            style={{
-              width: Math.random() * 3 + 1 + 'px',
-              height: Math.random() * 3 + 1 + 'px',
-              top: Math.random() * 100 + '%',
-              left: Math.random() * 100 + '%',
-              opacity: Math.random() * 0.5 + 0.2
-            }}
-          />
-        ))}
-      </div>
-      
-      {/* Data flow lines */}
-      <svg 
-        className="absolute inset-0 w-full h-full opacity-5" 
-        viewBox="0 0 1000 500" 
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        {Array.from({ length: 20 }).map((_, i) => (
-          <path
-            key={i}
-            d={`M${Math.random() * 500},0 
-                C${Math.random() * 500 + 200},${Math.random() * 150 + 50} 
-                 ${Math.random() * 500 + 400},${Math.random() * 150 + 150} 
-                 ${Math.random() * 500 + 500},${Math.random() * 200 + 200}`}
-            fill="none"
-            stroke="white"
-            strokeWidth="1"
-            strokeDasharray="5,5"
-            opacity="0.2"
-          />
-        ))}
-      </svg>
-    </div>
-  );
-  
-  // Logo component with animated elements
+
+  // Logo component
   const Logo = () => (
-    <div className="flex items-center space-x-2">
+    <div className="flex items-center space-x-2.5">
       <img 
         src="/logo.png"   
         alt="DataZen Logo" 
-        className="w-12 h-12 object-contain" 
+        className="w-10 h-10 object-contain" 
       />
-      
-      <div className="text-white font-bold text-2xl tracking-tight">
-        Data<span className="text-[var(--vitality-red)]">Zen</span>
+      <div className="text-foreground font-bold uppercase text-2xl tracking-wider" style={{ fontFamily: "'Tektur', sans-serif" }}>
+        DATA<span className="text-primary">ZEN</span>
       </div>
     </div>
   );
-  
-  // Features list with icons
-  const features = [
-    { icon: <Database size={16} />, text: "Data Science" },
-    { icon: <BarChart size={16} />, text: "Analytics" },
-    { icon: <Code size={16} />, text: "Machine Learning" }
-  ];
-  
+
   return (
-    <footer 
-      className="bg-slate-900 dark:bg-black text-white pt-16 pb-8 relative"
-      ref={containerRef}
-    >
-      {/* Background pattern */}
-      <DataPattern />
-      
-      {/* Back to top button - fixed position so it's always visible */}
+    <footer className="bg-card/90 backdrop-blur-md text-foreground pt-16 pb-10 relative border-t border-border">
+      {/* Back to top button */}
       <motion.a 
         href="#home"
-        className="fixed bottom-6 right-6 md:right-12 w-12 h-12 bg-gradient-red rounded-full flex items-center justify-center shadow-lg transform hover:-translate-y-1 transition-transform duration-300 z-50"
-        whileHover={{ scale: 1.1 }}
+        className="fixed bottom-6 right-6 md:right-10 w-10 h-10 bg-primary rounded-none border border-white/20 flex items-center justify-center shadow-lg transform hover:-translate-y-0.5 transition-all duration-150 z-50 text-white"
+        whileHover={{ scale: 1.05 }}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.3 }}
+        aria-label="Back to top"
       >
-        <ArrowUp className="text-white" size={20} />
+        <ArrowUp className="text-white w-4 h-4" />
       </motion.a>
       
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="flex flex-col md:flex-row justify-between items-center py-4 mb-6">
-          <div className="flex items-center gap-8 mb-6 md:mb-0">
+      <div className="container mx-auto px-6 relative z-10 max-w-6xl">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-12 pb-12">
+          {/* Col 1: Brand & Socials */}
+          <div className="md:col-span-1 flex flex-col items-start gap-4">
             <Logo />
-            
-            <div className="flex gap-4">
+            <p className="text-xs text-muted-foreground leading-relaxed max-w-xs font-body">
+              Official Data Science Student Council of Somaiya Vidyavihar University, Mumbai.
+            </p>
+            <div className="flex gap-2 pt-1">
               {socialLinks.map((social, index) => (
                 <motion.a 
                   key={index}
-                  href={social.href} 
-                  className={`text-gray-400 transition-colors duration-300 ${social.color}`}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-9 h-9 rounded-none bg-secondary border border-border text-muted-foreground hover:text-accent hover:border-accent/40 transition-all duration-150 flex items-center justify-center"
                   aria-label={social.label}
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
+                  whileHover={{ y: -1 }}
+                  whileTap={{ scale: 0.98 }}
                 >
                   {social.icon}
                 </motion.a>
@@ -158,70 +84,65 @@ export default function Footer() {
             </div>
           </div>
           
-          <div className="flex flex-wrap gap-8">
-            <div>
-              <h3 className="text-sm font-semibold mb-3 text-white">Quick Links</h3>
-              <ul className="space-y-2">
-                {quickLinks.map((link, index) => (
-                  <li key={index}>
-                    <a 
-                      href={link.href} 
-                      className="text-gray-400 hover:text-white text-xs transition-colors duration-300"
-                    >
-                      {link.name}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            
-            <div>
-              <h3 className="text-sm font-semibold mb-3 text-white">Resources</h3>
-              <ul className="space-y-2">
-                <li>
+          {/* Col 2: Navigation */}
+          <div>
+            <h3 className="text-xs font-mono font-bold tracking-widest text-muted-foreground uppercase mb-4">Navigation</h3>
+            <ul className="space-y-2.5 font-body">
+              {navigationLinks.map((link, index) => (
+                <li key={index}>
                   <a 
-                    href="/resources" 
-                    className="text-gray-400 hover:text-white text-xs transition-colors duration-300"
+                    href={link.href} 
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-150"
                   >
-                    AI/ML Resources
+                    {link.name}
                   </a>
                 </li>
-                {resourceLinks.slice(0, 3).map((link, index) => (
-                  <li key={index}>
-                    <a 
-                      href={link.href} 
-                      className="text-gray-400 hover:text-white text-xs transition-colors duration-300"
-                    >
-                      {link.name}
-                    </a>
-                  </li>
-                ))}
-              </ul>
+              ))}
+            </ul>
+          </div>
+          
+          {/* Col 3: Campus Location */}
+          <div>
+            <h3 className="text-xs font-mono font-bold tracking-widest text-muted-foreground uppercase mb-4">Campus</h3>
+            <div className="space-y-2 text-sm text-muted-foreground font-body">
+              <div className="flex items-start gap-2">
+                <MapPin className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                <address className="not-italic text-xs leading-relaxed">
+                  Somaiya Vidyavihar University<br />
+                  Vidyavihar East, Mumbai — 400077<br />
+                  Maharashtra, India
+                </address>
+              </div>
             </div>
-            
-            <form className="flex h-9">
-              <Input 
-                type="email" 
-                placeholder="Your email" 
-                className="rounded-r-none bg-gray-800/50 border-gray-700 text-white h-9 text-xs w-40 md:w-auto"
-              />
-              <Button type="submit" size="sm" className="rounded-l-none bg-gradient-red hover:opacity-90 h-9 px-3">
-                <Mail className="h-3 w-3" />
-              </Button>
-            </form>
+          </div>
+          
+          {/* Col 4: Contact */}
+          <div>
+            <h3 className="text-xs font-mono font-bold tracking-widest text-muted-foreground uppercase mb-4">Contact</h3>
+            <p className="text-xs text-muted-foreground mb-3 leading-relaxed font-body">
+              For event inquiries, student collaborations, or technical workshops:
+            </p>
+            <a 
+              href="mailto:datazen@somaiya.edu"
+              className="inline-flex items-center gap-2 px-3.5 py-2 bg-secondary border border-border text-xs font-mono text-foreground hover:border-primary hover:text-primary transition-colors duration-150"
+            >
+              <Mail className="w-3.5 h-3.5 text-primary" />
+              <span>datazen@somaiya.edu</span>
+            </a>
           </div>
         </div>
 
-        <div className="border-t border-gray-800 pt-4 flex flex-col md:flex-row justify-between items-center text-xs">
-          <p className="text-gray-500 mb-2 md:mb-0">
-            © {new Date().getFullYear()} DataZen - Somaiya Vidyavihar University
+        {/* Bottom bar */}
+        <div className="border-t border-border/40 pt-6 flex flex-col md:flex-row justify-between items-center text-xs text-muted-foreground gap-3 font-mono">
+          <p>
+            © {new Date().getFullYear()} DataZen — Somaiya Vidyavihar University
           </p>
-          <div className="flex gap-4">
-            <a href="#" className="text-gray-500 hover:text-white transition-colors">Privacy</a>
-            <a href="#" className="text-gray-500 hover:text-white transition-colors">Terms</a>
-          </div>
+          <p className="text-xs text-muted-foreground">
+            Student Technical Council
+          </p>
         </div>
       </div>
     </footer>
   );
 }
+

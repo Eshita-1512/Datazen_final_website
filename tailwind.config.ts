@@ -5,6 +5,12 @@ export default {
   content: ["./client/index.html", "./client/src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['"IBM Plex Sans"', "sans-serif"],
+        display: ['"Plus Jakarta Sans"', "sans-serif"],
+        mono: ['"IBM Plex Mono"', "monospace"],
+        wordmark: ['"Tektur"', "sans-serif"],
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",

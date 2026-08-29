@@ -80,7 +80,7 @@ export default function Contact() {
   };
   
   return (
-    <section id="contact" className="py-16 md:py-24 bg-gray-50" ref={ref}>
+    <section id="contact" className="py-16 md:py-24 bg-transparent" ref={ref}>
       <div className="container mx-auto px-6">
         <motion.div 
           className="flex flex-col items-center mb-16"
@@ -231,3 +231,4 @@ export default function Contact() {
     </section>
   );
 }
+

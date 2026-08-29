@@ -1,253 +1,422 @@
-import { useRef } from "react";
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
-import { VerticalTimeline, VerticalTimelineElement } from "react-vertical-timeline-component";
-import "react-vertical-timeline-component/style.min.css";
-import { Clock, Code, Fingerprint, Beaker, Lightbulb, Network, Rocket } from "lucide-react";
+import { useRef, useState, useEffect, useCallback } from "react";
+import { motion, useInView, useScroll, useSpring } from "framer-motion";
+import { ArrowRight, Trophy, Calendar } from "lucide-react";
+import { Link, useLocation } from "wouter";
+import { timelineEvents, type TimelineEventData } from "@/data/events";
+import EventImage from "@/components/EventImage";
 
-export default function Timeline() {
-  const ref = useRef(null);
-  const containerRef = useRef(null);
-  const isInView = useInView(ref, { once: false, margin: "-10%" });
-  
-  // Parallax scrolling effect for background elements
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"]
-  });
-  
-  const bgY = useTransform(scrollYProgress, [0, 1], [0, -200]);
-  
-  // Get appropriate icon for each timeline item
-  const getTimelineIcon = (index: number) => {
-    switch (index) {
-      case 0: return <Fingerprint className="w-7 h-7" />; // Foundation
-      case 1: return <Lightbulb className="w-7 h-7" />; // Workshop
-      case 2: return <Network className="w-7 h-7" />; // Virtual
-      case 3: return <Code className="w-7 h-7" />; // Partnerships
-      case 4: return <Rocket className="w-7 h-7" />; // Hackathon
-      case 5: return <Beaker className="w-7 h-7" />; // Research
-      case 6: return <Clock className="w-7 h-7" />; // Present
-      default: return <Fingerprint className="w-7 h-7" />;
-    }
-  };
-  
-  const timelineItems = [
-    {
-      year: "3rd September 2025",
-      title: "ZenConnect '25",
-      description: "A sneak peek into the exciting realm of AI & Data with us. Meet the council, explore fun activities, get a roadmap on your data journey, network at a university level."
-    },
-    {
-      year: "13th to 19th October 2025",
-      title: "Data Trek",
-      description: "A week-long virtual trek exploring the latest trends in data science and AI, featuring guest speakers from industry leaders and hands-on workshops."
-    },
-    // {
-    //   year: "17th and 18th October 2024",
-    //   title: "Through The Lens",
-    //   description: "Hands-on workshop on Computer Vision techniques and applications, including image processing, object detection, and deep learning."
-     
-    // },
-    {
-      year: "31th January 2026",
-      title: "Case Study Competition",
-      description: "A competition where the students analyze and visualize the data using Tableau, showcasing their skills in data storytelling and insights."
-     
-    },
-    {
-      year: "7th and 8th February 2026",
-      title: "Datathon 2026",
-      description: "Our flagship 48 hour Data Science and AI/ML based hackathon with a prize pool of over 2 lakhs and a footfall of over 1000 students."
-    },
-  ];
-  
-  // Binary code background decorator component
-  const BinaryBackground = () => (
-    <motion.div 
-      className="absolute inset-0 overflow-hidden opacity-5 pointer-events-none"
-      style={{ y: bgY }}
-    >
-      <div className="absolute inset-0 font-mono text-sm text-[var(--power-red)] leading-none flex flex-wrap">
-        {Array.from({ length: 100 }).map((_, i) => (
-          <div key={i} className="p-2">
-            {Array.from({ length: 8 }).map((_, j) => (
-              <span key={j}>{Math.round(Math.random())}</span>
-            ))}
-          </div>
-        ))}
-      </div>
-    </motion.div>
-  );
+// ── Timeline Card ───────────────────────────────────────────────────────
+function TimelineCard({
+  event,
+  index,
+}: {
+  event: TimelineEventData;
+  index: number;
+}) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(cardRef, { once: false, margin: "-10%" });
+  const [isHovered, setIsHovered] = useState(false);
+  const [, setLocation] = useLocation();
+  const isLeft = event.align === "left";
 
   return (
-    <section 
-      id="timeline" 
-      className="py-20 md:py-32 bg-background relative" 
-      ref={containerRef}
-    >
-      {/* Decorative elements */}
-      <BinaryBackground />
-      
-      <motion.div 
-        className="absolute -top-12 -right-12 w-64 h-64 rounded-full bg-gradient-red opacity-10"
-        style={{ 
-          backgroundImage: "radial-gradient(circle at center, var(--power-red) 0%, transparent 70%)" 
+    <div ref={cardRef}>
+      <motion.div
+        className={`group relative overflow-hidden cursor-pointer border border-border bg-card/90 hover:border-primary/60 transition-colors duration-150 ${
+          event.isFlagship ? "border-primary/80 bg-card/95" : ""
+        }`}
+        onClick={() => setLocation(`/events/${event.slug}`)}
+        role="link"
+        tabIndex={0}
+        aria-label={`Explore ${event.title}`}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            setLocation(`/events/${event.slug}`);
+          }
         }}
-      />
-      
-      <motion.div 
-        className="absolute -bottom-12 -left-12 w-64 h-64 rounded-full bg-gradient-red opacity-10"
-        style={{ 
-          backgroundImage: "radial-gradient(circle at center, var(--vitality-red) 0%, transparent 70%)" 
+        initial={{ opacity: 0, x: isLeft ? -40 : 40, y: 12 }}
+        animate={
+          isInView
+            ? { opacity: 1, x: 0, y: 0 }
+            : { opacity: 0, x: isLeft ? -40 : 40, y: 12 }
+        }
+        transition={{
+          duration: 0.5,
+          ease: [0.16, 1, 0.3, 1],
+          delay: index * 0.04,
         }}
-      />
-      
-      <div className="container mx-auto px-6 relative z-10" ref={ref}>
-        <motion.div 
-          className="max-w-3xl mx-auto text-center mb-16 md:mb-24"
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-        >
-          <motion.span 
-            className="inline-block mb-4 px-4 py-1 rounded-full bg-red-50/10 text-[var(--power-red)] text-sm font-medium"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
-            transition={{ duration: 0.6 }}
-          >
-            Upcoming Events
-          </motion.span>
-          
-          <motion.h2 
-            className="text-4xl md:text-5xl font-bold mb-6 tracking-tight leading-tight"
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-          >
-            <span className="text-foreground">Events </span>
-            <span className="text-gradient">Calendar</span>
-            <span className="text-foreground"> 2025-26  </span>
-          </motion.h2>
-          
-          <motion.p 
-            className="text-xl text-muted-foreground max-w-2xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            Mark your calendars for our exciting lineup of workshops, hackathons, and events planned for the upcoming academic year.
-          </motion.p>
-          
-          <motion.div 
-            className="h-1 w-20 bg-gradient-red mx-auto mt-8"
-            initial={{ opacity: 0, width: 0 }}
-            animate={isInView ? { opacity: 1, width: 80 } : { opacity: 0, width: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-          />
-        </motion.div>
+        onHoverStart={() => setIsHovered(true)}
+        onHoverEnd={() => setIsHovered(false)}
+      >
+        {/* Accent top bar */}
+        <div
+          className="absolute top-0 left-0 right-0 h-[2px] bg-primary origin-left transition-transform duration-300 z-10"
+          style={{
+            transform:
+              isHovered || event.isFlagship ? "scaleX(1)" : "scaleX(0)",
+          }}
+        />
 
-        {/* Main timeline component */}
-        <VerticalTimeline lineColor="var(--power-red)" className="custom-timeline">
-          {timelineItems.map((item, index) => (
-            <VerticalTimelineElement
-              key={index}
-              className="vertical-timeline-element--work"
-              contentStyle={{ 
-                background: 'var(--background)', 
-                boxShadow: '0 10px 40px rgba(0, 0, 0, 0.05)', 
-                borderRadius: '12px',
-                border: '1px solid var(--vitality-red)'
+        <div className="p-6 md:p-8">
+          {event.isFlagship && (
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-primary text-primary-foreground text-xs font-mono font-bold uppercase tracking-wider mb-4">
+              <Trophy className="w-3.5 h-3.5" /> Flagship Event
+            </div>
+          )}
+
+          {/* Date */}
+          <div className="text-xs font-mono font-bold tracking-widest text-accent uppercase mb-2">
+            {event.date}
+          </div>
+
+          {/* Title */}
+          <div className="overflow-hidden mb-3">
+            <h3
+              className="text-2xl md:text-3xl font-extrabold text-foreground tracking-tight leading-tight transition-colors duration-200 font-display"
+              style={{
+                color: isHovered ? "var(--power-red)" : undefined,
               }}
-              contentArrowStyle={{ 
-                borderRight: '10px solid var(--background)' 
-              }}
-              date={
-                <span className="text-gradient font-semibold text-lg md:text-xl">
-                  {item.year}
-                </span>
-              }
-              iconStyle={{ 
-                background: 'var(--vitality-red)',
-                color: '#fff',
-                boxShadow: '0 0 0 4px var(--background), 0 0 0 5px rgba(0,0,0,0.05)'
-              }}
-              icon={getTimelineIcon(index)}
-              visible={true}
             >
-              <div className="p-2">
-                <h3 className="text-xl md:text-2xl font-bold text-foreground">
-                  {item.title}
-                </h3>
-                
-                <div 
-                  className="h-1 w-12 mt-2 mb-4"
-                  style={{ 
-                    background: 'var(--vitality-red)'
-                  }}
-                />
-                
-                <p className="text-muted-foreground">
-                  {item.description}
-                </p>
+              {event.title}
+            </h3>
+          </div>
+
+          {/* Description */}
+          <div className="overflow-hidden mb-5">
+            <p className="text-sm md:text-base text-muted-foreground leading-relaxed font-body">
+              {event.description}
+            </p>
+          </div>
+
+          {/* Tags */}
+          <div className="flex flex-wrap gap-2 mb-6">
+            {event.tags.map((tag, j) => (
+              <span
+                key={j}
+                className="text-xs font-mono px-2.5 py-0.5 bg-secondary text-secondary-foreground border border-border tracking-wide"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+
+          {/* Image */}
+          <div className="overflow-hidden border border-border mb-6">
+            <EventImage
+              src={event.image}
+              alt={event.title}
+              gradient={event.fallbackGradient}
+              className="w-full h-44 md:h-52"
+            />
+          </div>
+
+          {/* Action Link */}
+          <div className="flex items-center gap-2 text-sm font-semibold text-foreground group-hover:text-primary transition-colors duration-150 font-display">
+            <span>View Event Brief</span>
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-150" />
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
+// ── Main Timeline Component ─────────────────────────────────────────────
+export default function Timeline() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const svgPathRef = useRef<SVGPathElement>(null);
+
+  const isHeaderInView = useInView(headerRef, { once: false, margin: "-10%" });
+
+  /* ── Scroll-driven progress for path draw ── */
+  const { scrollYProgress } = useScroll({
+    target: wrapRef,
+    offset: ["start 65%", "end 65%"],
+  });
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 250,
+    damping: 30,
+    restDelta: 0.0001,
+  });
+
+  /* ── SVG path state ── */
+  const [svgD, setSvgD] = useState("");
+  const [pathLen, setPathLen] = useState(0);
+  const [nodes, setNodes] = useState<{ x: number; y: number }[]>([]);
+  const [wrapSize, setWrapSize] = useState({ w: 0, h: 0 });
+
+  /* ──────────────────────────────────────────────────────────────────────
+   * Compute the snake path.
+   * Path snakes vertically down through the nodes, and horizontally BETWEEN the cards.
+   * ────────────────────────────────────────────────────────────────────── */
+  const compute = useCallback(() => {
+    const wrap = wrapRef.current;
+    if (!wrap) return;
+
+    const W = wrap.offsetWidth;
+    const H = wrap.scrollHeight || wrap.offsetHeight;
+    const wrapRect = wrap.getBoundingClientRect();
+    setWrapSize({ w: W, h: H });
+
+    // Node X positions
+    const NX_L = W * 0.75; // Right node (for left card)
+    const NX_R = W * 0.25; // Left node (for right card)
+
+    const positions: { x: number; y: number }[] = [];
+    rowRefs.current.forEach((el, i) => {
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      const y = r.top - wrapRect.top + r.height / 2;
+      positions.push({
+        x: timelineEvents[i].align === "left" ? NX_L : NX_R,
+        y,
+      });
+    });
+    if (positions.length < 2) return;
+    setNodes(positions);
+
+    // Path geometry
+    const R = Math.min(40, W * 0.1); 
+
+    let d = `M ${positions[0].x} 0 L ${positions[0].x} ${positions[0].y}`;
+
+    for (let i = 0; i < positions.length - 1; i++) {
+      const c = positions[i];
+      const n = positions[i + 1];
+      const turn_y = (c.y + n.y) / 2;
+
+      d += ` L ${c.x} ${turn_y - R}`;
+
+      if (c.x > n.x) {
+        // From right spine to left spine
+        d += ` Q ${c.x} ${turn_y}, ${c.x - R} ${turn_y}`;
+        d += ` L ${n.x + R} ${turn_y}`;
+        d += ` Q ${n.x} ${turn_y}, ${n.x} ${turn_y + R}`;
+      } else {
+        // From left spine to right spine
+        d += ` Q ${c.x} ${turn_y}, ${c.x + R} ${turn_y}`;
+        d += ` L ${n.x - R} ${turn_y}`;
+        d += ` Q ${n.x} ${turn_y}, ${n.x} ${turn_y + R}`;
+      }
+      
+      d += ` L ${n.x} ${n.y}`;
+    }
+    
+    // Extend to bottom
+    d += ` L ${positions[positions.length - 1].x} ${H}`;
+
+    setSvgD(d);
+  }, []);
+
+  useEffect(() => {
+    const t1 = setTimeout(compute, 200);
+    const t2 = setTimeout(compute, 600);
+    window.addEventListener("resize", compute);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      window.removeEventListener("resize", compute);
+    };
+  }, [compute]);
+
+  // Card-edge X for connector lines
+  const CE_L = wrapSize.w * 0.60; // right edge of left cards
+  const CE_R = wrapSize.w * 0.40; // left edge of right cards
+
+  return (
+    <section
+      id="timeline"
+      ref={sectionRef}
+      className="py-16 md:py-20 bg-transparent relative overflow-hidden"
+    >
+      <div className="container mx-auto px-4 md:px-8 relative z-10">
+        {/* ── Section Header ── */}
+        <div
+          ref={headerRef}
+          className="max-w-3xl mx-auto text-center mb-12 md:mb-16"
+        >
+          <span className="inline-flex items-center gap-1.5 mb-3 px-3 py-1 rounded-full bg-secondary text-secondary-foreground text-xs font-mono tracking-widest uppercase border border-border">
+            <Calendar className="w-3.5 h-3.5" /> Annual Calendar
+          </span>
+
+          <h2 className="text-3xl md:text-5xl font-extrabold mb-4 tracking-tight leading-tight font-display">
+            <span className="text-foreground">Council Events &amp; </span>
+            <span className="text-gradient">Hackathons</span>
+          </h2>
+
+          <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed font-body">
+            Major technical competitions, Datathons, hands-on bootcamps, and guest lectures hosted throughout the academic term.
+          </p>
+
+          <div className="h-1 w-16 bg-primary mx-auto mt-6 rounded-full" />
+        </div>
+
+        {/* ── Events + Snake SVG ── */}
+        <div
+          ref={wrapRef}
+          className="relative max-w-6xl mx-auto"
+          style={{ isolation: "isolate" }}
+        >
+          {/* ── SVG Snake Path Overlay (desktop only) ── */}
+          {svgD && wrapSize.w > 0 && (
+            <svg
+              width={wrapSize.w}
+              height={wrapSize.h}
+              className="absolute top-0 left-0 pointer-events-none hidden md:block"
+              style={{ overflow: "visible", zIndex: 5 }}
+            >
+              <defs>
+                <filter id="tl-glow">
+                  <feGaussianBlur stdDeviation="4" result="b" />
+                  <feMerge>
+                    <feMergeNode in="b" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+                <linearGradient id="tl-grad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="var(--vitality-red)" />
+                  <stop offset="50%" stopColor="var(--power-red)" />
+                  <stop offset="100%" stopColor="var(--vitality-red)" />
+                </linearGradient>
+              </defs>
+
+              {/* Ghost track (faint static path) */}
+              <path
+                d={svgD}
+                fill="none"
+                stroke="rgba(183,32,46,0.12)"
+                strokeWidth="3"
+                strokeLinecap="round"
+              />
+
+              {/* Animated glowing drawn path (fluid hardware-accelerated scroll tracking) */}
+              <motion.path
+                d={svgD}
+                fill="none"
+                stroke="url(#tl-grad)"
+                strokeWidth="3.5"
+                strokeLinecap="round"
+                filter="url(#tl-glow)"
+                style={{ pathLength: smoothProgress }}
+              />
+
+              {/* Connector lines + Node dots */}
+              {nodes.map((nd, i) => {
+                const isL = timelineEvents[i].align === "left";
+                const ceX = isL ? CE_L : CE_R;
+                const endX = isL ? nd.x + 40 : nd.x - 40;
+                return (
+                  <g key={i}>
+                    {/* Crosshair horizontal connector */}
+                    <line
+                      x1={ceX}
+                      y1={nd.y}
+                      x2={endX}
+                      y2={nd.y}
+                      stroke="rgba(237,28,36,0.6)"
+                      strokeWidth="2"
+                    />
+                    {/* Outer pulsing ring */}
+                    <circle
+                      cx={nd.x}
+                      cy={nd.y}
+                      r="15"
+                      fill="none"
+                      stroke="rgba(237,28,36,0.2)"
+                      strokeWidth="1.5"
+                      className="tl-node-pulse"
+                    />
+                    {/* Solid node dot */}
+                    <circle
+                      cx={nd.x}
+                      cy={nd.y}
+                      r="8"
+                      fill="var(--vitality-red)"
+                      stroke="var(--background)"
+                      strokeWidth="3.5"
+                      filter="url(#tl-glow)"
+                    />
+                  </g>
+                );
+              })}
+            </svg>
+          )}
+
+          {/* ── Mobile spine (simple vertical line) ── */}
+          <div className="absolute left-4 top-0 bottom-0 w-[2px] md:hidden z-[5]">
+            <div className="absolute inset-0 bg-[var(--power-red)]/15 rounded-full" />
+            <motion.div
+              className="absolute top-0 left-0 right-0 bg-gradient-to-b from-[var(--vitality-red)] via-[var(--power-red)] to-[var(--vitality-red)] rounded-full shadow-[0_0_12px_rgba(237,28,36,0.6)]"
+              style={{
+                scaleY: smoothProgress,
+                transformOrigin: "top",
+              }}
+            />
+          </div>
+
+          {/* ── Event Rows ── */}
+          <div className="flex flex-col gap-20 md:gap-32 py-4 relative z-10">
+            {timelineEvents.map((ev, i) => (
+              <div
+                key={ev.id}
+                ref={(el) => {
+                  rowRefs.current[i] = el;
+                }}
+                className={`flex ${
+                  ev.align === "left"
+                    ? "justify-start"
+                    : "justify-end"
+                } pl-10 md:pl-0`}
+              >
+                <div className="w-full md:w-[60%]">
+                  <TimelineCard event={ev} index={i} />
+                </div>
               </div>
-            </VerticalTimelineElement>
-          ))}
-        </VerticalTimeline>
-        
-        {/* Add custom CSS to improve the vertical timeline appearance */}
-        <style dangerouslySetInnerHTML={{ __html: `
-          /* Override react-vertical-timeline-component styles */
-          .vertical-timeline-element-content {
-            padding: 1.5rem !important;
-            transition: all 0.4s ease !important;
-          }
-          
-          .vertical-timeline-element-content:hover {
-            transform: translateY(-5px) !important;
-          }
-          
-          .vertical-timeline-element-content-arrow {
-            top: 22px !important;
-          }
-          
-          .vertical-timeline-element-date {
-            margin: 0 1.5rem !important;
-            padding: 0.5rem 0 !important;
-          }
-          
-          .vertical-timeline::before {
-            width: 3px !important;
-            background: linear-gradient(to bottom, var(--power-red), var(--vitality-red)) !important;
-          }
-          
-          .vertical-timeline-element-icon {
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            box-shadow: 0 0 0 4px var(--background), 0 2px 10px rgba(0,0,0,0.2) !important;
-          }
-          
-          .vertical-timeline-element-icon svg {
-            position: absolute !important;
-            left: 50% !important;
-            top: 50% !important;
-            transform: translate(-50%, -50%) !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            height: 24px !important;
-            width: 24px !important;
-          }
-          
-          /* Ensure the icon container has proper dimensions and centered content */
-          .vertical-timeline-element-icon * {
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            width: 100% !important;
-            height: 100% !important;
-          }
-        `}} />
+            ))}
+          </div>
+        </div>
       </div>
+
+      {/* ── Embedded Styles ── */}
+      <style>{`
+        /* Node dot pulse ring (SVG) */
+        .tl-node-pulse {
+          animation: tl-svg-pulse 2.4s ease-out infinite;
+          transform-origin: center;
+          transform-box: fill-box;
+        }
+        @keyframes tl-svg-pulse {
+          0%   { transform: scale(1);   opacity: 0.4; }
+          100% { transform: scale(2.2); opacity: 0;   }
+        }
+
+        /* Lusion image reveal — clip-path bottom→top on scroll-in */
+        .tl-img-wrap {
+          clip-path: inset(100% 0 0 0);
+          transition: clip-path 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+          will-change: clip-path;
+        }
+        .tl-card-inview .tl-img-wrap {
+          clip-path: inset(0% 0 0 0);
+        }
+
+        /* Image zoom on hover */
+        .tl-img-wrap img {
+          transform: scale(1.08);
+          filter: brightness(0.80);
+          transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+                      filter   0.6s ease;
+        }
+        .tl-card-hover .tl-img-wrap img,
+        .tl-card-flagship .tl-img-wrap img {
+          transform: scale(1.0);
+          filter: brightness(0.95);
+        }
+      `}</style>
     </section>
   );
 }

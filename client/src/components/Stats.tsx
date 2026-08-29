@@ -13,12 +13,12 @@ interface StatProps {
 function Stat({ value, label, description, icon, delay }: StatProps) {
   const [count, setCount] = useState(0);
   const statRef = useRef(null);
-  const isInView = useInView(statRef, { once: false, margin: "-30%" });
+  const isInView = useInView(statRef, { once: false, margin: "-20%" });
   
   useEffect(() => {
     if (isInView) {
       let currentCount = 0;
-      const duration = 2500; // ms
+      const duration = 2000; // ms
       const stepTime = 20; // ms
       const totalSteps = duration / stepTime;
       const increment = value / totalSteps;
@@ -35,7 +35,6 @@ function Stat({ value, label, description, icon, delay }: StatProps) {
       
       return () => clearInterval(timer);
     } else {
-      // Reset when out of view for re-animation when scrolling back
       setCount(0);
     }
   }, [isInView, value]);
@@ -43,48 +42,33 @@ function Stat({ value, label, description, icon, delay }: StatProps) {
   return (
     <motion.div
       ref={statRef}
-      className="bg-white/10 backdrop-blur-sm p-6 rounded-xl overflow-hidden relative group"
-      initial={{ opacity: 0, y: 40 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-      transition={{ duration: 0.7, delay, type: "spring", stiffness: 50 }}
-      whileHover={{ y: -5, transition: { duration: 0.2 } }}
+      className={`group p-8 md:p-10 flex flex-col justify-between transition-colors duration-150 hover:bg-secondary/30 relative border-b md:border-b-0 md:border-r border-border last:border-r-0 last:border-b-0`}
+      initial={{ opacity: 0, y: 20 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+      transition={{ duration: 0.5, delay }}
     >
-      {/* Decorative element */}
-      <motion.div 
-        className="absolute -right-6 -top-6 w-12 h-12 rounded-full bg-white/10"
-        initial={{ scale: 0 }}
-        animate={isInView ? { scale: 1 } : { scale: 0 }}
-        transition={{ duration: 0.7, delay: delay + 0.3 }}
-      />
-      
-      <div className="flex items-start gap-4">
-        <div className="bg-white/20 p-3 rounded-lg">
-          {icon}
-        </div>
-        
-        <div className="flex-1">
-          <div className="flex items-baseline gap-1">
-            <div className="text-4xl md:text-5xl font-bold tracking-tight">{count}</div>
-            <div className="text-xl font-bold text-black/80">+</div>
+      <div>
+        <div className="flex items-center justify-between mb-8">
+          <div className="w-9 h-9 bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+            {icon}
           </div>
-          
-          <h3 className="text-xl font-semibold mt-1 mb-2">{label}</h3>
-          
-          <p className="text-sm text-white/70 leading-relaxed">
-            {description}
-          </p>
+          <span className="font-mono text-xs text-muted-foreground uppercase tracking-widest">
+            Metric
+          </span>
         </div>
+
+        <div className="text-4xl md:text-6xl font-extrabold tracking-tight text-foreground mb-3 font-display">
+          {count.toLocaleString()}+
+        </div>
+
+        <h3 className="text-lg font-bold mb-2 text-foreground tracking-tight font-display">{label}</h3>
+
+        <p className="text-sm text-muted-foreground leading-relaxed font-body">
+          {description}
+        </p>
       </div>
-      
-      {/* Bottom progress bar */}
-      <div className="w-full h-1 bg-white/10 mt-4 rounded-full overflow-hidden">
-        <motion.div 
-          className="h-full bg-white"
-          initial={{ width: 0 }}
-          animate={isInView ? { width: "100%" } : { width: 0 }}
-          transition={{ duration: 2, delay: delay + 0.3, ease: "easeOut" }}
-        />
-      </div>
+
+      <div className="h-[2px] w-10 bg-primary/40 mt-8 group-hover:w-16 group-hover:bg-primary transition-all duration-300" />
     </motion.div>
   );
 }
@@ -92,111 +76,63 @@ function Stat({ value, label, description, icon, delay }: StatProps) {
 export default function Stats() {
   const ref = useRef(null);
   const containerRef = useRef(null);
-  const isInView = useInView(ref, { once: false, margin: "-20%" });
-  
-  // Parallax effect for the background pattern
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"]
-  });
-  
-  const bgY = useTransform(scrollYProgress, [0, 1], [0, -100]);
+  const isInView = useInView(ref, { once: false, margin: "-15%" });
   
   const stats = [
-    { 
-      value: 10, 
-      label: "Industrial Collaborations", 
-      description: "Collaborations with leading tech companies and organizations.",
-      icon: <Users className="w-5 h-5 text-white" />,
-      delay: 0.1 
-    },
-    { 
-      value: 5, 
-      label: "Workshops & Events", 
-      description: "Hands-on learning experiences and networking opportunities.",
-      icon: <Award className="w-5 h-5 text-white" />,
-      delay: 0.2 
-    },
-    { 
-      value: 1600, 
-      label: "Students Impacted", 
-      description: "Empowering the next generation of data scientists across campus.",
-      icon: <BarChart3 className="w-5 h-5 text-white" />,
+    {
+      value: 10,
+      label: "Industry & Academic Talks",
+      description: "Guest technical sessions with data professionals and university researchers.",
+      icon: <Users className="w-5 h-5" strokeWidth={1.5} />,
       delay: 0.1
     },
-  
+    {
+      value: 5,
+      label: "Annual Campus Events",
+      description: "Flagship hackathons, Datathons, and student coding bootcamps.",
+      icon: <Award className="w-5 h-5" strokeWidth={1.5} />,
+      delay: 0.2
+    },
+    {
+      value: 1600,
+      label: "Student Participants",
+      description: "Attendees across practical workshops, project tracks, and campus competitions.",
+      icon: <BarChart3 className="w-5 h-5" strokeWidth={1.5} />,
+      delay: 0.3
+    },
   ];
-  
-  // SVG pattern for background
-  const DataPattern = () => (
-    <motion.div 
-      className="absolute inset-0 opacity-5 pointer-events-none overflow-hidden"
-      style={{ y: bgY }}
-    >
-      <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <pattern id="statsPattern" patternUnits="userSpaceOnUse" width="50" height="50" patternTransform="rotate(30)">
-            <rect width="100%" height="100%" fill="none" />
-            <path d="M0,0 L50,50" stroke="white" strokeWidth="1" />
-            <circle cx="25" cy="25" r="3" fill="white" opacity="0.3" />
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#statsPattern)" />
-      </svg>
-    </motion.div>
-  );
-  
+
   return (
-    <section 
-      id="stats" 
-      className="py-20 md:py-32 relative overflow-hidden"
+    <section
+      id="stats"
+      className="py-16 md:py-20 bg-transparent relative overflow-hidden"
       ref={containerRef}
-      style={{
-        background: "linear-gradient(135deg, var(--power-red), var(--vitality-red))"
-      }}
     >
-      {/* Decorative background */}
-      <DataPattern />
-      
-      <div className="absolute top-0 right-0 w-64 h-64 rounded-full bg-white opacity-5" />
-      <div className="absolute bottom-0 left-0 w-80 h-80 rounded-full bg-white opacity-5" />
-      
       <div className="container mx-auto px-6 relative z-10" ref={ref}>
-        <motion.div 
-          className="max-w-3xl mx-auto text-center mb-16 md:mb-20 text-white"
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+        <motion.div
+          className="max-w-3xl mx-auto text-center mb-10 md:mb-14"
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.5 }}
         >
-          <motion.span 
-            className="inline-block mb-4 px-4 py-1 rounded-full bg-white/10 text-white text-sm font-medium"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
-            transition={{ duration: 0.6 }}
-          >
-            By The Numbers
-          </motion.span>
-          
-          <motion.h2 
-            className="text-4xl md:text-5xl font-bold mb-6 tracking-tight leading-tight"
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-          >
-            Our Growth & Impact
-          </motion.h2>
-          
-          <motion.p 
-            className="text-xl text-white/80 max-w-2xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            The DataZen community continues to expand its reach and influence in the data science ecosystem at Somaiya Vidyavihar University and beyond.
-          </motion.p>
+          <span className="inline-block mb-3 px-3 py-1 bg-secondary text-secondary-foreground text-xs font-mono tracking-widest uppercase border border-border">
+            Annual Activity
+          </span>
+
+          <h2 className="text-3xl md:text-5xl font-extrabold mb-4 tracking-tight leading-tight font-display">
+            <span className="text-foreground">Key Operations &amp; </span>
+            <span className="text-gradient">Reach</span>
+          </h2>
+
+          <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed font-body">
+            Student participation, technical talk benchmarks, and hackathon turnout recorded across academic terms.
+          </p>
+
+          <div className="h-[2px] w-16 bg-primary mx-auto mt-6" />
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+        {/* Swiss Architectural Ledger */}
+        <div className="border border-border bg-card/80 backdrop-blur-md grid grid-cols-1 md:grid-cols-3 max-w-6xl mx-auto">
           {stats.map((stat, index) => (
             <Stat
               key={index}
@@ -208,49 +144,8 @@ export default function Stats() {
             />
           ))}
         </div>
-        
-        {/* Visual data-driven decorative element */}
-        <motion.div 
-          className="mt-16 h-16 relative"
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-        >
-          <svg className="w-full h-full" viewBox="0 0 1000 100">
-            {/* Visualization lines */}
-            <path 
-              d="M0,50 Q250,90 500,50 Q750,10 1000,50" 
-              fill="none" 
-              stroke="white" 
-              strokeWidth="1.5" 
-              strokeDasharray="5,5" 
-              opacity="0.3"
-            />
-            <path 
-              d="M0,50 Q250,10 500,50 Q750,90 1000,50" 
-              fill="none" 
-              stroke="white" 
-              strokeWidth="1.5" 
-              strokeDasharray="5,5" 
-              opacity="0.3"
-            />
-            
-            {/* Data points */}
-            {[1, 2, 3, 4, 5, 6, 7].map((_, i) => (
-              <motion.circle
-                key={i}
-                cx={i * 150 + 50}
-                cy={50 + Math.sin(i * 0.8) * 20}
-                r="3"
-                fill="white"
-                initial={{ opacity: 0, scale: 0 }}
-                animate={isInView ? { opacity: 0.7, scale: 1 } : { opacity: 0, scale: 0 }}
-                transition={{ duration: 0.5, delay: 0.7 + i * 0.1 }}
-              />
-            ))}
-          </svg>
-        </motion.div>
       </div>
     </section>
   );
 }
+

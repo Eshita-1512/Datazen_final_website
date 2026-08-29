@@ -81,7 +81,7 @@ const PixelCardExample: React.FC = () => {
             <button className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700">
               Button 1
             </button>
-            <button className="rounded bg-gray-500 px-4 py-2 font-bold text-white hover:bg-gray-700">
+            <button className="rounded bg-transparent0 px-4 py-2 font-bold text-white hover:bg-gray-700">
               Button 2
             </button>
           </div>
