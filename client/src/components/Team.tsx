@@ -16,9 +16,9 @@ interface TeamMember {
   role: string;
   category: string;
   description: string;
-  github: string;
-  linkedin: string;
-  instagram: string;
+  github?: string;
+  linkedin?: string;
+  instagram?: string;
   photo: string;
 }
 
@@ -94,256 +94,275 @@ export default function Team() {
     () => [
       {
         id: 1,
-        name: "Mann Shah",
-        role: "Council Head",
-        category: "Core",
-        description: "Chief of Breaking Things and Fixing Them at 2 AM",
-        photo: "/mann.jpg",
-        github: "https://github.com/mannn13",
-        linkedin: "https://www.linkedin.com/in/mann-shah-3940a3278/",
-        instagram: "https://www.instagram.com/m.annn13/",
+        name: "Dr. Urmi Thakkar",
+        role: "Faculty Advisor",
+        category: "Faculty Advisors",
+        description: "Guiding the vision and execution of the council.",
+        photo: "/urmi.jpg"
       },
       {
         id: 2,
-        name: "Siddharth Chintawar",
-        role: "Council Head",
-        category: "Core",
-        photo: "/siddarth.jpg",
-        description: "Steering the ship, barely",
-        github: "https://github.com/sidc124",
-        linkedin: "https://www.linkedin.com/in/siddharth-chintawar-a76366291/",
-        instagram: "https://www.instagram.com/godknowssid/",
+        name: "Dr. Prasanna Shete",
+        role: "Faculty Advisor",
+        category: "Faculty Advisors",
+        description: "Mentoring the next generation of data scientists.",
+        photo: "/prasanna.jpg"
       },
       {
         id: 3,
-        name: "Shubham Indulkar",
-        role: "Tech Head",
-        category: "Tech",
-        description: "Writing code that works… on the second try",
-        photo: "/shubham.jpg",
-        github: "https://github.com/Thesilentprogramer",
-        linkedin: "https://www.linkedin.com/in/shubham-indulkar-7804561b3/",
-        instagram: "https://www.instagram.com/_shubh.13",
+        name: "Ms. Priyanka Shetty",
+        role: "Faculty Advisor",
+        category: "Faculty Advisors",
+        description: "Empowering students through technical leadership.",
+        photo: "/priyanka.jpg"
       },
       {
         id: 4,
-        name: "Ishika Bhoyar",
-        role: "Tech Member",
-        category: "Tech",
-        description: "Turning ideas into URLs",
-        photo: "/ishika.jpg",
-        github: "https://github.com/ishikabhoyar/",
-        linkedin: "https://www.linkedin.com/in/ishikabhoyar/",
-        instagram: "https://www.instagram.com/ishika.bhoyar?igsh=OGtmdGR1anc3aHE%3D&utm_source=qr",
-      },
-      {
-        id: 5,
-        name: "Soham Gore",
-        role: "Tech Member",
-        category: "Tech",
-        description: "Trained on chaos",
-        photo: "/soham.jpg",
-        github: "https://github.com/debug-soham",
-        linkedin: "https://www.linkedin.com/in/sohamgore",
-        instagram: "https://www.instagram.com/ssoham.jpg",
-      },
-      {
-        id: 6,
-        name: "Manas Kolaskar",
-        role: "Tech Member",
-        category: "Tech",
-        description: "Fueling curiosity today to engineer AI tomorrow.",
-        photo: "/manas.jpg",
-        github: "https://github.com/manasscodes",
-        linkedin: "https://www.linkedin.com/in/manaskolaskar/",
-        instagram: "https://www.instagram.com/itsmanaskolaskar/",
-      },
-      {
-        id: 7,
-        name: "Lakshya Santani",
-        role: "Tech Member",
-        category: "Tech",
-        description: "Turning data into decisions",
-        photo: "/Lakshya.PNG",
-        github: "https://github.com/Lakshyyaaa",
-        linkedin: "https://www.linkedin.com/in/lakshya-santani-021612292/",
-        instagram: "https://www.instagram.com/lakshyyaaa._/profilecard/?igsh=M2x3azNoc25naTFw",
-      },
-      {
-        id: 8,
-        name: "Swadha Kumari",
-        role: "Creative Head",
-        category: "Creative",
-        description: "Designing seamless digital experiences.",
-        photo: "/swadha.jpg",
-        github: "https://github.com/Swadha06",
-        linkedin: "https://www.linkedin.com/in/swadha-kumari-525a61294/",
-        instagram: "https://www.instagram.com/swaddhaa._/",
-      },
-      {
-        id: 9,
-        name: "Riya Gupta",
-        role: "Creative Member",
-        category: "Creative",
-        description: "Designing visual experiences",
-        photo: "/riya.jpg",
-        github: "https://github.com/riyaa-g",
-        linkedin: "https://www.linkedin.com/in/riyagupta70/",
-        instagram: "https://www.instagram.com/_riyaya_07/",
-      },
-      {
-        id: 10,
-        name: "Sachi Parekh",
-        role: "Creative Member",
-        category: "Creative",
-        description: "Exploring stories through data.",
-        photo: "/saachi.jpg",
-        github: "https://github.com/Sachi1312",
-        linkedin: "https://www.linkedin.com/in/sachi-parekh-427239263/",
-        instagram: "https://www.instagram.com/sachi__parekh?igsh=YTU2YmQ0ZDhiNGMw",
-      },
-      {
-        id: 11,
-        name: "Samiksha Phirangi",
-        role: "Creative Member",
-        category: "Creative",
-        description: "Creating and planning content strategies.",
-        photo: "/samiksha.jpg",
-        github: "https://github.com/samikshaphirangi",
-        linkedin: "https://www.linkedin.com/in/samiksha-phirangi-848531357/",
-        instagram: "https://www.instagram.com/samikshaphirangi?igsh=eXdlcTZrbmkzdWhx&utm_source=qr",
-      },
-      {
-        id: 12,
-        name: "Sohom Mallick",
-        role: "PR Head",
-        category: "PR",
-        description: "Crafting stories, leaving a mark.",
-        photo: "/sohom.jpg",
-        github: "https://github.com/sassysohom48",
-        linkedin: "https://www.linkedin.com/in/sohom-mallick-245965292",
-        instagram: "https://www.instagram.com/whynotsohom_",
-      },
-      {
-        id: 13,
-        name: "Pratibha Singh",
-        role: "PR Member",
-        category: "PR",
-        description: "Designing seamless digital experiences.",
-        photo: "/pratibha.PNG",
-        github: "https://github.com/pratibhasoup",
-        linkedin: "https://www.linkedin.com/in/pratibha-singh-76bb51340/",
-        instagram: "https://www.instagram.com/pratibha.singhh/",
-      },
-      {
-        id: 14,
-        name: "Mrinali Sharma",
-        role: "PR Member",
-        category: "PR",
-        description: "50%sweetness 50%savage",
-        photo: "/mrinali.jpg",
-        github: "https://github.com/mrinalishh",
-        linkedin: "https://www.linkedin.com/in/mrinali-sharma-353b92327/",
-        instagram: "https://www.instagram.com/mrinalish?igsh=MWo2dXJ0bjFuMWpraw==",
-      },
-      {
-        id: 15,
-        name: "Manya Baranwal",
-        role: "PR Member",
-        category: "PR",
-        description: "Keeping the vibes alive, one post at a time.",
-        photo: "/manya.jpg",
-        github: "https://github.com/manyab17",
-        linkedin: "https://www.linkedin.com/in/manya-baranwal-a74b6a320/",
-        instagram: "https://www.instagram.com/manya_baranwal17?igsh=MTkwZHBsbWt5bTh6bA==",
-      },
-      {
-        id: 16,
-        name: "Abdullah Qureshi",
-        role: "Marketing Head",
-        category: "Marketing",
-        description: "Strategic marketing expert",
-        photo: "/abdullah.jpg",
-        github: "https://github.com/abdullahqureshi",
-        linkedin: "https://www.linkedin.com/in/abdullah-qureshi/",
-        instagram: "https://www.instagram.com/abdullah.qureshi/",
-      },
-      {
-        id: 17,
-        name: "Ankita Kotkar",
-        role: "Marketing Member",
-        category: "Marketing",
-        description: "Keepin' it real",
-        photo: "/ankita.jpg",
-        github: "https://github.com/ankitakotkar",
-        linkedin: "https://www.linkedin.com/in/ankita-kotkar/",
-        instagram: "https://www.instagram.com/ankita.kotkar/",
-      },
-      {
-        id: 18,
         name: "Suryaansh Jain",
-        role: "Marketing Member",
-        category: "Marketing",
-        description: "Cold emailing is boring",
+        role: "Co-Committee Head",
+        category: "Core",
+        description: "Leading with data-driven strategies.",
         photo: "/suryaansh.jpg",
         github: "https://github.com/suryaansh-jain",
         linkedin: "https://www.linkedin.com/in/suryaansh-jain-61b74b28a/",
-        instagram: "https://www.instagram.com/suryaansh._._?igsh=cmw0OXh4ZHY4Nzlm",
+        instagram: "https://www.instagram.com/suryaansh._._?igsh=cmw0OXh4ZHY4Nzlm"
       },
       {
-        id: 19,
-        name: "Maahnal Chauhan",
-        role: "Marketing Member",
-        category: "Marketing",
-        description: "Teaching machines to think (and sometimes overthink)",
-        photo: "/manhal.jpg",
-        github: "https://github.com/Maahnal",
-        linkedin: "https://www.linkedin.com/in/maahnalchauhan5/",
-        instagram: "https://www.instagram.com/maahnalc?igsh=ZTl1ZHFkaXBudWoz&utm_source=qr",
+        id: 5,
+        name: "Ankita Kotkar",
+        role: "Co-Committee Head",
+        category: "Core",
+        description: "Driving the core operations and vision.",
+        photo: "/ankita.jpg",
+        github: "https://github.com/ankitakotkar",
+        linkedin: "https://www.linkedin.com/in/ankita-kotkar/",
+        instagram: "https://www.instagram.com/ankita.kotkar/"
       },
       {
-        id: 20,
-        name: "Vedant Padhy",
-        role: "Operation Head",
-        category: "Operations",
-        description: "Efficiency expert",
-        photo: "/vedant.jpg",
-        github: "https://github.com/vedantpadhy",
-        linkedin: "https://www.linkedin.com/in/vedant-padhy/",
-        instagram: "https://www.instagram.com/vedant.padhy/",
-      },
-      {
-        id: 21,
+        id: 6,
         name: "Abhishek Joshi",
-        role: "Operation Member",
-        category: "Operations",
-        description: "Vibe coded too hard, code's in therapy",
+        role: "Treasurer",
+        category: "Core",
+        description: "Managing finances and operational efficiency.",
         photo: "/abhishek.png",
         github: "https://github.com/ketanabhishek8",
         linkedin: "https://www.linkedin.com/in/abhishek-joshi2/",
-        instagram: "https://www.instagram.com/ketanabhishek8",
+        instagram: "https://www.instagram.com/ketanabhishek8/"
       },
       {
-        id: 22,
-        name: "Naman Lodha",
-        role: "Operation Member",
-        category: "Operations",
-        description: "….",
-        photo: "/naman.jpg",
-        github: "https://github.com/naman616",
-        linkedin: "https://www.linkedin.com/in/lodhanaman/",
-        instagram: "https://www.instagram.com/naman.ld",
+        id: 7,
+        name: "Eshita",
+        role: "Head",
+        category: "Tech",
+        description: "Spearheading the technical endeavors.",
+        photo: "/eshita.jpg",
+        github: "https://github.com/Eshita-1512",
+        linkedin: "https://www.linkedin.com/in/eshita-b108b9320/"
       },
       {
-        id: 23,
-        name: "Rayan J Castelino",
-        role: "Operation Member",
+        id: 8,
+        name: "Sadhil Madan",
+        role: "Member",
+        category: "Tech",
+        description: "Building scalable data solutions.",
+        photo: "/sadhil.jpg"
+      },
+      {
+        id: 9,
+        name: "Maahnal Chauhan",
+        role: "Member",
+        category: "Tech",
+        description: "Teaching machines to think (and sometimes overthink).",
+        photo: "/manhal.jpg",
+        github: "https://github.com/Maahnal",
+        linkedin: "https://www.linkedin.com/in/maahnalchauhan5/",
+        instagram: "https://www.instagram.com/maahnalc?igsh=ZTl1ZHFkaXBudWoz&utm_source=qr"
+      },
+      {
+        id: 10,
+        name: "Khushi Chaturvedi",
+        role: "Member",
+        category: "Tech",
+        description: "Passionate about artificial intelligence.",
+        photo: "/khushi.jpg"
+      },
+      {
+        id: 11,
+        name: "Harsh Zope",
+        role: "Member",
+        category: "Tech",
+        description: "Transforming code into impactful systems.",
+        photo: "/harsh.jpg",
+        github: "https://github.com/Hersheys6969",
+        linkedin: "https://www.linkedin.com/in/harshzope/"
+      },
+      {
+        id: 12,
+        name: "Mehak Trivedi",
+        role: "Head",
+        category: "PR",
+        description: "Managing public relations and outreach.",
+        photo: "/mehak.jpg",
+        github: "https://github.com/mehak-t",
+        linkedin: "https://www.linkedin.com/in/mehak-trivedi/",
+        instagram: "https://www.instagram.com/mehaktrivedi?igsh=d2Y1eW1sZjZvNjQy&utm_source=qr"
+      },
+      {
+        id: 13,
+        name: "Avani Maniyar",
+        role: "Member",
+        category: "PR",
+        description: "Connecting the council with the community.",
+        photo: "/avani.jpg"
+      },
+      {
+        id: 14,
+        name: "Fiona Kotak",
+        role: "Member",
+        category: "PR",
+        description: "Crafting narratives and maintaining relationships.",
+        photo: "/fiona.jpg",
+        github: "https://github.com/fionakotak",
+        linkedin: "https://www.linkedin.com/in/fiona-kotak-015569376",
+        instagram: "https://www.instagram.com/fiona.kotak?igsh=MWRsMmw1cjJwMmpkZA=="
+      },
+      {
+        id: 15,
+        name: "Avani Tiwari",
+        role: "Member",
+        category: "PR",
+        description: "Spreading the word of our initiatives.",
+        photo: "/avani_t.jpg",
+        github: "https://github.com/avanitiwari-coder",
+        linkedin: "https://www.linkedin.com/in/avani-tiwari777",
+        instagram: "https://www.instagram.com/avanitiwari27?igsh=MW94M3RydjdlaTV4MQ%3D%3D&utm_source=qr"
+      },
+      {
+        id: 16,
+        name: "Rayan Castelino",
+        role: "Head",
         category: "Operations",
-        description: "Clarity in Chaos",
+        description: "Ensuring smooth and effective operations.",
         photo: "/rayan.jpg",
         github: "https://github.com/rayanxc",
         linkedin: "https://www.linkedin.com/in/rayan-castelino-279795334/",
-        instagram: "https://www.instagram.com/rayancastelino?igsh=MXdkM2FwazBvcnYzeg==",
+        instagram: "https://www.instagram.com/rayancastelino?igsh=MXdkM2FwazBvcnYzeg=="
+      },
+      {
+        id: 17,
+        name: "Divith Kapri",
+        role: "Member",
+        category: "Operations",
+        description: "Optimizing logistics for events and projects.",
+        photo: "/divith.jpg",
+        github: "https://github.com/divithkapri-svg",
+        linkedin: "https://www.linkedin.com/in/divith-kapri-b68788382",
+        instagram: "https://www.instagram.com/divith___?igsh=aG9pcHR6cHppZ3py"
+      },
+      {
+        id: 18,
+        name: "Eklavya Pokhriyal",
+        role: "Member",
+        category: "Operations",
+        description: "Executing operational plans with precision.",
+        photo: "/eklavya.jpg",
+        github: "https://github.com/kanha310107",
+        linkedin: "https://www.linkedin.com/in/eklavya-pokhriyal-809722397/",
+        instagram: "https://www.instagram.com/eklavya310107/"
+      },
+      {
+        id: 19,
+        name: "Naga Tejas Nama",
+        role: "Member",
+        category: "Operations",
+        description: "Handling the groundwork of council events.",
+        photo: "/naga.jpg"
+      },
+      {
+        id: 20,
+        name: "Sanvi Kadu",
+        role: "Head",
+        category: "Creative",
+        description: "Guiding the creative direction and designs.",
+        photo: "/sanvi.jpg"
+      },
+      {
+        id: 21,
+        name: "Jash Adsule",
+        role: "Member",
+        category: "Creative",
+        description: "Designing visual experiences and assets.",
+        photo: "/jash.jpg"
+      },
+      {
+        id: 22,
+        name: "Mahek Agnihotri",
+        role: "Member",
+        category: "Creative",
+        description: "Infusing creativity into everything we do.",
+        photo: "/mahek.jpg"
+      },
+      {
+        id: 23,
+        name: "Ishaan Singh Khanka",
+        role: "Member",
+        category: "Creative",
+        description: "Curating aesthetic content and interfaces.",
+        photo: "/ishaan.jpg",
+        github: "https://github.com/IshaanSKhanka28",
+        linkedin: "https://www.linkedin.com/in/Ishaan-Singh-Khanka",
+        instagram: "https://www.instagram.com/ser_ishaan_the_incredible/"
+      },
+      {
+        id: 24,
+        name: "Shravika Mhatre",
+        role: "Head",
+        category: "Marketing",
+        description: "Leading marketing campaigns and strategy.",
+        photo: "/shravika.jpg",
+        github: "https://github.com/shravikamhatre",
+        linkedin: "https://www.linkedin.com/in/shravika-mhatre/"
+      },
+      {
+        id: 25,
+        name: "Ishita Sharma",
+        role: "Member",
+        category: "Marketing",
+        description: "Promoting the council's vision and events.",
+        photo: "/ishita.jpg",
+        github: "https://github.com/ishshsh21",
+        linkedin: "https://www.linkedin.com/in/ishita-sharma-2151a438b/"
+      },
+      {
+        id: 26,
+        name: "Vaibhavi Ajila",
+        role: "Member",
+        category: "Marketing",
+        description: "Connecting people with data science.",
+        photo: "/vaibhavi.jpg",
+        linkedin: "https://www.linkedin.com/in/vaibhavi-ajila-0b2a26322/"
+      },
+      {
+        id: 27,
+        name: "Ronit Chandarana",
+        role: "Member",
+        category: "Marketing",
+        description: "Managing digital marketing initiatives.",
+        photo: "/ronit.jpg",
+        github: "https://github.com/ronitrc",
+        linkedin: "https://www.linkedin.com/in/ronit-chandarana-92b428371/",
+        instagram: "https://www.instagram.com/ronit.rc6/"
+      },
+      {
+        id: 28,
+        name: "Nehal Gaba",
+        role: "Member",
+        category: "Marketing",
+        description: "Driving engagement and outreach efforts.",
+        photo: "/nehal.jpg",
+        github: "https://github.com/nehalgaba123",
+        linkedin: "https://www.linkedin.com/in/nehal-gaba/",
+        instagram: "https://www.instagram.com/nehal.gaba/"
       },
     ],
     []
@@ -588,36 +607,42 @@ export default function Team() {
 
                         {/* Social Links */}
                         <div className="flex items-center gap-2 pt-1">
-                          <a
-                            href={member.github}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-8 h-8 rounded-none bg-black/40 hover:bg-primary hover:text-white flex items-center justify-center transition-all duration-150 border border-white/20"
-                            aria-label={`${member.name}'s GitHub`}
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <Github className="w-4 h-4 text-white" />
-                          </a>
-                          <a
-                            href={member.linkedin}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-8 h-8 rounded-none bg-black/40 hover:bg-primary hover:text-white flex items-center justify-center transition-all duration-150 border border-white/20"
-                            aria-label={`${member.name}'s LinkedIn`}
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <Linkedin className="w-4 h-4 text-white" />
-                          </a>
-                          <a
-                            href={member.instagram}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-8 h-8 rounded-none bg-black/40 hover:bg-primary hover:text-white flex items-center justify-center transition-all duration-150 border border-white/20"
-                            aria-label={`${member.name}'s Instagram`}
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <Instagram className="w-4 h-4 text-white" />
-                          </a>
+                          {member.github && (
+                            <a
+                              href={member.github}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="w-8 h-8 rounded-none bg-black/40 hover:bg-primary hover:text-white flex items-center justify-center transition-all duration-150 border border-white/20"
+                              aria-label={`${member.name}'s GitHub`}
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <Github className="w-4 h-4 text-white" />
+                            </a>
+                          )}
+                          {member.linkedin && (
+                            <a
+                              href={member.linkedin}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="w-8 h-8 rounded-none bg-black/40 hover:bg-primary hover:text-white flex items-center justify-center transition-all duration-150 border border-white/20"
+                              aria-label={`${member.name}'s LinkedIn`}
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <Linkedin className="w-4 h-4 text-white" />
+                            </a>
+                          )}
+                          {member.instagram && (
+                            <a
+                              href={member.instagram}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="w-8 h-8 rounded-none bg-black/40 hover:bg-primary hover:text-white flex items-center justify-center transition-all duration-150 border border-white/20"
+                              aria-label={`${member.name}'s Instagram`}
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <Instagram className="w-4 h-4 text-white" />
+                            </a>
+                          )}
                         </div>
                       </div>
                     </div>

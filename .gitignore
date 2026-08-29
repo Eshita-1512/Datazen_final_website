@@ -9,3 +9,11 @@ vite.config.ts.*
 .env.*.local
 google-credentials.json
 DataZenWebsite/ 
+
+# Scratch and Temporary Files
+scratch_*
+*.scratch
+temp_*
+*.tmp
+*.xlsx
+*.csv
