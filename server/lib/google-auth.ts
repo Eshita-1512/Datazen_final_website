@@ -47,7 +47,7 @@ export async function getGoogleAuth(): Promise<any> {
     }
 
     // 3. Fallback to API Key string
-    const apiKey = process.env.GOOGLE_API_KEY || "AIzaSyBdAFx-jwdTZABdHqsMfCzK6Q9wK4Soa4U";
+    const apiKey = process.env.GOOGLE_API_KEY;
     if (apiKey) {
       return apiKey;
     }
