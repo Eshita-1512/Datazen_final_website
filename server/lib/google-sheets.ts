@@ -1,5 +1,5 @@
 import { google } from 'googleapis';
-import { TeamRegistration, ContactMessage } from '../../shared/schema';
+import { TeamRegistration, ContactMessage, RecruitmentApplication } from '../../shared/schema';
 import { getGoogleAuth } from './google-auth';
 
 async function getAuth() {
@@ -153,6 +153,67 @@ export async function appendContactMessage(data: ContactMessage): Promise<boolea
         return true;
     } catch (error) {
         console.warn("Failed to append contact message to Google Sheets:", error);
+        return false;
+    }
+}
+
+export async function appendRecruitmentApplication(data: RecruitmentApplication): Promise<boolean> {
+    const auth = await getAuth();
+    if (!auth) return false;
+
+    const spreadsheetId = process.env.GOOGLE_SHEETS_ID;
+    if (!spreadsheetId) {
+        console.warn("GOOGLE_SHEETS_ID is not set");
+        return false;
+    }
+
+    const sheetName = 'First Year Recruitment';
+
+    try {
+        const sheets = google.sheets({ version: 'v4', auth });
+
+        const headers = [
+            'Timestamp',
+            'Full Name',
+            'Email',
+            'Phone',
+            'College / Branch',
+            'Year of Study',
+            'Preference 1',
+            'Preference 2',
+            'About Yourself',
+            'Why Join DataZen',
+            'Resume / Drive Link',
+        ];
+        await ensureSheetExists(sheets, spreadsheetId, sheetName, headers);
+
+        const row = [
+            new Date().toISOString(),
+            data.name,
+            data.email,
+            data.phone,
+            data.college,
+            data.year,
+            data.preference1,
+            data.preference2,
+            data.aboutSelf,
+            data.whyJoin,
+            data.resumeUrl || '',
+        ];
+
+        await sheets.spreadsheets.values.append({
+            spreadsheetId,
+            range: `${sheetName}!A1`,
+            valueInputOption: 'USER_ENTERED',
+            requestBody: {
+                values: [row],
+            },
+        });
+
+        console.log("Successfully appended recruitment application to Google Sheets");
+        return true;
+    } catch (error) {
+        console.error("Failed to append recruitment application to Google Sheets:", error);
         return false;
     }
 }

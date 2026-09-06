@@ -5,6 +5,7 @@ import fs from 'fs';
 const SCOPES = [
   'https://www.googleapis.com/auth/spreadsheets',
   'https://www.googleapis.com/auth/drive.readonly',
+  'https://www.googleapis.com/auth/drive.file', // Added for uploading resumes
 ];
 
 let authClientInstance: any = null;

@@ -13,6 +13,7 @@ export interface TimelineEventData {
   fallbackGradient: string;
   location: string;
   registrationUrl?: string;
+  isRegistrationOpen?: boolean;
 }
 
 export const timelineEvents: TimelineEventData[] = [
@@ -29,6 +30,7 @@ export const timelineEvents: TimelineEventData[] = [
     fallbackGradient: "linear-gradient(135deg,#1a0505,#6b1010,#c0392b)",
     location: "Somaiya Vidyavihar University, Mumbai",
     registrationUrl: ZENCONNECT_REGISTRATION_URL,
+    isRegistrationOpen: false,
   },
   {
     id: 2,

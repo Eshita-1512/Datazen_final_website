@@ -1,10 +1,14 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { contactMessageSchema, teamRegistrationSchema } from "../shared/schema";
+import { contactMessageSchema, teamRegistrationSchema, recruitmentApplicationSchema } from "../shared/schema";
 import { ZodError } from "zod";
 import { fromZodError } from "zod-validation-error";
 import { fetchEventImages, fetchDriveImageStream } from "./lib/google-drive";
+import { uploadResumeToS3 } from "./lib/aws-s3";
+import multer from "multer";
+
+const upload = multer({ storage: multer.memoryStorage() });
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // GET /api/events/:event/images
@@ -124,6 +128,72 @@ export async function registerRoutes(app: Express): Promise<Server> {
         res.status(500).json({
           success: false,
           message: error instanceof Error ? error.message : "An error occurred while processing your request"
+        });
+      }
+    }
+  });
+
+  app.post("/api/recruitment", upload.single("resume"), async (req, res) => {
+    try {
+      // Validate the text fields
+      const validatedData = recruitmentApplicationSchema.parse(req.body);
+      
+      console.log("Recruitment application received:", {
+        name: validatedData.name,
+        email: validatedData.email,
+        preference1: validatedData.preference1,
+        preference2: validatedData.preference2,
+      });
+
+      // Handle the file upload if present
+      let resumeUrl = undefined;
+      if (req.file) {
+        console.log("Uploading resume to AWS S3:", req.file.originalname);
+        const uploadedUrl = await uploadResumeToS3(
+          req.file.buffer,
+          `${validatedData.name}-Resume-${req.file.originalname}`,
+          req.file.mimetype
+        );
+        
+        if (uploadedUrl) {
+          resumeUrl = uploadedUrl;
+        } else {
+          console.warn("Failed to get uploaded URL from AWS S3");
+        }
+      }
+
+      // Add the uploaded resume URL to the data before saving
+      const dataToSave = {
+        ...validatedData,
+        resumeUrl: resumeUrl,
+      };
+
+      const result = await storage.saveRecruitmentApplication(dataToSave);
+
+      if (result.success) {
+        res.status(201).json({
+          success: true,
+          message: result.message,
+        });
+      } else {
+        res.status(409).json({
+          success: false,
+          message: result.message,
+        });
+      }
+    } catch (error) {
+      console.error("Recruitment application error:", error instanceof Error ? error.message : String(error));
+      if (error instanceof ZodError) {
+        const validationError = fromZodError(error);
+        res.status(400).json({
+          success: false,
+          message: "Validation error",
+          errors: validationError.message,
+        });
+      } else {
+        res.status(500).json({
+          success: false,
+          message: error instanceof Error ? error.message : "An error occurred while processing your request",
         });
       }
     }

@@ -148,14 +148,23 @@ export default function EventDetail() {
 
             {event.registrationUrl && (
               <div className="text-center">
-                <a
-                  href={event.registrationUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="dz-button-primary inline-flex items-center gap-2 px-8 py-3.5 text-base"
-                >
-                  Register for Event <ExternalLink size={18} />
-                </a>
+                {event.isRegistrationOpen === false ? (
+                  <button
+                    disabled
+                    className="inline-flex items-center justify-center gap-2 px-8 py-3.5 text-base rounded font-display font-semibold transition-all shadow-sm bg-primary/20 text-muted-foreground opacity-70 cursor-not-allowed border border-primary/20 pointer-events-none"
+                  >
+                    Registrations Closed
+                  </button>
+                ) : (
+                  <a
+                    href={event.registrationUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="dz-button-primary inline-flex items-center gap-2 px-8 py-3.5 text-base"
+                  >
+                    Register for Event <ExternalLink size={18} />
+                  </a>
+                )}
               </div>
             )}
           </div>

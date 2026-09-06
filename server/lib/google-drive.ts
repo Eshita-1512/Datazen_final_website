@@ -2,6 +2,7 @@ import { google } from 'googleapis';
 import { getGoogleAuth } from './google-auth';
 import https from 'https';
 import { URL } from 'url';
+import { Readable } from 'stream';
 
 export interface DriveImageFile {
   id: string;
@@ -211,6 +212,59 @@ export async function fetchDriveImageStream(fileId: string): Promise<{ stream: a
     return null;
   } catch (error: any) {
     console.error(`Error streaming file ${fileId} from Google Drive:`, error?.message || error);
+    return null;
+  }
+}
+
+export async function uploadResumeToDrive(
+  fileBuffer: Buffer,
+  fileName: string,
+  mimeType: string
+): Promise<string | null> {
+  try {
+    const auth = await getGoogleAuth();
+    if (!auth || typeof auth === 'string') {
+      console.error("Valid Service Account authentication is required for file uploads");
+      return null;
+    }
+    const drive = google.drive({ version: 'v3', auth });
+
+    const folderId = process.env.GOOGLE_DRIVE_FOLDER_ID;
+    if (!folderId) {
+      console.error("GOOGLE_DRIVE_FOLDER_ID is not set in .env");
+      return null;
+    }
+
+    const fileMetadata = {
+      name: fileName,
+      parents: [folderId],
+    };
+
+    const media = {
+      mimeType: mimeType,
+      body: Readable.from(fileBuffer),
+    };
+
+    const response = await drive.files.create({
+      requestBody: fileMetadata,
+      media: media,
+      fields: 'id, webViewLink',
+    });
+
+    // Make the file publicly accessible so the link works for anyone with it
+    if (response.data.id) {
+      await drive.permissions.create({
+        fileId: response.data.id,
+        requestBody: {
+          role: 'reader',
+          type: 'anyone',
+        },
+      });
+    }
+
+    return response.data.webViewLink || null;
+  } catch (error) {
+    console.error("Error uploading file to Google Drive:", error);
     return null;
   }
 }

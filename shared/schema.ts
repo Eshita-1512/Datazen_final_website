@@ -53,3 +53,29 @@ export const teamRegistrationSchema = z.object({
 });
 
 export type TeamRegistration = z.infer<typeof teamRegistrationSchema>;
+
+// First Year Recruitment schema
+export const recruitmentApplicationSchema = z.object({
+  name: z.string().min(2, "Full name is required"),
+  email: z.string().email("Please enter a valid email address").refine(
+    (val) => val.endsWith("@somaiya.edu") || val.endsWith("@djsce.ac.in") || val.includes("somaiya"),
+    { message: "Please use your Somaiya email ID (e.g. name@somaiya.edu)" }
+  ),
+  phone: z.string().min(10, "Phone number must be at least 10 digits").max(15, "Phone number too long"),
+  college: z.string().min(2, "College / branch is required"),
+  year: z.literal("First Year"),
+  preference1: z.enum(["Tech", "Creative", "Operations", "PR", "Marketing"], {
+    errorMap: () => ({ message: "Please select a domain preference" }),
+  }),
+  preference2: z.enum(["Tech", "Creative", "Operations", "PR", "Marketing"], {
+    errorMap: () => ({ message: "Please select a domain preference" }),
+  }),
+  aboutSelf: z.string().min(20, "Please write at least 20 characters about yourself"),
+  whyJoin: z.string().min(20, "Please write at least 20 characters about why you want to join"),
+  resumeUrl: z.string().url().optional(),
+}).refine((data) => data.preference1 !== data.preference2, {
+  message: "Preference 1 and Preference 2 must be different domains",
+  path: ["preference2"],
+});
+
+export type RecruitmentApplication = z.infer<typeof recruitmentApplicationSchema>;

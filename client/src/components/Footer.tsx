@@ -1,4 +1,4 @@
-import { Mail, Github, Linkedin, ArrowUp, MapPin, Instagram } from "lucide-react";
+import { Mail, Github, ArrowUp, MapPin, Instagram } from "lucide-react";
 import { Link } from "wouter";
 import { motion } from "framer-motion";
 
@@ -21,11 +21,6 @@ export default function Footer() {
       icon: <Instagram className="h-4 w-4" />, 
       href: "https://www.instagram.com/datazensomaiya/", 
       label: "Instagram",
-    },
-    { 
-      icon: <Linkedin className="h-4 w-4" />, 
-      href: "https://www.linkedin.com/company/datazen-somaiya/?originalSubdomain=in", 
-      label: "LinkedIn",
     }
   ];
 

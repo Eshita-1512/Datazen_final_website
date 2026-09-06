@@ -1,4 +1,4 @@
-import { users, contactMessages, type User, type InsertUser, type ContactMessage, type InsertContactMessage, type TeamRegistration } from "../shared/schema";
+import { users, contactMessages, type User, type InsertUser, type ContactMessage, type InsertContactMessage, type TeamRegistration, type RecruitmentApplication } from "../shared/schema";
 
 // modify the interface with any CRUD methods
 // you might need
@@ -9,12 +9,14 @@ export interface IStorage {
   createUser(user: InsertUser): Promise<User>;
   saveContactMessage(message: InsertContactMessage): Promise<ContactMessage>;
   saveTeamRegistration(registration: TeamRegistration): Promise<{ success: boolean; message: string }>;
+  saveRecruitmentApplication(application: RecruitmentApplication): Promise<{ success: boolean; message: string }>;
 }
 
 export class MemStorage implements IStorage {
   private users: Map<number, User>;
   private contactMessages: Map<number, ContactMessage>;
   private registeredEmails: Set<string>;
+  private recruitmentEmails: Set<string>;
   currentId: number;
   currentContactId: number;
 
@@ -22,6 +24,7 @@ export class MemStorage implements IStorage {
     this.users = new Map();
     this.contactMessages = new Map();
     this.registeredEmails = new Set();
+    this.recruitmentEmails = new Set();
     this.currentId = 1;
     this.currentContactId = 1;
   }
@@ -103,6 +106,43 @@ export class MemStorage implements IStorage {
       return {
         success: false,
         message: "Internal server error during registration processing",
+      };
+    }
+  }
+
+  async saveRecruitmentApplication(application: RecruitmentApplication): Promise<{ success: boolean; message: string }> {
+    if (this.recruitmentEmails.has(application.email)) {
+      return {
+        success: false,
+        message: "This email address has already submitted an application.",
+      };
+    }
+
+    try {
+      console.log("Processing recruitment application for:", application.name);
+
+      const { appendRecruitmentApplication } = await import("./lib/google-sheets");
+      const sheetsSuccess = await appendRecruitmentApplication(application);
+
+      this.recruitmentEmails.add(application.email);
+
+      if (sheetsSuccess) {
+        return {
+          success: true,
+          message: "Application submitted successfully! We'll be in touch soon.",
+        };
+      } else {
+        console.warn("Failed to save recruitment application to Google Sheets.");
+        return {
+          success: true,
+          message: "Application received (Note: Backup to Sheets failed, check logs).",
+        };
+      }
+    } catch (error) {
+      console.error("Error in saveRecruitmentApplication:", error);
+      return {
+        success: false,
+        message: "Internal server error during application processing",
       };
     }
   }
