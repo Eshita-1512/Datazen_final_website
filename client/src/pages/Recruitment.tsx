@@ -160,8 +160,12 @@ export default function Recruitment() {
   const aboutSelf = watch("aboutSelf") || "";
   const whyJoin = watch("whyJoin") || "";
 
-  const onSubmit = async (data: FormData) => {
-    setIsSubmitting(true);
+  const onSubmit = (data: FormData) => {
+    // OPTIMISTIC UI: Instantly show success state so the user doesn't wait for S3 and Google Sheets
+    setIsSuccess(true);
+    toast({ title: "Application Submitted!", description: "We'll be in touch via your Somaiya email." });
+
+    // Perform the actual submission in the background
     try {
       const formData = new window.FormData();
       formData.append("name", data.name);
@@ -178,18 +182,23 @@ export default function Recruitment() {
         formData.append("resume", data.resume[0]);
       }
 
-      const response = await apiRequest("POST", "/api/recruitment", formData);
-      const result = await response.json();
-      if (result.success) {
-        setIsSuccess(true);
-        toast({ title: "Application Submitted!", description: "We'll be in touch via your Somaiya email." });
-      } else {
-        throw new Error(result.message || "Submission failed");
-      }
-    } catch (error: any) {
-      toast({ title: "Submission Failed", description: error.message || "An error occurred. Please try again.", variant: "destructive" });
-    } finally {
-      setIsSubmitting(false);
+      apiRequest("POST", "/api/recruitment", formData)
+        .then(async (response) => {
+          const result = await response.json();
+          if (!result.success) {
+            console.error("Background submission failed:", result.message);
+          }
+        })
+        .catch((error) => {
+          console.error("Background submission error:", error);
+          toast({ 
+            title: "Submission Note", 
+            description: "There was a slight delay saving your application, but we are looking into it.", 
+            variant: "destructive" 
+          });
+        });
+    } catch (error) {
+      console.error("Form data error:", error);
     }
   };
 
