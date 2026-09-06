@@ -289,9 +289,11 @@ export default function Recruitment() {
                 as a First Year
               </h1>
               <p className="text-muted-foreground text-base leading-relaxed max-w-md">
-                DataZen is K.J. Somaiya's premier data science and tech club. We build, learn, and create
-                together — from hackathons and case studies to creative campaigns and industry outreach.
-                This is your chance to start from Day 1.
+               We are the official Data Science Council of Somaiya Vidyavihar University; 
+               a student-run community that turns curiosity into work that ships. 
+               Through workshops, projects, competitions, speaker sessions and industry collaborations,
+              we help you pick up the skills, meet the right people, and turn half-formed ideas into things that hold up. 
+              Bring the questions; we will help with the rest. 
               </p>
             </div>
 
