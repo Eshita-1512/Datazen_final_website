@@ -84,11 +84,11 @@ type FormData = z.infer<typeof clientSchema>;
 
 // ─── Domain config ────────────────────────────────────────────────────────
 const DOMAINS = [
-  { value: "Creative", label: "Creative", icon: Palette },
-  { value: "Operations", label: "Operations", icon: Settings },
-  { value: "PR", label: "PR", icon: Megaphone },
-  { value: "Marketing", label: "Marketing", icon: Rocket },
-  { value: "Tech", label: "Tech", icon: Code2 },
+  { value: "Tech", label: "Tech", icon: Code2, desc: "Assists in technical projects, data analysis, and automation. Supports workshops, hackathons, and innovative research initiatives." },
+  { value: "Creative", label: "Creative", icon: Palette, desc: "Designs posters and social media creatives. Creates promotional reels, manages event photography/videography, and brings aesthetic vision." },
+  { value: "Operations", label: "Operations", icon: Settings, desc: "Manages event setup, coordination, and execution. Handles registrations, logistical requirements, and ensures smooth workflows." },
+  { value: "PR", label: "PR", icon: Megaphone, desc: "Promotes events through campus outreach and social media. Creates engaging content, manages platforms, and builds community connections." },
+  { value: "Marketing", label: "Marketing", icon: Rocket, desc: "Assists in sponsor outreach and partnership development. Supports promotional campaigns, helps create proposals, and conducts research." },
 ] as const;
 
 // ─── Perks ────────────────────────────────────────────────────────────────
@@ -332,18 +332,28 @@ export default function Recruitment() {
               </div>
             </div>
 
-            {/* Domain pills */}
+            {/* Domains */}
             <div className="space-y-3">
-              <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Domains</p>
-              <div className="flex flex-wrap gap-2">
-                {DOMAINS.map((d) => (
-                  <span
-                    key={d.value}
-                    className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full border border-border/60 bg-card/40 text-foreground/70"
+              <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                Available Roles
+              </p>
+              <div className="grid gap-3">
+                {DOMAINS.map((domain, i) => (
+                  <motion.div
+                    key={domain.value}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.4 + i * 0.1 }}
+                    className="flex items-start gap-3 p-3 rounded-lg bg-card/40 border border-border/60 backdrop-blur-sm"
                   >
-                    <d.icon size={12} className="opacity-70" />
-                    {d.label}
-                  </span>
+                    <div className="h-8 w-8 rounded-md bg-primary/10 flex items-center justify-center text-primary shrink-0 mt-0.5">
+                      <domain.icon size={15} />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold">{domain.label}</p>
+                      <p className="text-xs text-muted-foreground leading-snug mt-0.5">{domain.desc}</p>
+                    </div>
+                  </motion.div>
                 ))}
               </div>
             </div>
