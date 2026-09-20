@@ -188,12 +188,22 @@ async function appendRecruitmentToSheets(data: Record<string, any>): Promise<boo
     data.resumeUrl || "",
   ];
 
-  await sheets.spreadsheets.values.append({
-    spreadsheetId,
-    range: `${sheetName}!A1`,
-    valueInputOption: "USER_ENTERED",
-    requestBody: { values: [row] },
-  });
+  try {
+    await sheets.spreadsheets.values.append({
+      spreadsheetId,
+      range: `${sheetName}!A1`,
+      valueInputOption: "USER_ENTERED",
+      requestBody: { values: [row] },
+    });
+  } catch (err: any) {
+    console.error("Sheets append FULL error:", JSON.stringify({
+      status: err?.status,
+      message: err?.message,
+      errors: err?.response?.data?.error,
+      clientEmail: (JSON.parse(process.env.GOOGLE_SHEETS_CREDENTIALS || process.env.GOOGLE_DRIVE_CREDENTIALS || "{}"))?.client_email,
+    }, null, 2));
+    throw err;
+  }
 
   return true;
 }
