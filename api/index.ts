@@ -16,13 +16,17 @@ async function getAuth() {
     process.env.GOOGLE_SHEETS_CREDENTIALS;
   if (jsonCreds) {
     const credentials = JSON.parse(jsonCreds);
-    return new google.auth.GoogleAuth({
-      credentials,
+    // Use explicit JWT instead of GoogleAuth to avoid serverless ADC fallback issues
+    const jwt = new google.auth.JWT({
+      email: credentials.client_email,
+      key: credentials.private_key,
       scopes: [
         "https://www.googleapis.com/auth/spreadsheets",
         "https://www.googleapis.com/auth/drive.readonly",
       ],
     });
+    await jwt.authorize();
+    return jwt;
   }
   return null;
 }
